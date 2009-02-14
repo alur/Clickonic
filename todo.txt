@@ -1,0 +1,61 @@
+- = open
++ = fixed
+* = info
+
+- Fix the issue with cuting files from folders opend by litestep
+	* Unless explorer is called explicitly with LSUseSystemDDE this bug will occur.
+	* Hijacking clicks and calling ShellExecute() could fix this.
+		* (group)ExplicitCalls does just this.
+- Fix the bug which causes .zip files to be inert on XP
+	* Deleting (HKEY_CLASSES_ROOT\SystemFileAssociations\.zip) will fix it (no idea what it does).
+	* Possibly something related to the whole viewing zip files as folders thing.
+- Fix the bug which causes the My Documents folder to be inert on XP
+	* Changing Attributes in HKEY_CLASSES_ROOT\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\ShellFolder from
+	   F080013D to B080013D will fix it (Removing SFGAO_HASPROPSHEET).
+	* (group)ExplicitCalls will at least let it open, even if the right click menu doesn't work
+- Delete the clipboard data once a file is cut away from clickonic
+	* Explorer doesn't delete it on it's own, it's supposed to send a message but it doesn't.
+- Add support for ctrl+z
+	* No API function, but maybe you could abuse the system menu.
+- Add .back/.forward to changedir
+- Add support for custom file managers
+	- Replace (group)ExplicitCalls with this?
+- Add .last(saved folder location) to (group)Folder
+- Add vista/windows7 support
+	- Icons are forcibly auto arranged on startup?
+		* It's possible to position them correctly using !RestoreIconPositions after the group has loaded.
+		* It seems to be imposibole to set the position of an icon when it's first added to the group
+- Improve on drag&drop support
+	- Add right click drag&drop menu
+	- Improve on icon positioning after external drops
+- Add an AddToGroup setting
+- Add *(Group)Hide "iconname" setting?
+- Use ListView_InsertItem instead of refreshing the folder when Toggling an icon into visibility.
+- Specify a custom icon size and change it dynamically
+	* Clickonic uses the global system icon size right now.
+	* This setting is only reloaded after restarting litestep (!quit).
+- Ability to paste pictures from the clipboard
+	+ Add (group)DontPastePictures
+	- Add (group)PicturePasteFormat setting
+- Ability to paste audio from the clipboard
+	+ Add (group)DontPasteAudio
+	- Add (group)AudioPasteFormat
+- Get the system menu to show "properties", at least for the desktop
+- Add (group)TextPasteFormat setting
+- Stop system menus from reseting icon positions
+- Keep group variables updated when they are changed through the system menu
+	* Explorer never clears styles with LVM_SETEXTENDEDLISTVIEWSTYLE
+- Make the code compilable with unicode?
+	* TCHARS & explicit A/W function calls
+- Handle large changes in icon spacing better?
+- Check into icon positioning with grids turned of
+- Improve on CGroup::CopyFiles
+	- Provide more clipboard formats?
+	- Toggle DROPFILES.fWide depending on os?
+- Fix possible crash related to shell extensions when right clicking an icon
+	* Unable to confirm shell extensions as the cause
+- Decide on /MT or /MD
+	* /MD is about half the size of /MT and will use updated .dll files
+	* /MD promotes installiation of the VC runtimes
+	* /MT avoids runtime issues and lets people who don't have the necesary rights to install runtimes use clickonic
+	* Currently, /MT is used
