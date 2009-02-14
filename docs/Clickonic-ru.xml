@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ruDocs-ru.xsl"?>
+<lsmd spec="0.3p" version="1.0.7">
+	<author>Seg@</author>
+	<copyright year="2004-2008">Seg@, Andymon.  Распространяется под лицензей GNU GPL2.</copyright>
+	<module version="1.0.7" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
+		<author name="Sergey Gagarin" email="inform-sega_AT_freemail.ru" web="http://www.litestep.bip.ru" icq="162261148">Seg@</author>
+		<author name="Andymon" email="andymon_AT_ls-universe.info" web="http://www.ls-universe.info">Andymon</author>
+		<author name="Erik Welander" email="alurcard2_AT_gmail.com">Alurcard2</author>
+		<documentation>
+			<description>
+				<p>
+					Clickonic.dll - модуль, отображающий значки на рабочем столе LiteStep.
+					В отличие от IconDesk и xDesktop, он имеет меньше настроек, зато имеет полноценную поддержку drag-and-drop,
+					так что значки на рабочем столе вы можете размещать так, как Вам будет угодно...
+				</p>
+			</description>
+			<section id="install" name="Установка">
+				<description>
+					<p>
+						Скопируйте Clickonic.dll в любую папку, например в <code>C:\LiteStep\</code>,
+						и добавьте в step.rc следующую строчку
+					</p>
+					<example>LoadModule "C:\LiteStep\Clickonic-1.0.7.dll"</example>
+					<p>
+						Если Вы используете дистрибутив формата OTS2 (LiteStep Installer от Omar'а,
+						EZ2Install от AngelKnight или Dist.ru от Joshhh'а, воспользуйтесь псевдооператором *NetLoadModule:
+					</p>
+					<example>*NetLoadModule Clickonic-1.0.7</example>
+				</description>
+			</section>
+			<section id="usage" name="Использование">
+				<description>
+					<p>
+						Clickonic.dll поддерживает работу с несколькими группами значков, поэтому прежде всего
+						от Вас потребуется сказать модулю о именах этих групп. Все настройки и !команды будут
+						использовать эти имена
+					</p>
+					<!-- Actually there should be a <multiple> option here, but it is ugly looking =( -->
+					<p>
+						Группа задается следующей строчкой:
+					</p>
+					<example>
+*Clickonic [имя]</example>
+					<p>
+						и в таком случае настройки для этой группы имеют вид:
+					</p>
+					<example>
+[имя][настройка] [значение]</example>
+					<p>
+						Например:
+					</p>
+					<example>
+*Clickonic DeskIcons
+DeskIconsFolder ".desktop"</example>
+				</description>
+			</section>			
+			<section id="sample" name="Пример конфигурации">
+				<description>
+					<example>
+;===============================================
+;  Значки рабочего стола (Clickonic.dll v1.0.7)
+;-----------------------------------------------
+
+DeskIconsFolder ".desktop"
+
+DeskIconsX 50
+DeskIconsY 50
+
+DeskIconsWidth  300
+DeskIconsHeight 300
+
+DeskIconsSpacingX 64
+DeskIconsSpacingY 64
+
+DeskIconsStartHidden false
+DeskIconsNoScroll true
+
+DeskIconsFont Tahoma
+DeskIconsFontSize 12
+DeskIconsFontItalic false
+DeskIconsFontBold true
+DeskIconsFontColor FFFFFF
+DeskIconsExplorerDesktop false
+
+DeskIconsBackground "D:\Work\Media\Birthday.jpg"
+DeskIconsTiled false
+DeskIconsOffsetPercentX 50	; расположить картинку
+DeskIconsOffsetPercentX 50  ; по центру группы значков
+DeskIconsBackgroundColor AAEEAA
+
+DeskIconsUseRename true
+DeskIconsUseDelete true
+
+DeskIconsConfirmFileDelete true
+DeskIconsDontUseRecycleBin false
+DeskIconsNoConnectedFiles false
+DeskIconsSimpleProgress false
+DeskiconsVirtualFileDelete false
+
+DeskIconsSnapToGrid true
+DeskiconsHotTracking false
+DeskiconsHotTrackingTime 200
+					</example>
+				</description>
+			</section>
+			<section id="settings" name="Настройки">
+				<description>
+					<p>
+						Обратите внимание, что каждая настройка начинается с имени группы, которую вы указали в строке, начинающейся с ключевого слова <strong>*Clickonic</strong>.
+					</p>
+				</description>
+			</section>
+			<section id="control" name="Команды">
+				<description>
+					<p>
+						Обратите внимание, что первый параметр каждой !команды - имя группы значков,
+						заданное в строке, начинающейся с ключевого слова <strong>*Clickonic</strong>!
+						Если Вы забудете указать имя группы, то увидите на экране сообщение об ошибке.
+					</p>
+				</description>
+			</section>
+		</documentation>
+		<!-- @@@@@@@@@@@@@@@@@@  deafults @@@@@@@@@@@@@@@@ -->
+		<data>
+			<строка id="Folder1" default=".desktop"/>
+			<координата id="X1" default="0"/>
+			<координата id="Y1" default="0"/>
+			
+			<число id="Width1"  default="$ResolutionX$"/>
+			<число id="Height1" default="$ResolutionY$"/>
+
+			<число id="SpacingX1" default="-1"/>
+			<число id="SpacingY1" default="-1"/>
+
+			<строка id="Background1" default="none"/>
+			<да-нет id="Tiled1" default="false"/>
+			<число id="OffsetPercentX1" default="0"/>
+			<число id="OffsetPercentY1" default="0"/>
+			<цвет id="BackgroundColor1" default="FFFFFF"/>
+
+			<да-нет id="StartHidden1" default="false"/>
+			<да-нет id="NoScroll1" default="false"/>
+
+			<шрифт id="Font1" default="Arial"/>
+			<число id="FontSize1" default="14"/>
+			<да-нет id="FontItalic1" default="false"/>
+			<да-нет id="FontBold1" default="false"/>
+			<цвет id="FontColor1" default="FFFFFF"/>
+			<цвет id="FontBackgroundColor1" default="FFFFFF"/>
+			
+			<да-нет id="ExplorerDesktop1" default="false"/>
+			<да-нет id="HotTracking1" default="false"/>
+			<да-нет id="SnapToGrid1" default="true"/>
+			<да-нет id="NoConnectedFiles1" default="false"/>
+			<да-нет id="SimpleProgress1" default="false"/>
+			<да-нет id="ConfirmFileDelete1" default="false"/>
+			<да-нет id="DontUseRecycleBin1" default="false"/>
+			<число id="HotTrackingTime1" default="-1"/>
+			<да-нет id="VirtualFileDelete1" default="false"/>
+			<да-нет id="UseDelete1" default="true"/>
+			<да-нет id="UseRename1" default="true"/>
+			<да-нет id="DontUseCtrlC1" default="false"/>
+			<да-нет id="DontUseCtrlX1" default="false"/>
+			<да-нет id="DontUseCtrlV1" default="false"/>
+			<строка id="ViewMode1" default="icons"/>
+			<да-нет id="InlineBrowsing1" default="false"/>
+		</data>
+		<!-- @@@@@@@@@@@@@@@@@@  config @@@@@@@@@@@@@@@@ -->
+		<config>
+			<group section="settings">
+				<single name="(group)Folder">
+					<string data="Folder1"/>
+					<description>
+						<p>Папка, которая будет отображена на экране. Укажите ".desktop", чтобы отобразить всё содержимое рабочего стола, или $Desktop$, чтобы показать только ярлыки</p>
+					</description>
+				</single>
+				<single name="(group)X">
+					<coordinate data="X1"/>
+					<description>
+						<p>Позиция по горизонтали левого верхнего угла группы</p>
+					</description>
+				</single>
+				<single name="(group)Y">
+					<coordinate data="Y1"/>
+					<description>
+						<p>Позиция по вертикали левого верхнего угла группы</p>
+					</description>
+				</single>
+				<single name="(group)Width">
+					<integer data="Width1"/>
+					<description>
+						<p>Ширина области отображения значков.</p>
+					</description>
+				</single>
+				<single name="(group)Height">
+					<integer data="Height1"/>
+					<description>
+						<p>Высота области отображения значков.</p>
+					</description>
+				</single>
+				<single name="(group)SpacingX">
+					<integer data="SpacingX1"/>
+					<description>
+						<p>
+							Расстояние по горизонтали между соседними значками. Не забудьте включить сюда размер значка!
+							Если и <strong>(group)SpacingX</strong>, и <xref>(group)SpacingY</xref> установлены в -1,
+							то будут использоваться значения по умолчанию, прописанные в системе.
+						</p>
+					</description>
+				</single>
+				<single name="(group)SpacingY">
+					<integer data="SpacingY1"/>
+					<description>
+						<p>
+							Расстояние по вертикали между соседними значками. Не забудьте включить сюда размер значка!
+							Если и <strong>(group)SpacingX</strong>, и <xref>(group)SpacingY</xref> установлены в -1,
+							то будут использоваться значения по умолчанию, прописанные в системе.
+						</p>
+					</description>
+				</single>				
+				<single name="(group)Background">
+					<string data="Background1"/>
+					<description>
+						<p>
+							Фоновая картинка. Обратите внимание, что это должен быть реально существующий файл на диске или
+							URL к файлу в Сети! Примочки LiteStep'а типа ".extract=" или "image1|image2|image3" использовать
+							нельзя... увы, но так захотели разработчики Windows =) ...
+						</p>
+					</description>
+				</single>
+				<single name="(group)BackgroundColor">
+					<color data="BackgroundColor1"/>
+					<description>
+						<p>Цвет фона.</p>
+					</description>
+				</single>
+				<single name="(group)Tiled">
+					<bool data="Tiled1"/>
+					<description>
+						<p>Если установить этот флаг, то фоновая картинка будет выложена рядами.</p>
+					</description>
+				</single>
+				<single name="(group)OffsetPercentX">
+					<integer data="OffsetPercentX1"/>
+					<description>
+						<p>
+							Смещение фоновой картинки от левого верхнего угла по горизонтали (в процентах!)
+							Например 0 означает, что картинка будет отображена у левого края группы значков,
+							при 50 картинка будет оцентрирована по горизонтали, при 100 фоновая картинка будет
+							привязана к правому краю группы.
+							Понятное дело, что если установлен флаг <xref>(group)Tiled</xref>, то это параметр
+							будет просто проигнорирован.
+						</p>
+					</description>
+				</single>
+				<single name="(group)OffsetPercentY">
+					<integer data="OffsetPercentY1"/>
+					<description>
+						<p>
+							Смещение фоновой картинки от левого верхнего угла по вертикали (в процентах!)
+							См. <xref>(group)OffsetPercentX</xref>.
+						</p>
+					</description>
+				</single>
+				<single name="(group)Font">
+					<font data="Font1"/>
+					<description>
+						<p>Шрифт текста подписей под значками.</p>
+					</description>
+				</single>				
+				<single name="(group)FontSize">
+					<integer data="FontSize1"/>
+					<description>
+						<p>Размер шрифта текста подписей.</p>
+					</description>
+				</single>
+				<single name="(group)FontItalic">
+					<bool data="FontItalic1"/>
+					<description>
+						<p>Если флаг установлен, то шрифт будет выделен <italic>курсивом</italic>.</p>
+					</description>
+				</single>
+				<single name="(group)FontBold">
+					<bool data="FontBold1"/>
+					<description>
+						<p>Если флаг установлен, то шрифт будет выделен <strong>жирным</strong></p>
+					</description>
+				</single>
+				<single name="(group)FontColor">
+					<color data="FontColor1"/>
+					<description>
+						<p>
+							Цвет шрифта подписей под значками.
+							Работает только в Windows 2000, или если установлена фоновая картинка <xref>(group)Background</xref>
+						</p>
+					</description>
+				</single>
+				<single name="(group)FontBackgroundColor">
+					<color data="FontBackgroundColor1"/>
+					<description>
+						<p>
+							Цвет фона для подписей.
+							Работает только в Windows 2000, или если установлена фоновая картинка <xref>(group)Background</xref>
+						</p>
+					</description>
+				</single>
+				<single name="(group)StartHidden">
+					<bool data="StartHidden1"/>
+					<description>
+						<p>Если флаг установлен, то группа будет скрыта</p>
+					</description>
+				</single>
+				<single name="(group)NoScroll">
+					<bool data="NoScroll1"/>
+					<description>
+						<p>Не показывать полосы прокрутки</p>
+					</description>
+				</single>
+				<single name="(group)ExplorerDesktop">
+					<bool data="ExplorerDesktop1"/>
+					<description>
+						<p>
+							Если флаг установлен, то по правой и левой кнопке мыши будет выпадать меню
+							Explorer'а и можно будет выделять группы значков.
+							Зато не будет доступно popup-меню LiteStep'а.
+						</p>
+					</description>
+				</single>
+				<single name="(group)DontUseRecycleBin">
+					<bool data="DontUseRecycleBin1"/>
+					<description>
+						<p>Delete files directly rather than moving them to recycle bin.</p>
+					</description>
+				</single>
+				<single name="(group)ConfirmFileDelete">
+					<bool data="ConfirmFileDelete1"/>
+					<description>
+						<p>Ask for confirmation before deleting files.</p>
+					</description>
+				</single>
+				<single name="(group)SimpleProgress">
+					<bool data="SimpleProgress1"/>
+					<description>
+						<p>Use a simple progress bar for file operations instead of the standard one.</p>
+					</description>
+				</single>
+				<single name="(group)NoConnectedFiles">
+					<bool data="NoConnectedFiles1"/>
+					<description>
+						<p>Don't treat connected files as a group (that thing windows does when you save a webpage for example)</p>
+					</description>
+				</single>
+				<single name="(group)SnapToGrid">
+					<bool data="SnapToGrid1"/>
+					<description>
+						<p>Snap icons to a grid.</p>
+					</description>
+				</single>
+				<single name="(group)HotTracking">
+					<bool data="HotTracking1"/>
+					<description>
+						<p>Enables hottracking, selection of files by hovering the mouse over them.</p>
+					</description>
+				</single>
+				<single name="(group)HotTrackingTime">
+					<integer data="HotTrackingTime1"/>
+					<description>
+						<p>Sets the time in milliseconds between the mouse hovering over a file and the file being selected. -1 is some kind of default.</p>
+					</description>
+				</single>
+				<single name="(group)VirtualFileDelete">
+					<bool data="VirtualFileDelete1"/>
+					<description>
+						<p>Pressing delete will only delete the files from the group until the module is reloaded.</p>
+					</description>
+				</single>
+				<single name="(group)UseDelete">
+					<bool data="UseDelete1"/>
+					<description>
+						<p>Pressing delete will delete selected files from the group.</p>
+					</description>
+				</single>
+				<single name="(group)UseRename">
+					<bool data="UseRename1"/>
+					<description>
+						<p>Pressing F2 will rename the focused file in the group.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlC">
+					<bool data="DontUseCtrlC1"/>
+					<description>
+						<p>Clickonic won't copy files when Ctrl+V is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlX">
+					<bool data="DontUseCtrlX1"/>
+					<description>
+						<p>Clickonic won't cut files when Ctrl+X is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlV">
+					<bool data="DontUseCtrlV1"/>
+					<description>
+						<p>Clickonic won't paste files when Ctrl+V is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)ViewMode">
+					<string data="ViewMode1"/>
+					<description>
+						<p>Sets the view style of icons. Values: icons, tiles, details, or thumbnails.</p>
+					</description>
+				</single>
+				<single name="(group)InlineBrowsing">
+					<bool data="InlineBrowsing1"/>
+					<description>
+						<p>Causes opening folders to change the groups directory to said folder instead of opening it externally.</p>
+					</description>
+				</single>
+			</group>
+		</config>
+		<!-- @@@@@@@@@@@@@@@@@@  bangs  @@@@@@@@@@@@@@@@ -->
+		<control>
+			<group section="control">
+				<bang name="ClickonicShow">
+					<string/>
+					<description>
+						<p>Показать группу.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHide">
+					<string/>
+					<description>
+						<p>Скрыть группу.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicToggle">
+					<string/>
+					<description>
+						<p>Показать/скрыть группу</p>
+					</description>
+				</bang>
+				<bang name="ClickonicToggleExplorerDesktop">
+					<string/>
+					<description>
+						<p>Переключить стиль действий мыши: как в Explorer'е или как в LiteStep.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicReset">
+					<string/>
+					<description>
+						<p>Сбросить сохраненные данные о положении значков на рабочем столе.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByName">
+					<string/>
+					<description>
+						<p>Отсортировать значки по имени.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortBySize">
+					<string/>
+					<description>
+						<p>Отсортировать значки по размеру файлов.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByType">
+					<string/>
+					<description>
+						<p>Отсортировать значки по типу файлов.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByDate">
+					<string/>
+					<description>
+						<p>Отсортировать значки по дате последнего изменения файлов.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetBackground">
+					<string/>
+					<integer/>
+					<integer/>
+					<bool/>
+					<description>
+						<p>
+							Изменить фоновую картинку. <strong>Нельзя</strong> назначить фоновую картинку, если
+							она не была задана ранее с помощью <xref>(group)Background</xref>! То есть либо она есть
+							с самого начала - либо её нет вообще.
+							Первый параметр - аналог <xref>(group)Background</xref>, второй и третий - это новые
+							значения <xref>(group)OffsetPercentX</xref> и <xref>(group)OffsetPercentX</xref>.
+							Последний параметр - новое значение <xref>(group)Tiled</xref>.
+						</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetBackgroundColor">
+					<color/>
+					<description>
+						<p>Изменить цвет фона.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetTextColor">
+					<color/>
+					<description>
+						<p>Применить новый цвет шрифта.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetTextBkColor">
+					<color/>
+					<description>
+						<p>Применить новый цвет подложки для подписей значков.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicExplorerDesktop">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable the explorer desktop.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicConfirmFileDelete">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable confirmation dialogs for file deletion.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicDontUseRecycleBin">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable moving files to the recycle bin.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicNoConnectedFiles">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable connected files.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSimpleProgress">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable the simple progress bar.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSnapToGrid">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable snap to grid.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicHotTracking">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable hot tracking.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicHotTrackingTime">
+					<group/>
+					<integer/>
+					<description>
+						<p>Set the hot tracking time in milliseconds.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicVirtualFileDelete">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable VirtualFileDelete.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicUseDelete">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable the Delete key.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicUseRename">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enable/Disable the F2 key.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicPasteFiles">
+					<group/>
+					<description>
+						<p>Pastes files in the windows clipboard into the group folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicChangeDir">
+					<group/>
+					<string/>
+					<description>
+						<p>Changes the directory of the group. You can use .desktop for the virtual desktop folder and .up to go up one folder in the hierarchy.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetViewMode">
+					<group/>
+					<string/>
+					<description>
+						<p>Changes the view mode of the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicInlineBrowsing">
+					<group/>
+					<bool/>
+					<description>
+						<p>Enables/Disables Inline Browsing.</p>
+					</description>
+				</bang>
+			</group>
+		</control>
+		<history>
+			<revision version="1.0.7" by="Alurcard2" date="2008-10-06">
+				<fixed>Removed some debuging code.</fixed>
+				<fixed>Pasting a cut file will move it rather than copy it.</fixed>
+				<added>Information on fixing problems with .ZIP files.</added>
+				<added>Ctrl+x cuts selected files.</added>
+				<changed>Icon positions are now saved in separate keys for every folder.</changed>
+				<changed><xref>!ClickonicReset</xref> Now supports a 2nd argument to determine what folder to reset.</changed>
+				<added><xref>!ClickonicChangeDir</xref>, <xref>(group)InlineBrowsing</xref>, <xref>!ClickonicInlineBrowsing</xref></added>
+				<added><xref>(group)ViewMode</xref>, <xref>!ClickonicSetViewMode</xref></added>
+				<added>
+					<xref>(group)DontUseCtrlV</xref>, 
+					<xref>(group)DontUseCtrlX</xref>, 
+					<xref>(group)DontUseCtrlC</xref>
+				</added>
+			</revision>
+			<revision version="1.0.6" by="Alurcard2" date="2008-04-06">
+				<fixed>Bug with deleting multiple files.</fixed>
+				<added>ctrl+c copies selected files to the windows clipboard.</added>
+				<added>Pressing ctrl+v while having a file selected pastes files from the clipboard.</added>
+				<added><xref>!ClickonicPasteFiles</xref> pastes files from the clipboard.</added>
+				<added>Added information about removing IE, My Documents, etc from the desktop.</added>
+			</revision>
+			<revision version="1.0.5.1" by="Alurcard2" date="2007-04-12">
+				<fixed>Deleting links or having file extensions disabled causing wrong file to be deleted</fixed>
+			</revision>
+			<revision version="1.0.5" by="Alurcard2" date="2007-30-11">
+				<added>The Delete button deletes selected files.</added>
+				<added>Press F2 to rename a focused file.</added>
+				<added>
+					<xref>(group)ConfirmFileDelete</xref>, 
+					<xref>(group)DontUseRecycleBin</xref>, 
+					<xref>(group)NoConnectedFiles</xref>, 
+					<xref>(group)SimpleProgress</xref>
+				</added>
+				<added>
+					<xref>(group)SnapToGrid</xref>, 
+					<xref>(group)HotTracking</xref>, 
+					<xref>(group)HotTrackingTime</xref>, 
+					<xref>!ClickonicExplorerDesktop</xref>
+				</added>
+				<added>
+					<xref>!ClickonicConfirmFileDelete</xref>, 
+					<xref>!ClickonicDontUseRecycleBin</xref>, 
+					<xref>!ClickonicNoConnectedFiles</xref>, 
+					<xref>!ClickonicSimpleProgress</xref>
+				</added>
+				<added>
+					<xref>!ClickonicSnapToGrid</xref>, 
+					<xref>!ClickonicHotTracking</xref>, 
+					<xref>!ClickonicHotTrackingTime</xref>, 
+					<xref>!ClickonicVirtualFileDelete</xref>
+				</added>
+				<added>
+					<xref>(group)UseRename</xref>, 
+					<xref>(group)UseDelete</xref>, 
+					<xref>!ClickonicUseRename</xref>, 
+					<xref>!ClickonicUseDelete</xref>
+				</added>
+			</revision>
+			<revision version="1.0.4" by="Seg@" date="2006-13-07">
+				<fixed>Заработал щелчок левой кнопкой мыши в режиме LiteStep</fixed>
+			</revision>
+			<revision version="1.0.3" by="Seg@" date="2006-16-04">
+				<added>
+					Настройки и команды для изменения фона:
+					<xref>(group)Background</xref>,
+					<xref>(group)BackgroundColor</xref>,
+					<xref>(group)Tiled</xref>,
+					<xref>(group)OffsetPercentX</xref>,
+					<xref>(group)OffsetPercentX</xref>,
+					<xref>!ClickonicSetBackground</xref>,
+					<xref>!ClickonicSetBackgroundColor</xref>
+				</added>
+				<added>
+					<xref>!ClickonicSetTextColor</xref>, <xref>!ClickonicSetTextBkColor</xref>
+				</added>
+			</revision>
+			<revision version="1.0.2" by="Andymon, Seg@" date="2006-08-04">
+				<fixed>При установке предыдушей версии модуля после завершения сеанса или перезагрузки LiteStep мог "вылетать"</fixed>
+				<added><xref>(group)FontBackgroundColor</xref></added>
+				<fixed>В сообщении об ошибке при вызове !команд фигурировало имя !команды вместо имени группы</fixed>
+				<added>
+					<xref>!ClickonicReset</xref>,
+					<xref>!ClickonicSortByName</xref>,
+					<xref>!ClickonicSortBySize</xref>,
+					<xref>!ClickonicSortByType</xref>,
+					<xref>!ClickonicSortByDate</xref>
+				</added>
+				<added>Добавлена документация на русском</added>
+			</revision>
+			<revision version="1.0.1" by="Andymon" date="2006-04-04">
+				<fixed>
+					Fixed the suboptimal MouseClick behaviour ;) The normal Litestep Desktop Clicks were totally unavailable! Now it's a really great module ;)
+				</fixed>
+			</revision>
+			<revision version="1.0" by="Seg@" date="2005-12-05">
+				<note>
+					That's a first public release. Actually the most part of the module has been coded in 3 days of December 2004,
+					but I havn't enough time to finish the development till the yesterday =(
+				</note>
+			</revision>
+		</history>
+	</module>
+	<history>
+		<revision version="1.0.7">
+			<note>Добавил изменения из версии 1.0.7.</note>
+		</revision>
+		<revision version="1.0.6">
+			<note>Добавил изменения из версии 1.0.6.</note>
+		</revision>
+		<revision version="1.0.5.1">
+			<note>Добавил изменения из версии 1.0.5.1.</note>
+		</revision>
+		<revision version="1.0.5">
+			<note>Добавил изменения из версии 1.0.5.</note>
+		</revision>
+		<revision version="1.0.4">
+			<note>Добавил изменения из версии 1.0.4.</note>
+		</revision>	
+		<revision version="1.0.3">
+			<note>Добавил изменения из версии 1.0.3.</note>
+		</revision>
+		<revision version="1.0.2">
+			<note>Перевел документацию на русский... вместе с XSL-схемой.</note>
+		</revision>
+	</history>
+</lsmd>

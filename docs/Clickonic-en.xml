@@ -1,0 +1,1845 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ruDocs-en.xsl"?>
+<lsmd spec="0.3p" version="1.1.4.1">
+	<author>Seg@</author>
+	<copyright year="2004-2008">Seg@, Andymon, Alurcard2.  Distributed under the GNU GPL2 license.</copyright>
+	<module version="1.1.4.1" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
+		<author name="Sergey Gagarin" email="inform-sega_AT_freemail.ru" web="http://www.litestep.bip.ru" icq="162261148">Seg@</author>
+		<author name="Andymon" email="andymon_AT_ls-universe.info" web="http://www.ls-universe.info">Andymon</author>
+		<author name="Erik Welander" email="alurcard2_AT_gmail.com">Alurcard2</author>
+		<documentation>
+			<description>
+				<p>
+					Clickonic.dll is a LiteStep Desktop module, that provides the ability to view folders on the desktop.
+					Unlike the IconDesk, it is less customizable, but it completely supports drag-and-drop operations,
+					so you can place your icons like YOU want...
+				</p>
+			</description>
+			<section id="install" name="Installation">
+				<description>
+					<p>
+						Put Clickonic-1.1.4.1.dll in any directory you like, for example <code>C:\LiteStep\</code>,
+						then add this line to step.rc
+					</p>
+					<example>LoadModule "C:\LiteStep\Clickonic-1.1.4.1.dll"</example>
+					<p>
+						In the case you're using OTS2 compatible distro such as Omar's LiteStep Installer,
+						AngelKnight's EZ2Install or Joshhh's Dist.ru, you should use the *NetLoadModule pseudo-operator:
+					</p>
+					<example>*NetLoadModule Clickonic-1.1.4.1</example>
+				</description>
+			</section>
+			<section id="usage" name="Usage">
+				<description>
+					<p>
+						Clickonic.dll can handle multiple icon groups, so first of all you need to instruct
+						the module about groups' names. They will be used to configure and control the groups.
+					</p>
+					<!-- Actually there should be a <multiple> option here, but it is ugly looking =( -->
+					<p>
+						New group should be defined in the next manner:
+					</p>
+					<example>*Clickonic [name]</example>
+					<p>
+						and the group options have the following form:
+					</p>
+					<example>
+[name][option] [value]</example>
+					<p>
+						Example:
+					</p>
+					<example>
+*Clickonic DeskIcons
+DeskIconsFolder ".desktop"</example>
+				</description>
+			</section>
+			<section id="removal" name="Troubleshooting">
+				<description>
+					<p>
+				These are just temporary fixes for problems, hopefully this will not be needed in future versions.
+					</p>
+				</description>
+			</section>
+			<section id="sample" name="Sample Configuration">
+				<description>
+					<example>
+;===============================================
+;  Desktop icons (Clickonic.dll v1.1.4.1)
+;-----------------------------------------------
+*Clickonic DeskIcons
+DeskIconsFolder .desktop
+
+DeskIconsX 50
+DeskIconsY 50
+
+DeskIconsWidth 300
+DeskIconsHeight 300
+
+DeskIconsSpacingX 64
+DeskIconsSpacingY 64
+DeskIconsSnapToGrid
+
+DeskIconsNoScroll
+
+DeskIconsFont Arial
+DeskIconsFontSize 12
+DeskIconsFontBold
+DeskIconsFontColor FFFFFF
+
+DeskIconsConfirmFileDelete
+DeskIconsNoConnectedFiles</example>
+				</description>
+			</section>
+			<section id="globalsettings" name="Global Settings">
+				<description>
+					<p>
+						These settings effect all groups.
+					</p>
+				</description>
+			</section>
+			<section id="settings" name="Group Settings">
+				<description>
+					<p>
+						Note please, that each option begins from the group name, specified in the <strong>*Clickonic</strong> line.
+					</p>
+				</description>
+			</section>
+			<section id="exportedvars" name="Exported Evars">
+				<description>
+					<p>
+						Clickonic will export the following evars for each group.
+					</p>
+				</description>
+			</section>
+			<section id="control" name="Bang commands">
+				<description>
+					<p>
+						Note, please, that the first parameter of each !bang command is a group name
+						written in the <strong>*Clickonic</strong> line!
+						If you forget to specify it, an error message will pop up.
+					</p>
+				</description>
+			</section>
+			<section id="events" name="Events">
+				<description>
+					<p>
+						These settings will cause Command to be fired upon certain events. 
+						Command can be any command or one of the following predefined actions: 
+						.none (does nothing), .rename (renames focused file), .delete (deletes selected files), 
+						.paste (pastes data in clipboard), .copy (copies selected files), 
+						.cut (cuts the selected files), .selectall (selects all files), 
+						.refresh (refreshes the folder view), .execute (runs the default action for all selected items), 
+						.changedir (changes the directory to the currently focused directory), .up (browses up 1 dir), 
+						.goup (moves the focus up one icon), .godown (moves the focus down one icon), .goleft (moves the focus
+						left one icon), or .goright (moves the focus right one icon).
+					</p>
+				</description>
+			</section>
+			<section id="mouseevents" name="Mouse Events">
+				<description>
+					<p>
+						The mouse events support all the predefined actions of the regular events as 
+						well as .forward, .rectangle, and .systemmenu. .forward will forward the event to the
+						desktop (xDesk, jDesk, desktop2, etc...). .rectangle will start the the selection 
+						rectangle (if the <xref>(group)RectangleModifierKey</xref>s are held down). 
+						.systemmenu will show the system menu (if the <xref>(group)SystemMenuModifierKey</xref>s 
+						are held down). While you can set the rectangle and and system menu to all mouse events, 
+						I would strongly recommend keeping them on a "ClickDown" event. Additionally, if you set 
+						a mouseevent to .changedir and hover your mouse over a directory, it will change to that 
+						directory instead of the currently focused directory.
+					</p>
+				</description>
+			</section>
+		</documentation>
+		<!-- @@@@@@@@@@@@@@@@@@  deafults @@@@@@@@@@@@@@@@ -->
+		<data>
+			<string id="Folder1" default=".desktop"/>
+			<coordinate id="X1" default="0"/>
+			<coordinate id="Y1" default="0"/>
+			<integer id="Width1"  default="$ResolutionX$"/>
+			<integer id="Height1" default="$ResolutionY$"/>
+			<integer id="SpacingX1" default="-1"/>
+			<integer id="SpacingY1" default="-1"/>
+			<string id="Background1" default="none"/>
+			<color id="BackgroundColor1" default="FFFFFF"/>
+			<bool id="Tiled1" default="false"/>
+			<integer id="OffsetPercentX1" default="0"/>
+			<integer id="OffsetPercentY1" default="0"/>
+			<bool id="StartHidden1" default="false"/>
+			<bool id="NoScroll1" default="false"/>
+			<bool id="ExplorerDesktop1" default="false" />
+			<font id="Font1" default="Arial"/>
+			<integer id="FontSize1" default="14"/>
+			<bool id="FontItalic1" default="false"/>
+			<bool id="FontBold1" default="false"/>
+			<color id="FontColor1" default="FFFFFF"/>
+			<color id="FontBackgroundColor1" default="FFFFFF"/>
+			<bool id="HotTracking1" default="false"/>
+			<bool id="SnapToGrid1" default="true"/>
+			<bool id="NoConnectedFiles1" default="false"/>
+			<bool id="SimpleProgress1" default="false"/>
+			<bool id="ConfirmFileDelete1" default="false"/>
+			<bool id="DontUseRecycleBin1" default="false"/>
+			<integer id="HotTrackingTime1" default="-1"/>
+			<bool id="VirtualFileDelete1" default="false"/>
+			<bool id="UseDelete1" default="true"/>
+			<bool id="UseRename1" default="true"/>
+			<bool id="DontUseCtrlC1" default="false"/>
+			<bool id="DontUseCtrlX1" default="false"/>
+			<bool id="DontUseCtrlV1" default="false"/>
+			<string id="ViewMode1" default="icons"/>
+			<bool id="InlineBrowsing1" default="false" />
+			<bool id="NoVirtualSwitch1" default="false" />
+			<bool id="DontUseCtrlA1" default="false" />
+			<bool id="StealFocus1" default="false" />
+			<bool id="UseSelectionRectangle1" default="false" />
+			<string id="RectangleModifierKey1" default=".none" />
+			<bool id="UseSystemMenu1" default="false" />
+			<string id="SystemMenuModifierKey1" default=".none" />
+			<string id="IconPositionFile1" default=".registry" />
+			<string id="CustomDrive1" default="-" />
+			<bool id="AutoArrange1" default="false" />
+			<integer id="FontWeight1" default="700 if FontBold is set, 400 otherwise." />
+			<string id="FontQuality1" default="default" />
+			<bool id="FontStrikeout1" default="false" />
+			<bool id="FontUnderline1" default="false" />
+			<bool id="DontUseRegistryIcons1" default="false" />
+			<bool id="HideControlPanel1" default="registry setting or false" />
+			<bool id="HideMyDocuments1" default="registry setting or false" />
+			<bool id="HideInternetExplorer1" default="registry setting or false" />
+			<bool id="HideRecycleBin1" default="registry setting or false" />
+			<bool id="HideMyNetworkPlaces1" default="registry setting or false" />
+			<bool id="HideMyComputer1" default="registry setting or false" />
+			<bool id="NoInfoTips1" default="false" />
+			<bool id="AlignTop1" default="false" />
+			<bool id="AlwaysShowSelection1" default="false" />
+			<bool id="DontUseF51" default="false" />
+			<command id="OnCtrlZ1" default=".undo" />
+			<command id="OnCtrlX1" default=".cut" />
+			<command id="OnCtrlV1" default=".paste" />
+			<command id="OnCtrlA1" default=".selectall" />
+			<command id="OnCtrlC1" default=".copy" />
+			<command id="OnFolderChange1" default=".none" />
+			<command id="OnRemoveItem1" default=".none" />
+			<command id="OnInsertItem1" default=".none" />
+			<command id="OnF1Down1" default=".none" />
+			<command id="OnF2Down1" default=".rename" />
+			<command id="OnF3Down1" default=".none" />
+			<command id="OnF4Down1" default=".none" />
+			<command id="OnF5Down1" default=".refresh" />
+			<command id="OnF6Down1" default=".none" />
+			<command id="OnF7Down1" default=".none" />
+			<command id="OnF8Down1" default=".none" />
+			<command id="OnF9Down1" default=".none" />
+			<command id="OnF10Down1" default=".none" />
+			<command id="OnF11Down1" default=".none" />
+			<command id="OnF12Down1" default=".none" />
+			<command id="OnF1Up1" default=".none" />
+			<command id="OnF2Up1" default=".none" />
+			<command id="OnF3Up1" default=".none" />
+			<command id="OnF4Up1" default=".none" />
+			<command id="OnF5Up1" default=".none" />
+			<command id="OnF6Up1" default=".none" />
+			<command id="OnF7Up1" default=".none" />
+			<command id="OnF8Up1" default=".none" />
+			<command id="OnF9Up1" default=".none" />
+			<command id="OnF10Up1" default=".none" />
+			<command id="OnF11Up1" default=".none" />
+			<command id="OnF12Up1" default=".none" />
+			<command id="OnDELUp1" default=".none" />
+			<command id="OnDELDown1" default=".delete" />
+			<bool id="DontPasteText1" default="false" />
+			<command id="OnLeftClickDown1" default=".forward" />
+			<command id="OnLeftClickUp1" default=".forward" />
+			<command id="OnLeftDoubleClick1" default=".forward" />
+			<command id="OnMiddleClickDown1" default=".forward" />
+			<command id="OnMiddleClickUp1" default=".forward" />
+			<command id="OnMiddleDoubleClick1" default=".forward" />
+			<command id="OnRightClickDown1" default=".forward" />
+			<command id="OnRightClickUp1" default=".forward" />
+			<command id="OnRightDoubleClick1" default=".forward" />
+			<command id="OnX1ClickDown1" default=".forward" />
+			<command id="OnX1ClickUp1" default=".forward" />
+			<command id="OnX1DoubleClick1" default=".forward" />
+			<command id="OnX2ClickDown1" default=".forward" />
+			<command id="OnX2ClickUp1" default=".forward" />
+			<command id="OnX2DoubleClick1" default=".forward" />
+			<command id="OnWheelUp1" default=".forward" />
+			<command id="OnWheelDown1" default=".forward" />
+			<command id="OnWheelLeft1" default=".forward" />
+			<command id="OnWheelRight1" default=".forward" />
+			<command id="OnRightKeyDown1" default=".goright" />
+			<command id="OnLeftKeyDown1" default=".goleft" />
+			<command id="OnUpKeyDown1" default=".goup" />
+			<command id="OnDownKeyDown1" default=".godown" />
+			<command id="OnEnterDown1" default=".execute" />
+			<command id="OnRightKeyUp1" default=".none" />
+			<command id="OnLeftKeyUp1" default=".none" />
+			<command id="OnUpKeyUp1" default=".none" />
+			<command id="OnDownKeyUp1" default=".none" />
+			<command id="OnEnterUp1" default=".none" />
+			<integer id="ClickonicErrorTranslucency1" default="2" />
+			<integer id="Monitor1" default="0" />
+			<bool id="ExplicitCalls1" default="false" />
+		</data>
+		<!-- @@@@@@@@@@@@@@@@@@  config @@@@@@@@@@@@@@@@ -->
+		<config>
+			<group section="mouseevents">
+				<single name="(group)OnLeftClickDown">
+					<command data="OnLeftClickDown1"/>
+					<description>
+						<p>This will execute [command] when the left mouse button is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnLeftClickUp">
+					<command data="OnLeftClickUp1"/>
+					<description>
+						<p>This will execute [command] when the left mouse button is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnLeftDoubleClick">
+					<command data="OnLeftDoubleClick1"/>
+					<description>
+						<p>This will execute [command] when the left mouse button is Double Clicked.</p>
+					</description>
+				</single>
+				<single name="(group)OnMiddleClickDown">
+					<command data="OnMiddleClickDown1"/>
+					<description>
+						<p>This will execute [command] when the middle mouse button is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnMiddleClickUp">
+					<command data="OnMiddleClickUp1"/>
+					<description>
+						<p>This will execute [command] when the middle mouse button is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnMiddleDoubleClick">
+					<command data="OnMiddleDoubleClick1"/>
+					<description>
+						<p>This will execute [command] when the middle mouse button is double clicked.</p>
+					</description>
+				</single>
+				<single name="(group)OnRightClickDown">
+					<command data="OnRightClickDown1"/>
+					<description>
+						<p>This will execute [command] when the right mouse button is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnRightClickUp">
+					<command data="OnRightClickUp1"/>
+					<description>
+						<p>This will execute [command] when the right mouse button is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnRightDoubleClick">
+					<command data="OnRightDoubleClick1"/>
+					<description>
+						<p>This will execute [command] when the right mouse button is double clicked.</p>
+					</description>
+				</single>
+				<single name="(group)OnX1ClickDown">
+					<command data="OnX1ClickDown1"/>
+					<description>
+						<p>This will execute [command] when the X1 mouse button is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnX1ClickUp">
+					<command data="OnX1ClickUp1"/>
+					<description>
+						<p>This will execute [command] when the X1 mouse button is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnX1DoubleClick">
+					<command data="OnX1DoubleClick1"/>
+					<description>
+						<p>This will execute [command] when the X1 mouse button is double clicked.</p>
+					</description>
+				</single>
+				<single name="(group)OnX2ClickDown">
+					<command data="OnX2ClickDown1"/>
+					<description>
+						<p>This will execute [command] when the X2 mouse button is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnX2ClickUp">
+					<command data="OnX2ClickUp1"/>
+					<description>
+						<p>This will execute [command] when the X2 mouse button is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnX2DoubleClick">
+					<command data="OnX2DoubleClick1"/>
+					<description>
+						<p>This will execute [command] when the X2 mouse button is double clicked.</p>
+					</description>
+				</single>
+				<single name="(group)OnWheelUp">
+					<command data="OnWheelUp1"/>
+					<description>
+						<p>This will execute [command] when the mouse wheel is scrolled upwards.</p>
+					</description>
+				</single>
+				<single name="(group)OnWheelDown">
+					<command data="OnWheelDown1"/>
+					<description>
+						<p>This will execute [command] when the mouse wheel is scrolled downwards.</p>
+					</description>
+				</single>
+				<single name="(group)OnWheelLeft">
+					<command data="OnWheelLeft1"/>
+					<description>
+						<p>This will execute [command] when the mouse wheel is scrolled to the left.</p>
+					</description>
+				</single>
+				<single name="(group)OnWheelRight">
+					<command data="OnWheelRight1"/>
+					<description>
+						<p>This will execute [command] when the mouse wheel is scrolled to the right.</p>
+					</description>
+				</single>
+			</group>
+			<group section="globalsettings">
+				<single name="ClickonicErrorTranslucency">
+					<integer data="ClickonicErrorTranslucency1"/>
+					<description>
+						<p>This setting determines which errors Clickonic will alert you about. All errors will still be 
+						loged as long as your LSLogLevel and LSLogFile variables are set up. Possible values: <br />0. Show no errors.<br />
+						1. Only show critical errors<br />
+						2. Show Errors and warnings<br />
+						3. Show Errors, warnings, and notices<br />
+						4. Show Errors, warnings, notices, and debug messages.</p>
+					</description>
+				</single>
+			</group>
+			<group section="events">
+				<single name="(group)OnFolderChange">
+					<command data="OnFolderChange1"/>
+					<description>
+						<p>This will execute [command] after a directory change.</p>
+					</description>
+				</single>
+				<single name="(group)OnRemoveItem">
+					<command data="OnRemoveItem1"/>
+					<description>
+						<p>This will execute [command] when an icon is removed from the listview.</p>
+					</description>
+				</single>
+				<single name="(group)OnInsertItem">
+					<command data="OnInsertItem1"/>
+					<description>
+						<p>This will execute [command] when an icon is added to the listview.</p>
+					</description>
+				</single>
+				<single name="(group)OnF1Down">
+					<command data="OnF1Down1"/>
+					<description>
+						<p>This will execute [command] when F1 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF2Down">
+					<command data="OnF2Down1"/>
+					<description>
+						<p>This will execute [command] when F2 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF3Down">
+					<command data="OnF3Down1"/>
+					<description>
+						<p>This will execute [command] when F3 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF4Down">
+					<command data="OnF4Down1"/>
+					<description>
+						<p>This will execute [command] when F4 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF5Down">
+					<command data="OnF5Down1"/>
+					<description>
+						<p>This will execute [command] when F5 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF6Down">
+					<command data="OnF6Down1"/>
+					<description>
+						<p>This will execute [command] when F6 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF7Down">
+					<command data="OnF7Down1"/>
+					<description>
+						<p>This will execute [command] when F7 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF8Down">
+					<command data="OnF8Down1"/>
+					<description>
+						<p>This will execute [command] when F8 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF9Down">
+					<command data="OnF9Down1"/>
+					<description>
+						<p>This will execute [command] when F9 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF10Down">
+					<command data="OnF10Down1"/>
+					<description>
+						<p>This will execute [command] when F10 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF11Down">
+					<command data="OnF11Down1"/>
+					<description>
+						<p>This will execute [command] when F11 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF12Down">
+					<command data="OnF12Down1"/>
+					<description>
+						<p>This will execute [command] when F12 is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnDELDown">
+					<command data="OnDELDown1"/>
+					<description>
+						<p>This will execute [command] when delete is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnF1Up">
+					<command data="OnF1Up1"/>
+					<description>
+						<p>This will execute [command] when F1 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF2Up">
+					<command data="OnF2Up1"/>
+					<description>
+						<p>This will execute [command] when F2 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF3Up">
+					<command data="OnF3Up1"/>
+					<description>
+						<p>This will execute [command] when F3 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF4Up">
+					<command data="OnF4Up1"/>
+					<description>
+						<p>This will execute [command] when F4 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF5Up">
+					<command data="OnF5Up1"/>
+					<description>
+						<p>This will execute [command] when F5 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF6Up">
+					<command data="OnF6Up1"/>
+					<description>
+						<p>This will execute [command] when F6 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF7Up">
+					<command data="OnF7Up1"/>
+					<description>
+						<p>This will execute [command] when F7 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF8Up">
+					<command data="OnF8Up1"/>
+					<description>
+						<p>This will execute [command] when F8 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF9Up">
+					<command data="OnF9Up1"/>
+					<description>
+						<p>This will execute [command] when F9 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF10Up">
+					<command data="OnF10Up1"/>
+					<description>
+						<p>This will execute [command] when F10 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF11Up">
+					<command data="OnF11Up1"/>
+					<description>
+						<p>This will execute [command] when F11 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnF12Up">
+					<command data="OnF12Up1"/>
+					<description>
+						<p>This will execute [command] when F12 is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnDELUp">
+					<command data="OnDELUp1"/>
+					<description>
+						<p>This will execute [command] when delete is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnCtrlA">
+					<command data="OnCtrlA1"/>
+					<description>
+						<p>This will execute [command] when CTRL+A is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnCtrlC">
+					<command data="OnCtrlC1"/>
+					<description>
+						<p>This will execute [command] when CTRL+C is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnCtrlV">
+					<command data="OnCtrlV1"/>
+					<description>
+						<p>This will execute [command] when CTRL+V is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnCtrlX">
+					<command data="OnCtrlX1"/>
+					<description>
+						<p>This will execute [command] when CTRL+X is pressed.</p>
+					</description>
+				</single>
+				<!--<single name="(group)OnCtrlZ">
+					<command data="OnCtrlZ1"/>
+					<description>
+						<p>This will execute [command] when CTRL+Z is pressed.</p>
+					</description>
+				</single>-->
+				<single name="(group)OnEnterDown">
+					<command data="OnEnterDown1"/>
+					<description>
+						<p>This will execute [command] when ENTER is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnEnterUp">
+					<command data="OnEnterUp1"/>
+					<description>
+						<p>This will execute [command] when ENTER is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnRightKeyDown">
+					<command data="OnRightKeyDown1"/>
+					<description>
+						<p>This will execute [command] when the right arrow key is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnRightKeyUp">
+					<command data="OnRightKeyUp1"/>
+					<description>
+						<p>This will execute [command] when the right arrow key is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnLeftKeyDown">
+					<command data="OnLeftKeyDown1"/>
+					<description>
+						<p>This will execute [command] when the left arrow key is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnLeftKeyUp">
+					<command data="OnLeftKeyUp1"/>
+					<description>
+						<p>This will execute [command] when the left arrow key is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnDownKeyDown">
+					<command data="OnDownKeyDown1"/>
+					<description>
+						<p>This will execute [command] when the down arrow key is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnDownKeyUp">
+					<command data="OnDownKeyUp1"/>
+					<description>
+						<p>This will execute [command] when the down arrow key is released.</p>
+					</description>
+				</single>
+				<single name="(group)OnUpKeyDown">
+					<command data="OnUpKeyDown1"/>
+					<description>
+						<p>This will execute [command] when the up arrow key is pressed.</p>
+					</description>
+				</single>
+				<single name="(group)OnUpKeyUp">
+					<command data="OnUpKeyUp1"/>
+					<description>
+						<p>This will execute [command] when the up arrow key is released.</p>
+					</description>
+				</single>
+			</group>
+			<group section="exportedvars">
+				<single name="(group)CurrentFolder">
+					<description>
+						<p>The current folder the group is in. ".desktop" will be substituted for the actual path if the current folder is the virtual desktop folder.</p>
+					</description>
+				</single>
+				<single name="(group)CurrentX">
+					<description>
+						<p>The current X value of the group.</p>
+					</description>
+				</single>
+				<single name="(group)CurrentY">
+					<description>
+						<p>The current Y value of the group.</p>
+					</description>
+				</single>
+				<single name="(group)CurrentWidth">
+					<description>
+						<p>The current width of the group.</p>
+					</description>
+				</single>
+				<single name="(group)CurrentHeight">
+					<description>
+						<p>The current height of the group.</p>
+					</description>
+				</single>
+				<single name="(group)IsHidden">
+					<description>
+						<p>"true" if the group is hidden, "false" if it's visible.</p>
+					</description>
+				</single>
+				<single name="(group)ItemCount">
+					<description>
+						<p>The number of items currently in the group.</p>
+					</description>
+				</single>
+			</group>
+			<group section="removal">
+				<single name="ZIP Files">
+					<description>
+						<p>
+							If you are having problems with not being able to open .ZIP files, delete the "HKEY_CLASSES_ROOT\SystemFileAssociations\.zip" key 
+							from the registry. If you want to undo this, create all necesary keys and set the default value of 
+							"HKEY_CLASSES_ROOT\SystemFileAssociations\.zip\CLSID" to "{E88DCCE0-B7B3-11d1-A9F0-00AA0060FA31}".
+						</p>
+					</description>
+				</single>
+				<single name="My Documents">
+					<description>
+						<p>
+							If you are having problems with not being able to open the My Documents folder, change Attributes in
+							HKEY_CLASSES_ROOT\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\ShellFolder from F080013D to B080013D
+						</p>
+					</description>
+				</single>
+			</group>
+			<group section="settings">
+				<single name="(group)Folder">
+					<string data="Folder1"/>
+					<description>
+						<p>A folder to display. Use ".desktop" to show full desktop content or $Desktop$ to show only icons. You can also use ".mycomputer" to show the contents of My Computer.</p>
+					</description>
+				</single>
+				<single name="(group)X">
+					<coordinate data="X1"/>
+					<description>
+						<p>Horizontal coordinate of the top left corner of the group</p>
+					</description>
+				</single>
+				<single name="(group)Y">
+					<coordinate data="Y1"/>
+					<description>
+						<p>Vertical coordinate of the top left corner of the group</p>
+					</description>
+				</single>
+				<single name="(group)Width">
+					<integer data="Width1"/>
+					<description>
+						<p>Initial width of the icon group.</p>
+					</description>
+				</single>
+				<single name="(group)Height">
+					<integer data="Height1"/>
+					<description>
+						<p>Initial height of the icon group.</p>
+					</description>
+				</single>
+				<single name="(group)SpacingX">
+					<integer data="SpacingX1"/>
+					<description>
+						<p>
+							Horizontal distance between neighbour icons. Include the icon size here too!
+							If both <strong>(group)SpacingX</strong> and <xref>(group)SpacingY</xref> are set to -1,
+							the default system options will be used.
+						</p>
+					</description>
+				</single>
+				<single name="(group)SpacingY">
+					<integer data="SpacingY1"/>
+					<description>
+						<p>
+							Vertical distance between neighbour icons. Include the icon size here too!
+							If both <xref>(group)SpacingX</xref> and <strong>(group)SpacingY</strong> are set to -1,
+							the default system options will be used.
+						</p>
+					</description>
+				</single>
+				<single name="(group)Background">
+					<string data="Background1"/>
+					<description>
+						<p>
+							Background image for your icon group. Note, please, that it is a file name or URL! You may not
+							use native LiteStep hacks like ".extract=", "image1|image2|image3", etc. Unfortunaly, it's an
+							Explorer limitation that cannot be fixed...
+						</p>
+					</description>
+				</single>
+				<single name="(group)BackgroundColor">
+					<color data="BackgroundColor1"/>
+					<description>
+						<p>Background color. Applied <strong>in addition</strong> to the background image.</p>
+					</description>
+				</single>
+				<single name="(group)Tiled">
+					<bool data="Tiled1"/>
+					<description>
+						<p>Set this flag if the background image should be tiled.</p>
+					</description>
+				</single>
+				<single name="(group)OffsetPercentX">
+					<integer data="OffsetPercentX1"/>
+					<description>
+						<p>
+							Percentage of the group area that the image should be offset horizontally.
+							For example, at 0 percent, the image will be displayed against the left edge of
+							the group area. At 50 percent, the image will be displayed horizontally centered
+							in the group area. At 100 percent, the image will be displayed against the right edge
+							of the group area. This member is only valid when <xref>(group)Tiled</xref> flag not set.
+						</p>
+					</description>
+				</single>
+				<single name="(group)OffsetPercentY">
+					<integer data="OffsetPercentY1"/>
+					<description>
+						<p>
+							Percentage of the group area that the image should be offset vertically. See
+							<xref>(group)OffsetPercentX</xref> for details.
+						</p>
+					</description>
+				</single>
+				<single name="(group)Font">
+					<font data="Font1"/>
+					<description>
+						<p>Sets the name of the font used to display file names.</p>
+					</description>
+				</single>				
+				<single name="(group)FontSize">
+					<integer data="FontSize1"/>
+					<description>
+						<p>Sets the height of the font used to display the file names.</p>
+					</description>
+				</single>
+				<single name="(group)FontItalic">
+					<bool data="FontItalic1"/>
+					<description>
+						<p>If this command is present then the font will be italic.</p>
+					</description>
+				</single>
+				<single name="(group)FontUnderline">
+					<bool data="FontUnderline1"/>
+					<description>
+						<p>If this command is present then the font will be underlined.</p>
+					</description>
+				</single>
+				<single name="(group)FontStrikeout">
+					<bool data="FontStrikeout1"/>
+					<description>
+						<p>If this command is present then the font will have a line through it.</p>
+					</description>
+				</single>
+				<single name="(group)FontBold">
+					<bool data="FontBold1"/>
+					<description>
+						<p>If this command is present then the font will be bold.</p>
+					</description>
+				</single>
+				<single name="(group)FontWeight">
+					<integer data="FontWeight1"/>
+					<description>
+						<p>Specifies the weight of the Font. Range: 1 to 1000. This value overwrites FontBold if set.</p>
+					</description>
+				</single>
+				<single name="(group)FontQuality">
+					<string data="FontQuality1"/>
+					<description>
+						<p>Specifies the quality of the font. Values: cleartype, antialiased, proof, draft, nonantialiased, default. default will use the systems default font quality.</p>
+					</description>
+				</single>
+				<single name="(group)FontColor">
+					<color data="FontColor1"/>
+					<description>
+						<p>Sets the color of the font used to display the file names. Works only on Win2k or if <xref>(group)Background</xref> specified</p>
+					</description>
+				</single>
+				<single name="(group)FontBackgroundColor">
+					<color data="FontBackgroundColor1"/>
+					<description>
+						<p>Sets the color behind the icon labels. Works only on Win2k or if <xref>(group)Background</xref> specified</p>
+					</description>
+				</single>
+				<single name="(group)StartHidden">
+					<bool data="StartHidden1"/>
+					<description>
+						<p>Sets the initial visibility</p>
+					</description>
+				</single>
+				<single name="(group)NoScroll">
+					<bool data="NoScroll1"/>
+					<description>
+						<p>Don't show the scroll bars</p>
+					</description>
+				</single>
+				<single name="(group)ExplorerDesktop">
+					<bool data="ExplorerDesktop1"/>
+					<description>
+						<p>Use the Explorer Desktop Click behaviour. (not recommended!) This essentially disables all "click transparency"
+						and enables the selection rectangle and system menu with no modifier keys.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseRecycleBin">
+					<bool data="DontUseRecycleBin1"/>
+					<description>
+						<p>Delete files directly rather than moving them to recycle bin.</p>
+					</description>
+				</single>
+				<single name="(group)ConfirmFileDelete">
+					<bool data="ConfirmFileDelete1"/>
+					<description>
+						<p>Ask for confirmation before deleting files.</p>
+					</description>
+				</single>
+				<single name="(group)SimpleProgress">
+					<bool data="SimpleProgress1"/>
+					<description>
+						<p>Use a simple progress bar for file operations instead of the standard one.</p>
+					</description>
+				</single>
+				<single name="(group)NoConnectedFiles">
+					<bool data="NoConnectedFiles1"/>
+					<description>
+						<p>Don't treat connected files as a group (that thing windows does when you save a webpage for example)</p>
+					</description>
+				</single>
+				<single name="(group)SnapToGrid">
+					<bool data="SnapToGrid1"/>
+					<description>
+						<p>Snap icons to a grid.</p>
+					</description>
+				</single>
+				<single name="(group)HotTracking">
+					<bool data="HotTracking1"/>
+					<description>
+						<p>Enables hottracking, selection of files by hovering the mouse over them.</p>
+					</description>
+				</single>
+				<single name="(group)HotTrackingTime">
+					<integer data="HotTrackingTime1"/>
+					<description>
+						<p>Sets the time in milliseconds between the mouse hovering over a file and the file being selected. -1 is some kind of default.</p>
+					</description>
+				</single>
+				<single name="(group)VirtualFileDelete">
+					<bool data="VirtualFileDelete1"/>
+					<description>
+						<p>Pressing delete will only delete the files from the group until the module is reloaded.</p>
+					</description>
+				</single>
+				<single name="(group)UseDelete">
+					<bool data="UseDelete1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnDELDown</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)UseRename">
+					<bool data="UseRename1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnF2Down</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlC">
+					<bool data="DontUseCtrlC1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnCtrlC</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlX">
+					<bool data="DontUseCtrlX1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnCtrlX</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlV">
+					<bool data="DontUseCtrlV1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnCtrlV</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseCtrlA">
+					<bool data="DontUseCtrlA1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnCtrlA</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)ViewMode">
+					<string data="ViewMode1"/>
+					<description>
+						<p>Sets the view style of icons. Values: icons, smallicons, tiles, details, or thumbnails.
+						Please note that the only supported value is "icons", the others are a little buggy and are just in there if you want to experiment.</p>
+					</description>
+				</single>
+				<single name="(group)InlineBrowsing">
+					<bool data="InlineBrowsing1"/>
+					<description>
+						<p>Causes opening folders to change the groups directory to said folder instead of opening it externally.</p>
+					</description>
+				</single>
+				<single name="(group)NoVirtualSwitch">
+					<bool data="NoVirtualSwitch1"/>
+					<description>
+						<p>Prevents clickonic from replacing the users desktop folder with the virtual desktop folder.</p>
+					</description>
+				</single>
+				<single name="(group)StealFocus">
+					<bool data="StealFocus1"/>
+					<description>
+						<p>Causes clickonic to steal focus when it detects a mouseclick within its area.</p>
+					</description>
+				</single>
+				<single name="(group)UseSelectionRectangle">
+					<bool data="UseSelectionRectangle1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnLeftClickDown</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)RectangleModifierKey">
+					<string data="RectangleModifierKey1"/>
+					<description>
+						<p>Can be any combination of .alt, .shift, and .ctrl. For example, .alt.ctrl or .alt+.ctrl</p>
+					</description>
+				</single>
+				<single name="(group)UseSystemMenu">
+					<bool data="UseSystemMenu1"/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>(group)OnRightClickDown</xref> instead.</p>
+					</description>
+				</single>
+				<single name="(group)SystemMenuModifierKey">
+					<string data="SystemMenuModifierKey1"/>
+					<description>
+						<p>Can be any combination of .alt, .shift, and .ctrl. For example, .alt.ctrl or .alt+.ctrl</p>
+					</description>
+				</single>
+				<single name="(group)IconPositionFile">
+					<string data="IconPositionFile1"/>
+					<description>
+						<p>This specifies the file to store icon positions in. Omiting it will cause icon positions to be stored in the registry. You 
+						can also specify .dontsave to prevent icon positions from saving.</p>
+					</description>
+				</single>
+				<single name="(group)CustomDrive">
+					<string data="CustomDrive1"/>
+					<description>
+						<p>This will cause any position saving for this drive to be marked as the custom drive. The idea is that if a drive changes its drive letter 
+						you can specify it here to still have your icons saved for it. You can use .current for the current drive.</p>
+					</description>
+				</single>
+				<single name="(group)AutoArrange">
+					<bool data="AutoArrange1"/>
+					<description>
+						<p>This will cause icons to be arranged automatically.</p>
+					</description>
+				</single>
+				<single name="(group)AlignTop">
+					<bool data="AlignTop1"/>
+					<description>
+						<p>This will cause icons to be aligned along the top of the window.</p>
+					</description>
+				</single>
+				<single name="(group)DontUseRegistryIcons">
+					<bool data="DontUseRegistryIcons1"/>
+					<description>
+						<p>Desktop icons will not be hidden based on explorer settings.</p>
+					</description>
+				</single>
+				<single name="(group)HideRecycleBin">
+					<bool data="HideRecycleBin1"/>
+					<description>
+						<p>The recycle bin will be hidden on the desktop. This overrides the explorer setting.</p>
+					</description>
+				</single>
+				<single name="(group)HideMyDocuments">
+					<bool data="HideMyDocuments1"/>
+					<description>
+						<p>My Documents will be hidden on the desktop. This overrides the explorer setting.</p>
+					</description>
+				</single>
+				<single name="(group)HideInternetExplorer">
+					<bool data="HideInternetExplorer1"/>
+					<description>
+						<p>Internet Explorer will be hidden on the desktop. This overrides the explorer setting.</p>
+					</description>
+				</single>
+				<single name="(group)HideMyNetworkPlaces">
+					<bool data="HideMyNetworkPlaces1"/>
+					<description>
+						<p>My Network Places will be hidden on the desktop. This overrides the explorer setting.</p>
+					</description>
+				</single>
+				<single name="(group)HideMyComputer">
+					<bool data="HideMyComputer1"/>
+					<description>
+						<p>My Computer will be hidden on the desktop. This overrides the explorer setting.</p>
+					</description>
+				</single>
+				<single name="(group)HideControlPanel">
+					<bool data="HideControlPanel1"/>
+					<description>
+						<p>The control panel will be hidden on the desktop. This overrides the explorer setting.</p>
+					</description>
+				</single>
+				<single name="(group)NoInfoTips">
+					<bool data="NoInfoTips1"/>
+					<description>
+						<p>Clickonic won't show infotips for icons.</p>
+					</description>
+				</single>
+				<single name="(group)AlwaysShowSelection">
+					<bool data="AlwaysShowSelection1"/>
+					<description>
+						<p>Keeps selected icons highlighted even when the group doesn't have focus.</p>
+					</description>
+				</single>
+				<single name="(group)DontPasteText">
+					<bool data="DontPasteText1"/>
+					<description>
+						<p>Prevents clickonic from saving text in the clipboard.</p>
+					</description>
+				</single>
+				<single name="(group)Monitor">
+					<integer data="Monitor1"/>
+					<description>
+						<p>Which monitor clickonics X and Y coordinates is relative to. 0 = Virtual desktop; 1 = Primary monitor; and so on</p>
+					</description>
+				</single>
+				<single name="(group)ExplicitCalls">
+					<integer data="ExplicitCalls1"/>
+					<description>
+						<p>This will make Clickonic explicitly call explorer.exe when opening a folder.</p>
+					</description>
+				</single>
+			</group>
+		</config>
+		<!-- @@@@@@@@@@@@@@@@@@  bangs  @@@@@@@@@@@@@@@@ -->
+		<control>
+			<group section="control">
+				<bang name="ClickonicShow">
+					<group/>
+					<description>
+						<p>Show the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHide">
+					<group/>
+					<description>
+						<p>Hide the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicToggle">
+					<group/>
+					<description>
+						<p>Toggle the group visibility state.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicToggleExplorerDesktop">
+					<group/>
+					<description>
+						<p>Toggles the group Desktop Click behaviour between Explorer and LS Style.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicReset">
+					<group/>
+					<string/>
+					<description>
+						<p>Reset icons position data. Omit the argument in order to reset the current folder, set it to .all in order to delete all position data, or specify a folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByName">
+					<group/>
+					<description>
+						<p>Sort icons by name.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortBySize">
+					<group/>
+					<description>
+						<p>Sort icons by file size.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByType">
+					<group/>
+					<description>
+						<p>Sort icons by file type.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByDate">
+					<group/>
+					<description>
+						<p>Sort icons by file date.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSortByDate">
+					<group/>
+					<description>
+						<p>Sort icons by file date.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetBackground">
+					<group/>
+					<string/>
+					<integer/>
+					<integer/>
+					<bool/>
+					<description>
+						<p>
+							Change the background image. You <strong>cannot</strong> set background image if
+							havn't already specified one in the <xref>(group)Background</xref>.
+							First paremeter is analogue of <xref>(group)Background</xref>, the second parameter
+							and the third one are new <xref>(group)OffsetPercentX</xref> and <xref>(group)OffsetPercentX</xref>
+							values. Use the last parameter to set the background image tiled (or not tiled, as you wish, monsieur).
+						</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetBackgroundColor">
+					<group/>
+					<color/>
+					<description>
+						<p>Set background color.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetTextColor">
+					<group/>
+					<color/>
+					<description>
+						<p>Apply new font color.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetTextBkColor">
+					<group/>
+					<color/>
+					<description>
+						<p>Apply new background color for the icon labels.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicExplorerDesktop">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable the explorer desktop.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicConfirmFileDelete">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable confirmation dialogs for file deletion.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicDontUseRecycleBin">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable moving files to the recycle bin.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicNoConnectedFiles">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable connected files.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSimpleProgress">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable the simple progress bar.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSnapToGrid">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable snap to grid.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicHotTracking">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable hot tracking.</p>
+					</description>
+				</bang> 
+				<bang name="ClickonicHotTrackingTime">
+					<group/>
+					<integer/>
+					<description>
+						<p>Set the hot tracking time in milliseconds.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicVirtualFileDelete">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enable/Disable VirtualFileDelete.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicUseDelete">
+					<group/>
+					<tbool/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>!ClickonicRefreshEvent</xref> instead.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicUseRename">
+					<group/>
+					<tbool/>
+					<deprecated/>
+					<description>
+						<p>Deprecated, please use <xref>!ClickonicRefreshEvent</xref> instead.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicPasteFiles">
+					<group/>
+					<description>
+						<p>Pastes files in the windows clipboard into the group folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicChangeDir">
+					<group/>
+					<string/>
+					<description>
+						<p>Changes the directory of the group. You can use .desktop for the virtual desktop folder, .mycomputer for virtual my computer folder, .selected for the currently focused folder, and .up to go up one folder in the hierarchy.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetViewMode">
+					<group/>
+					<string/>
+					<description>
+						<p>Changes the view mode of the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicInlineBrowsing">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enables/Disables Inline Browsing.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSelectAll">
+					<group/>
+					<description>
+						<p>Selects all files within the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicMove">
+					<group/>
+					<integer/>
+					<integer/>
+					<description>
+						<p>Moves the window to x,y</p>
+					</description>
+				</bang>
+				<bang name="ClickonicMoveBy">
+					<group/>
+					<integer/>
+					<integer/>
+					<description>
+						<p>Moves the window x coordinates right and y coordinates down.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicResize">
+					<group/>
+					<integer/>
+					<integer/>
+					<description>
+						<p>Resizes the window to width x height</p>
+					</description>
+				</bang>
+				<bang name="ClickonicResizeBy">
+					<group/>
+					<integer/>
+					<integer/>
+					<description>
+						<p>Expands the window</p>
+					</description>
+				</bang>
+				<bang name="ClickonicReposition">
+					<group/>
+					<integer/>
+					<integer/>
+					<integer/>
+					<integer/>
+					<description>
+						<p>Moves &amp; Resizes the window to specified position &amp; size. !ClickonicReposition Group [X] [Y] [Width] [Height]</p>
+					</description>
+				</bang>
+				<bang name="ClickonicRepositionBy">
+					<group/>
+					<integer/>
+					<integer/>
+					<integer/>
+					<integer/>
+					<description>
+						<p>Moves &amp; Resizes the window relative to the current size &amp; position. !ClickonicRepositionBy Group [X] [Y] [Width] [Height]</p>
+					</description>
+				</bang>
+				<bang name="ClickonicShowMyComputer">
+					<group/>
+					<description>
+						<p>Shows My Computer in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicShowMyNetworkPlaces">
+					<group/>
+					<description>
+						<p>Shows My Network Places in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicShowInternetExplorer">
+					<group/>
+					<description>
+						<p>Shows Internet Exlorer in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicShowMyDocuments">
+					<group/>
+					<description>
+						<p>Shows My Documents in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicShowRecycleBin">
+					<group/>
+					<description>
+						<p>Shows the Recycle Bin in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicShowControlPanel">
+					<group/>
+					<description>
+						<p>Shows the control panel in the desktop folder</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHideMyComputer">
+					<group/>
+					<description>
+						<p>Hides My Computer in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHideMyNetworkPlaces">
+					<group/>
+					<description>
+						<p>Hides My Network Places in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHideInternetExplorer">
+					<group/>
+					<description>
+						<p>Hides Internet Exlorer in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHideMyDocuments">
+					<group/>
+					<description>
+						<p>Hides My Documents in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHideRecycleBin">
+					<group/>
+					<description>
+						<p>Hides the Recycle Bin in the desktop folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicHideControlPanel">
+					<group/>
+					<description>
+						<p>Hides the Control Panel from the desktop.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicInfoTip">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enables/Disables/Toggles infotips.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicRefreshEvent">
+					<group/>
+					<evar/>
+					<command/>
+					<description>
+						<p>Changes the command for any of the <xref>events</xref>. Please note that this command will also change
+						the evar for the event.</p>
+						<example> 
+!ClickonicRefreshEvent DeskIcons DeskIconsOnFolderChange !about ; Shows !about on a folder change
+!ClickonicRefreshEvent DeskIcons DeskIconsOnF2Down ".none" ; Disables renaming with F2
+!ClickonicRefreshEvent DeskIcons DeskIconsOnDELDown ".none" ; Disables deletion by pressing delete</example>
+					</description>
+				</bang>
+				<bang name="ClickonicAlignTop">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enables/Disables/Toggles <xref>(group)AlignTop</xref>.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicRenameFile">
+					<group/>
+					<description>
+						<p>Renames the currently focused file.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicDeleteFiles">
+					<group/>
+					<description>
+						<p>Deletes the currently selected files.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicCopyFiles">
+					<group/>
+					<description>
+						<p>Copies the currently selected files.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicCutFiles">
+					<group/>
+					<description>
+						<p>Cuts the currently selected files.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicRefresh">
+					<group/>
+					<description>
+						<p>Refreshes the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicExecute">
+					<group/>
+					<description>
+						<p>Opens the selected icons</p>
+					</description>
+				</bang>
+				<bang name="ClickonicMoveFocus">
+					<group/>
+					<string/>
+					<description>
+						<p>Moves the focus, valid value are .up, .left, .down, and .right</p>
+					</description>
+				</bang>
+				<bang name="ClickonicClearData">
+					<group/>
+					<string/>
+					<description>
+						<p>Clears all stored icon positions for the group, except for the currently opend folder.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicRestoreIconPositions">
+					<group/>
+					<description>
+						<p>Restores the position of all icons in the group from the saved positions.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicCreateGroup">
+					<group/>
+					<description>
+						<p>Creates a group named [group].</p>
+					</description>
+				</bang>
+				<bang name="ClickonicDestroyGroup">
+					<group/>
+					<description>
+						<p>Destroys the group.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetMonitor">
+					<group/>
+					<description>
+						<p>Moves Clickonic to a different monitor.</p>
+					</description>
+				</bang>
+			</group>
+		</control>
+		<history>
+			<revision version="1.1.4.1" by="Alurcard2" date="2009-09-02">
+				<fixed>Issue introduced in 1.1.4 which could cause clickonic to load significantly slower.</fixed>
+			</revision>
+			<revision version="1.1.4" by="Alurcard2" date="2009-28-01">
+				<added>Support for Windows Vista and Windows 7</added>
+				<fixed>Crash on recycle with LiteStep 0.25.0</fixed>
+				<added>
+					<xref>(group)Monitor</xref>, 
+					<xref>!ClickonicSetMonitor</xref>
+				</added>
+				<fixed>Some Drag&amp;Drop improvements</fixed>
+				<added>Clickonic now logs all errors</added>
+				<added><xref>ClickonicErrorTranslucency</xref></added>
+				<added><xref>!ClickonicRestoreIconPositions</xref></added>
+				<added><xref>!ClickonicCreateGroup</xref> and <xref>!ClickonicDestroyGroup</xref></added>
+				<added>.dontsave option for <xref>(group)IconPositionFile</xref></added>
+				<added>
+					<xref>(group)HideControlPanel</xref>, 
+					<xref>!ClickonicHideControlPanel</xref>, 
+					<xref>!ClickonicShowControlPanel</xref>
+				</added>
+				<added><xref>(group)ExplicitCalls</xref></added>
+			</revision>
+			<revision version="1.1.3" by="Alurcard2" date="2008-25-10">
+				<fixed>Error message poping up when it shouldnt.</fixed>
+				<fixed>Clickonic wouldn't go all the way to the root drive using ".up".</fixed>
+				<added><xref>!ClickonicClearData</xref> to clean up old stored icon positions.</added>
+			</revision>
+			<revision version="1.1.2" by="Alurcard2" date="2008-30-08">
+				<fixed>Event actions containing spaces needed quotes around them.</fixed>
+				<added>
+					<xref>!ClickonicRenameFile</xref>, 
+					<xref>!ClickonicDeleteFiles</xref>, 
+					<xref>!ClickonicCopyFiles</xref>, 
+					<xref>!ClickonicCutFiles</xref>, 
+					<xref>!ClickonicRefresh</xref>, 
+					<xref>!ClickonicExecute</xref>, and 
+					<xref>!ClickonicMoveFocus</xref>
+				</added>
+			</revision>
+			<revision version="1.1.1" by="Alurcard2" date="2008-20-08">
+				<fixed>Clickonic is now "transparent" for double clicks, middle button clicks, and xbutton clicks</fixed>
+				<fixed>Icons would "snap to grid" on startup even if SnapToGrid was disabled while using an iconposition file</fixed>
+				<fixed>Icons wouldn't snap to grid when !ClickonicSnapToGrid was called</fixed>
+				<fixed>Selecting "Align to Grid" from the system menu no longer messes up icon spacing</fixed>
+				<fixed>Calling !Refresh will no longer result in LiteStep crashing(at least not due to clickonic).</fixed>
+				<fixed>The "ExplorerDesktop" setting works better now.</fixed>
+				<changed>Pressing F5 will refresh the icon group by default.</changed>
+				<added><xref>(group)AlwaysShowSelection</xref></added>
+				<changed>Visual Studio 2008 runtimes shouldn't be needed anymore.</changed>
+				<added>Added a few exported evars, 63 events, and <xref>!ClickonicRefreshEvent</xref></added>
+				<changed>Deprecated the following settings: <xref>(group)DontUseCtrlA</xref>, <xref>(group)DontUseCtrlV</xref>, <xref>(group)DontUseCtrlX</xref>, <xref>(group)DontUseCtrlC</xref>, <xref>(group)UseRename</xref>, <xref>(group)UseSelectionRectangle</xref>, <xref>(group)UseSystemMenu</xref>, and <xref>(group)UseDelete</xref>.</changed>
+				<changed>Deprecated the following bangs: <xref>!ClickonicUseDelete</xref>, <xref>!ClickonicUseRename</xref>.</changed>
+				<changed>Pasting with text in the clipboard will cause the clipboard to save the text into a .txt file on the clipboard, set <xref>(group)DontPasteText</xref> to avoid this.</changed>
+				<added>Added support for ".selected" in <xref>!ClickonicChangeDir</xref>.</added>
+			</revision>
+			<revision version="1.1" by="Alurcard2" date="2008-30-07">
+				<changed>Internet Explorer, Recycle Bin, My Computer, My Documents, and My Network Places will all be hidden/shown on the desktop depending on windows desktop settings.</changed>
+				<changed>Made deletion of above icons change windows desktop settings.</changed>
+				<changed>Clickonic no longer depends on a module such as xDesk, jDesk, or desktop2 being loaded.</changed>
+				<changed>Clickonic will now show infotips for icons. Use <xref>(group)NoInfoTips</xref> or <xref>!ClickonicInfoTip</xref> to disable them.</changed>
+				<changed>All bangs now support [false/true/toggle] instead of just [false/true].</changed>
+				<added>
+					<xref>!ClickonicShowMyComputer</xref>, 
+					<xref>!ClickonicShowMyNetworkPlaces</xref>, 
+					<xref>!ClickonicShowInternetExplorer</xref> , 
+					<xref>!ClickonicShowMyDocuments</xref>, and 
+					<xref>!ClickonicShowRecycleBin</xref>
+				</added>
+				<added>
+					<xref>!ClickonicHideMyComputer</xref>, 
+					<xref>!ClickonicHideMyNetworkPlaces</xref>, 
+					<xref>!ClickonicHideInternetExplorer</xref> , 
+					<xref>!ClickonicHideMyDocuments</xref>, and 
+					<xref>!ClickonicHideRecycleBin</xref>
+				</added>
+				<added>
+					<xref>(group)DontUseRegistryIcons</xref>
+				</added>
+				<added>
+					<xref>(group)HideRecycleBin</xref>, 
+					<xref>(group)HideMyDocuments</xref>, 
+					<xref>(group)HideInternetExplorer</xref>, 
+					<xref>(group)HideMyNetworkPlaces</xref>, 
+					<xref>(group)HideMyComputer</xref>
+				</added>
+				<fixed>Various issues with file cuting</fixed>
+				<fixed><xref>!ClickonicReset</xref> bang wasn't working properly.</fixed>
+				<fixed>Issue with icon positions locking up.</fixed>
+				<fixed>Icons will respect changes to SpacingX and SpacingY during a recycle.</fixed>
+				<added><xref>(group)AutoArrange</xref>, <xref>(group)AlignTop</xref>, <xref>!ClickonicAlignTop</xref></added>
+				<added><xref>(group)IconPositionFile</xref>, <xref>(group)CustomDrive</xref></added>
+				<added><xref>(group)NoVirtualSwitch</xref></added>
+				<added>Cut files now have a cut marked effect.</added>
+				<added>smallicons viewmode</added>
+				<added><xref>(group)DontUseCtrlA</xref>, Ctrl+A or <xref>!ClickonicSelectAll</xref> selects all files in the group.</added>
+				<added><xref>(group)StealFocus</xref>, Makes Clickonic steal focus when a point in its area is pressed.</added>
+				<added><xref>(group)UseSelectionRectangle</xref>, <xref>(group)RectangleModifierKey</xref></added>
+				<added><xref>(group)UseSystemMenu</xref>, <xref>(group)SystemMenuModifierKey</xref></added>
+				<added><xref>(group)FontWeight</xref>, <xref>(group)FontQuality</xref>, <xref>(group)FontUnderline</xref>, <xref>(group)FontStrikeout</xref></added>
+				<added><xref>!ClickonicMove</xref>, <xref>!ClickonicMoveBy</xref>, <xref>!ClickonicResize</xref>, <xref>!ClickonicResizeBy</xref></added>
+				<added><xref>!ClickonicReposition</xref>, <xref>!ClickonicRepositionBy</xref></added>
+			</revision>
+			<revision version="1.0.7" by="Alurcard2" date="2008-10-06">
+				<fixed>Removed some debugging code.</fixed>
+				<fixed>Pasting a cut file will move it rather than copy it.</fixed>
+				<added>Information on fixing problems with .ZIP files.</added>
+				<added>Ctrl+x cuts selected files.</added>
+				<changed>Icon positions are now saved in separate keys for every folder.</changed>
+				<changed><xref>!ClickonicReset</xref> Now supports a 2nd argument to determine what folder to reset.</changed>
+				<added><xref>!ClickonicChangeDir</xref>, <xref>(group)InlineBrowsing</xref>, <xref>!ClickonicInlineBrowsing</xref></added>
+				<added><xref>(group)ViewMode</xref>, <xref>!ClickonicSetViewMode</xref></added>
+				<added>
+					<xref>(group)DontUseCtrlV</xref>, 
+					<xref>(group)DontUseCtrlX</xref>, 
+					<xref>(group)DontUseCtrlC</xref>
+				</added>
+			</revision>
+			<revision version="1.0.6" by="Alurcard2" date="2008-04-06">
+				<fixed>Bug with deleting multiple files.</fixed>
+				<added>ctrl+c copies selected files to the windows clipboard.</added>
+				<added>Pressing ctrl+v while having a file selected pastes files from the clipboard.</added>
+				<added><xref>!ClickonicPasteFiles</xref> pastes files from the clipboard.</added>
+				<added>Added information about removing IE, My Documents, etc from the desktop.</added>
+			</revision>
+			<revision version="1.0.5.1" by="Alurcard2" date="2007-04-12">
+				<fixed>Deleting links or having file extensions disabled causing wrong file to be deleted</fixed>
+			</revision>
+			<revision version="1.0.5" by="Alurcard2" date="2007-30-11">
+				<added>The Delete button deletes selected files.</added>
+				<added>Press F2 to rename a focused file.</added>
+				<added>
+					<xref>(group)ConfirmFileDelete</xref>, 
+					<xref>(group)DontUseRecycleBin</xref>, 
+					<xref>(group)NoConnectedFiles</xref>, 
+					<xref>(group)SimpleProgress</xref>
+				</added>
+				<added>
+					<xref>(group)SnapToGrid</xref>, 
+					<xref>(group)HotTracking</xref>, 
+					<xref>(group)HotTrackingTime</xref>, 
+					<xref>!ClickonicExplorerDesktop</xref>
+				</added>
+				<added>
+					<xref>!ClickonicConfirmFileDelete</xref>, 
+					<xref>!ClickonicDontUseRecycleBin</xref>, 
+					<xref>!ClickonicNoConnectedFiles</xref>, 
+					<xref>!ClickonicSimpleProgress</xref>
+				</added>
+				<added>
+					<xref>!ClickonicSnapToGrid</xref>, 
+					<xref>!ClickonicHotTracking</xref>, 
+					<xref>!ClickonicHotTrackingTime</xref>, 
+					<xref>!ClickonicVirtualFileDelete</xref>
+				</added>
+				<added>
+					<xref>(group)UseRename</xref>, 
+					<xref>(group)UseDelete</xref>, 
+					<xref>!ClickonicUseRename</xref>, 
+					<xref>!ClickonicUseDelete</xref>
+				</added>
+			</revision>
+			<revision version="1.0.4" by="Seg@" date="2006-13-07">
+				<fixed>Left mouse button click wasn't 'transparent' for desktop. Thanks to immortal who point this bug</fixed>
+			</revision>
+			<revision version="1.0.3" by="Seg@" date="2006-16-04">
+				<added>
+					Background stuff:
+					<xref>(group)Background</xref>,
+					<xref>(group)BackgroundColor</xref>,
+					<xref>(group)Tiled</xref>,
+				</added>
+				<added>
+					<xref>(group)OffsetPercentX</xref>,
+					<xref>(group)OffsetPercentX</xref>,
+					<xref>!ClickonicSetBackground</xref>,
+					<xref>!ClickonicSetBackgroundColor</xref>
+				</added>
+				<added>
+					<xref>!ClickonicSetTextColor</xref>, <xref>!ClickonicSetTextBkColor</xref>
+				</added>
+			</revision>
+			<revision version="1.0.2" by="Andymon, Seg@" date="2006-08-04">
+				<fixed>No more crash after logoff/reboot</fixed>
+				<added><xref>(group)FontBackgroundColor</xref></added>
+				<fixed>Error message for bangs contained the bang name instead of the icons group name</fixed>
+				<added>
+					<xref>!ClickonicReset</xref>,
+					<xref>!ClickonicSortByName</xref>,
+					<xref>!ClickonicSortBySize</xref>,
+					<xref>!ClickonicSortByType</xref>,
+					<xref>!ClickonicSortByDate</xref>
+				</added>
+				<added>Added Russian documentation</added>
+			</revision>
+			<revision version="1.0.1" by="Andymon" date="2006-04-04">
+				<fixed>
+					Fixed the suboptimal MouseClick behaviour ;) The normal LiteStep Desktop Clicks were totally unavailable! Now it's a really great module ;)
+				</fixed>
+			</revision>
+			<revision version="1.0" by="Seg@" date="2005-12-05">
+				<note>
+					That's a first public release. Actually the most part of the module has been coded in 3 days of December 2004,
+					but I havn't enough time to finish the development till the yesterday =(
+				</note>
+			</revision>
+		</history>
+	</module>
+	<history>
+		<revision version="1.1.4.1">
+			<note>Added 1.1.4.1 changes</note>
+		</revision>
+		<revision version="1.1.4">
+			<note>Added 1.1.4 changes</note>
+		</revision>
+		<revision version="1.1.3">
+			<note>Added 1.1.3 changes</note>
+		</revision>
+		<revision version="1.1.2">
+			<note>Added 1.1.2 changes</note>
+		</revision>
+		<revision version="1.1.1">
+			<note>Added 1.1.1 changes</note>
+		</revision>
+		<revision version="1.1">
+			<note>Added 1.1 changes</note>
+		</revision>
+		<revision version="1.0.7">
+			<note>Added 1.0.7 changes</note>
+		</revision>
+		<revision version="1.0.6">
+			<note>Added 1.0.6 changes</note>
+		</revision>
+		<revision version="1.0.5.1">
+			<note>Added 1.0.5.1 changes</note>
+		</revision>
+		<revision version="1.0.5">
+			<note>Added 1.0.5 changes</note>
+		</revision>
+		<revision version="1.0.4">
+			<note>Added 1.0.4 changes</note>
+		</revision>
+		<revision version="1.0.3">
+			<note>Added 1.0.3 changes.</note>
+		</revision>
+		<revision version="1.0.2">
+			<note>Added 1.0.1 and 1.0.2 changes.</note>
+		</revision>
+		<revision version="1.0.0">
+			<note>First version as lsmd.</note>
+		</revision>
+	</history>
+</lsmd>

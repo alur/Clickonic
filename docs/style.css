@@ -1,0 +1,22 @@
+body {font-family: Tahoma, Verdana;font-size: 8pt;color: #000000;background-color: #FFFFFF; text-align:center; margin:0px;}
+a:link {color: #333333;font-weight: bold;text-decoration: underline; white-space: nowrap;}
+a:visited {text-decoration: underline; font-weight: bold; color: #333333; white-space: nowrap;}
+a:hover {text-decoration: underline; font-weight: bold; color: #000000; white-space: nowrap;}
+a:active {text-decoration: underline; font-weight: bold;color: #030303; white-space: nowrap;}
+div.copyright {padding-left:8px; padding-right:8px; padding-bottom:2px; padding-top:2px; background-color:#F0F0F0; text-align:left; font:9pt Trebuchet MS; border-bottom:1px dashed #000000;}
+div.navy {padding-left:8px; padding-right:8px; padding-bottom:2px; padding-top:2px; background-color:#F0F0F0; text-align:center; font:9pt Trebuchet MS; border-bottom:1px dashed #000000;}
+div.code {font-family: "Courier New", Courier; font-size: 8pt; text-align: left;margin-left:35px; margin-right:30px; padding: 3px; padding-left:5px; border: 1px solid #999999; background:#F0F0F0; white-space: nowrap;}
+div.exam {font-family: "Lucida Console", Courier; font-size: 8pt; text-align: left;margin-left:35px; margin-right:30px; padding: 3px; padding-left:5px; border: 1px solid #999999; background:#E0E0E0; white-space: nowrap;}
+div.head {background-image:url(head_bg.png);border-bottom:1px solid #000000;font:bold 34pt Century Gothic; color: #666666; padding:4px; text-align: left; background-color:#E0E0E0; white-space: nowrap;}
+div.midhead {border-bottom:1px dotted #999999; font:bold 14pt Trebuchet MS; margin:12px; color:#333333; text-align:left; white-space: nowrap;}
+div.text {text-align:justify; font:9pt Trebuchet MS; padding-left:30px; padding-right:30px;}
+td.text {text-align:justify; font:0.8em Trebuchet MS; padding-left:30px; padding-right:30px;}
+div.lasttext {text-align:justify; font:9pt Trebuchet MS; padding-left:30px;padding-right:30px;}
+div.totop {text-align:center; font:10pt Trebuchet MS; background-color:#F0F0F0; margin-top:10px; margin-bottom:10px; border-bottom:1px dashed #000000; border-top:1px dotted #000000; padding-bottom:4px;}
+span.exam {font-family: "Lucida Console", Courier; font-size: 8pt; text-align: left;padding: 3px; padding-left:5px; border: 1px solid #999999; background:#E0E0E0; white-space: nowrap;}
+span.code {font-family: "Courier New", Courier; font-size: 8pt; text-align: left;padding: 3px; padding-left:5px; border: 1px solid #999999; background:#E0E0E0; white-space: nowrap;}
+span.subhead {font:bold 17pt Century Gothic;}
+pre.code {font-family: "Courier New", Courier; font-size: 8pt; text-align: left;margin-left:35px; margin-right:30px; padding: 3px; padding-left:5px; border: 1px solid #999999; background:#F0F0F0; white-space: nowrap;}
+li {text-indent: -16px; padding-left:50px; padding-bottom:5px;}
+li.inner {list-style : circle; text-indent: -20px; padding-left:10px; padding-bottom:5px;}
+dir {padding:0px; margin:0px; margin-left:40px;}

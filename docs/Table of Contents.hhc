@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="English">
+		<param name="Local" value="clickonic-en.html">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Installation">
+			<param name="Local" value="clickonic-en.html#install">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Usage">
+			<param name="Local" value="clickonic-en.html#usage">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Troubleshooting">
+			<param name="Local" value="clickonic-en.html#removal">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Sample Configuration">
+			<param name="Local" value="clickonic-en.html#sample">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Settings">
+			<param name="Local" value="clickonic-en.html#settings">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Exported Evars">
+			<param name="Local" value="clickonic-en.html#exportedvars">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Bangs">
+			<param name="Local" value="clickonic-en.html#control">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Events">
+			<param name="Local" value="clickonic-en.html#events">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Mouse Events">
+			<param name="Local" value="clickonic-en.html#mouseevents">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="History">
+			<param name="Local" value="clickonic-en.html#changes">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Developers">
+			<param name="Local" value="clickonic-en.html#dev">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Russian">
+		<param name="Local" value="clickonic-ru.html">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Installation">
+			<param name="Local" value="clickonic-ru.html#install">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Usage">
+			<param name="Local" value="clickonic-ru.html#usage">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Sample Configuration">
+			<param name="Local" value="clickonic-ru.html#sample">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Settings">
+			<param name="Local" value="clickonic-ru.html#settings">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Bangs">
+			<param name="Local" value="clickonic-ru.html#control">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="History">
+			<param name="Local" value="clickonic-ru.html#changes">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Developers">
+			<param name="Local" value="clickonic-ru.html#dev">
+			</OBJECT>
+	</UL>
+</UL>
+</BODY></HTML>
