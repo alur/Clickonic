@@ -168,6 +168,7 @@ public:
 	void ToggleIcon(int iD, bool bVisible);
 	int GetIdFromName(LPCTSTR pszFileName);
 	void CheckVirtualIcon(LPCTSTR pszFileName, bool bDeleted);
+	void GetStoredFolderLocation(LPSTR szBuf);
 
 	char	m_szName[MAX_PATH]; // Name of the group
 	char	m_szInitError[MAX_LINE_LENGTH];
@@ -187,6 +188,7 @@ public:
 	WNDPROC m_wpOrigListViewProc;
 	WNDPROC m_wpOrigGroupProc;
 	LPITEMIDLIST	m_pidlFolder; // PIDL address of the folder to browse
+	bool	m_bPersistantFolderLocation;
 	bool	m_bHidden;
 	bool	m_bInitialized;
 	bool	m_bNoScroll;
@@ -225,7 +227,7 @@ public:
 	char	m_szFolderLocation[MAX_PATH];
 	char	m_szIconPositionFile[MAX_PATH];
 	bool	m_bUseIconPositionFile;
-	int		m_nCustomDrive;
+	char	m_CustomDrive;
 	bool	m_bInlineBrowsing;
 	bool	m_bNoVirtualSwitch;
 	WORD	m_wSelectionRectangleMod;

@@ -91,36 +91,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	SHGetSpecialFolderPath(NULL, m_szMyDocumentsPath, CSIDL_PERSONAL, false);
 	SHGetSpecialFolderPath(NULL, m_szDesktopPath, CSIDL_DESKTOP, 0);
 
-	// Grab the PIDL for the folder
-	if (!bIsRefresh)
-	{
-		LiteStep::GetPrefixedRCLine(szBuf, m_szName, "Folder", ".desktop");
-
-		if (_stricmp(szBuf, ".desktop") == 0)
-		{
-			StringCchCopy(m_szFolderLocation, MAX_PATH, m_szDesktopPath);
-			SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP, &m_pidlFolder);
-			utils::SetEvar(m_szName, "CurrentFolder", ".desktop");
-		}
-		else if (_stricmp(szBuf, ".mycomputer") == 0)
-		{
-			SHGetSpecialFolderPath(NULL, m_szFolderLocation, CSIDL_DRIVES, 0);
-			SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &m_pidlFolder);
-			utils::SetEvar(m_szName, "CurrentFolder", ".mycomputer");
-		}
-		else
-		{
-			StringCchCopy(m_szFolderLocation, MAX_PATH, szBuf);
-			m_pidlFolder = PIDL::ParseDisplayName(szBuf);
-			utils::SetEvar(m_szName, "CurrentFolder", "%s", m_szFolderLocation);
-		}
-
-		if (!m_pidlFolder)
-		{
-			StringCchCopy(m_szInitError, sizeof(m_szInitError), "Invalid desktop folder.");
-			return false;
-		}
-	}
+	m_bPersistantFolderLocation = LiteStep::GetPrefixedRCBool(m_szName, "PersistantFolderLocation", false);
 
 	m_bExplicitCalls = LiteStep::GetPrefixedRCBool(m_szName, "ExplicitCalls", false);
 
@@ -153,10 +124,10 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	{
 		char lpCurrentDirectory[MAX_PATH];
 		GetCurrentDirectory( MAX_PATH, lpCurrentDirectory );
-		m_nCustomDrive = lpCurrentDirectory[0];
+		m_CustomDrive = lpCurrentDirectory[0];
 	}
 	else 
-		m_nCustomDrive = szBuf[0];
+		m_CustomDrive = szBuf[0];
 
 	// Init events
 	LoadEvents();
@@ -215,6 +186,42 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	m_bAlignTop = LiteStep::GetPrefixedRCBool(m_szName, "AlignTop", FALSE);
 	m_bAlwaysShowSelection =  LiteStep::GetPrefixedRCBool(m_szName, "AlwaysShowSelection", FALSE);
 
+	// Grab the PIDL for the folder
+	if (!bIsRefresh)
+	{
+		LiteStep::GetPrefixedRCLine(szBuf, m_szName, "Folder", ".desktop");
+
+		if (m_bPersistantFolderLocation)
+		{
+			GetStoredFolderLocation(szBuf);
+		}
+
+		if (_stricmp(szBuf, ".desktop") == 0)
+		{
+			StringCchCopy(m_szFolderLocation, MAX_PATH, m_szDesktopPath);
+			SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP, &m_pidlFolder);
+			utils::SetEvar(m_szName, "CurrentFolder", ".desktop");
+		}
+		else if (_stricmp(szBuf, ".mycomputer") == 0)
+		{
+			SHGetSpecialFolderPath(NULL, m_szFolderLocation, CSIDL_DRIVES, 0);
+			SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &m_pidlFolder);
+			utils::SetEvar(m_szName, "CurrentFolder", ".mycomputer");
+		}
+		else
+		{
+			StringCchCopy(m_szFolderLocation, MAX_PATH, szBuf);
+			m_pidlFolder = PIDL::ParseDisplayName(szBuf);
+			utils::SetEvar(m_szName, "CurrentFolder", "%s", m_szFolderLocation);
+		}
+
+		if (!m_pidlFolder)
+		{
+			StringCchCopy(m_szInitError, sizeof(m_szInitError), "Invalid desktop folder.");
+			return false;
+		}
+	}
+
 	// Font Settings
 	m_crTextColor = LiteStep::GetPrefixedRCColor(m_szName, "FontColor", RGB(255, 255, 255));
 	m_crTextBackgroundColor = LiteStep::GetPrefixedRCColor(m_szName, "FontBackgroundColor", CLR_NONE);
@@ -247,6 +254,33 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 		utils::ErrorMessage(E_WARNING, "Could not load font %s", szBuf);
 
 	return true;
+}
+
+/**************************************************************************************************
+	This function returns the saved folder location or refrains from modify the string if no
+	folder location has been saved.
+**************************************************************************************************/
+void CGroup::GetStoredFolderLocation(LPSTR pszLocation)
+{
+	if (m_bUseIconPositionFile)
+	{
+		GetPrivateProfileString("Settings", "CurrentFolder", pszLocation, pszLocation, MAX_PATH, m_szIconPositionFile);
+	}
+	else
+	{
+		char szKeyName[MAX_PATH], szRet[MAX_PATH];
+		StringCchPrintf(szKeyName, MAX_PATH, "%s%s", REGKEY_MODULE, m_szName);
+		DWORD dwRegType = REG_SZ, dwRegSize = MAX_PATH;
+
+		if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, szKeyName, "CurrentFolder", &dwRegType, szRet, &dwRegSize))
+		{
+			StringCchCopy(pszLocation, MAX_PATH, szRet);
+		}
+	}
+	if (!m_bNoVirtualSwitch && !_stricmp(pszLocation, m_szDesktopPath))
+	{
+		StringCchCopy(pszLocation, MAX_PATH, ".desktop");
+	}
 }
 
 /**************************************************************************************************
@@ -843,8 +877,8 @@ void CGroup::Reset(const char *szFolder, bool bDontSort) {
 	else if (_stricmp(szFolder, "") == 0) {
 		if (m_bUseIconPositionFile) {
 			StringCchCopy(m_szFolderLocation, sizeof(m_szFolderLocation), szFile);
-			if (szFile[0] == m_nCustomDrive)
-				szFile[0] = 63;
+			if (szFile[0] == m_CustomDrive)
+				szFile[0] = '?';
 			WritePrivateProfileSection(szFile, "", m_szIconPositionFile);
 		}
 		else {
@@ -864,8 +898,8 @@ void CGroup::Reset(const char *szFolder, bool bDontSort) {
 	else {
 		if (m_bUseIconPositionFile) {
 			memcpy(szFile, szFolder, sizeof(szFolder));
-			if (szFile[0] == m_nCustomDrive)
-				szFile[0] = 63;
+			if (szFile[0] == m_CustomDrive)
+				szFile[0] = '?';
 			WritePrivateProfileSection(szFile, "", m_szIconPositionFile);
 		}
 		else {
@@ -1087,6 +1121,7 @@ void CGroup::PasteFiles()
 
 	// Build the pFrom string.
 	files = (char*)GetClipboardData(CF_HDROP)+20;
+	//WideCharToMultiByte(CP_ACP, 0, files, -1, szFiles, sizeof(szFiles), NULL, NULL);
 	while (!bBreak)
 	{
 		szFiles[i/2] = files[i];
@@ -1291,6 +1326,19 @@ void CGroup::SaveState()
 	}
 
 	RegCloseKey(hKey);
+
+	if (m_bPersistantFolderLocation)
+	{
+		ZeroMemory(&szKeyName, sizeof(szKeyName));
+		StringCchPrintf(szKeyName, MAX_PATH, "%s%s", REGKEY_MODULE, m_szName);
+		if (ERROR_SUCCESS != RegCreateKeyEx( HKEY_CURRENT_USER, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisposition))
+			return;
+		pBuf = reinterpret_cast<BYTE*>(HeapAlloc(GetProcessHeap(), 0, MAX_PATH));
+		CopyMemory(pBuf, m_szFolderLocation, MAX_PATH);
+		RegSetValueEx(hKey, "CurrentFolder", 0, REG_SZ, pBuf, MAX_PATH);
+		HeapFree(GetProcessHeap(), 0, pBuf);
+		RegCloseKey(hKey);
+	}
 }
 
 /**************************************************************************************************
@@ -1299,10 +1347,9 @@ void CGroup::SaveState()
 void CGroup::SaveToFile()
 {
 	POINT pt;
-	char szFileData[MAX_LINE_LENGTH] = {0}, szFileName[MAX_PATH], szPoint[20], szFile[MAX_PATH];
-	int nCount = ListView_GetItemCount(m_hwndListView), iPos = 0;
-	UINT j;
-	size_t FileNameSize, PointSize;
+	char szFileData[MAX_LINE_LENGTH*2] = {0}, szFileName[MAX_PATH], szPoint[20], szFile[MAX_PATH];
+	LPSTR pszPos = szFileData;
+	int nCount = ListView_GetItemCount(m_hwndListView);
 
 	if (!(nCount > 0))
 		return;
@@ -1312,21 +1359,26 @@ void CGroup::SaveToFile()
 		ListView_GetItemText(m_hwndListView, i, 0, szFileName, MAX_PATH);
 		if (!IconShouldBeHidden(szFileName))
 		{
+			StringCchCopy(pszPos, szFileData+sizeof(szFileData)-pszPos, szFileName);
+			pszPos += strlen(szFileName);
 			ListView_GetItemPosition(m_hwndListView, i, &pt);
-			FileNameSize = strlen(szFileName);
-			for(j = 0; j < FileNameSize; j++)
-				szFileData[iPos++] = szFileName[j];
 			StringCchPrintf(szPoint, 20, "=?%d?%d", pt.x, pt.y);
-			PointSize = strlen(szPoint);
-			for(j = 0; j <= PointSize; j++)
-				szFileData[iPos++] = szPoint[j];
+			StringCchCopy(pszPos, szFileData+sizeof(szFileData)-pszPos, szPoint);
+			pszPos += strlen(szPoint)+1;
 		}
 	}
 	StringCchCopy(szFile, sizeof(szFile), m_szFolderLocation);
-	if (szFile[0] == m_nCustomDrive)
-		szFile[0] = 63;
+	if (szFile[0] == m_CustomDrive)
+		szFile[0] = '?';
 
 	WritePrivateProfileSection(szFile, szFileData, m_szIconPositionFile);
+
+	if (m_bPersistantFolderLocation)
+	{
+		ZeroMemory(&szFileData, sizeof(szFileData));
+		StringCchPrintf(szFileData, sizeof(szFileData), "CurrentFolder=%s", m_szFolderLocation);
+		WritePrivateProfileSection("Settings", szFileData, m_szIconPositionFile);
+	}
 }
 
 /**************************************************************************************************
@@ -1412,8 +1464,8 @@ void CGroup::RestoreFromFile()
 	int nCount = ListView_GetItemCount(m_hwndListView);
 
 	StringCchCopy(szFile, sizeof(szFile), m_szFolderLocation);
-	if (szFile[0] == m_nCustomDrive)
-		szFile[0] = 63;
+	if (szFile[0] == m_CustomDrive)
+		szFile[0] = '?';
 
 	GetPrivateProfileSection(szFile, szStoredPos, MAX_LINE_LENGTH, m_szIconPositionFile);
 
