@@ -2,9 +2,6 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef __GROUP_HEADER__
-#define __GROUP_HEADER__
-
 #pragma once
 
 #include "IShellBrowserImpl.h"
@@ -235,5 +232,3 @@ public:
 	IconMap m_HiddenIcons;
 	bool	m_bExplicitCalls;
 };
-
-#endif

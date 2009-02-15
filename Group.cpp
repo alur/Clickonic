@@ -1041,6 +1041,7 @@ void CGroup::CopyFiles(bool cut)
 	if (!(iNumSelected > 0))
 		return; // No files selected
 
+	m_bCutMarkedFiles = true;
 	ClearCutMark();
 
 	// Build the list of files
@@ -1052,10 +1053,8 @@ void CGroup::CopyFiles(bool cut)
 			if (utils::File_Exists(szFileName)) // We ignore virtual files.
 			{
 				if (cut)
-				{
 					ListView_SetItemState(m_hwndListView, iItem, LVIS_CUT, LVIS_CUT);
-					m_bCutMarkedFiles = true;
-				}
+
 				iFileCounter++;
 				StringCchCopyA(pszPos, sizeof(szFullCommand)+szFullCommand-pszPos, szFileName);
 				pszPos += strlen(szFileName)+1;
@@ -1088,7 +1087,9 @@ void CGroup::CopyFiles(bool cut)
 		SetClipboardData(CF_HDROP, hClipData);
 		SetClipboardData(RegisterClipboardFormat(CFSTR_PREFERREDDROPEFFECT), hEffect);
 		CloseClipboard();
-	}	
+	}
+	if (cut)
+		m_bCutMarkedFiles = true;
 }
 
 /**************************************************************************************************
@@ -1675,6 +1676,9 @@ void CGroup::SetDropHover(POINTL *pt, DWORD *pdwEffect)
 	}
 }
 
+/**************************************************************************************************
+	This function clears the drophilited flag
+**************************************************************************************************/
 void CGroup::ClearDropHover()
 {
 	if (m_nLastItem != -1)
