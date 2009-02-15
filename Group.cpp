@@ -420,6 +420,9 @@ void CGroup::CheckVirtualIcon(LPCTSTR pszFileName, bool bDeleted)
 	}
 }
 
+/**************************************************************************************************
+	This function toggles whether an icon should be hidden or not
+**************************************************************************************************/
 void CGroup::ToggleIcon(LPCTSTR pszFileName, bool bVisible)
 {
 	IconMap::iterator iter = m_HiddenIcons.find(pszFileName);
@@ -454,7 +457,6 @@ void CGroup::ToggleIcon(LPCTSTR pszFileName, bool bVisible)
 		}
 	}
 }
-
 void CGroup::ToggleIcon(int iD, bool bVisible)
 {
 	char szFileName[MAX_PATH];
@@ -1041,7 +1043,6 @@ void CGroup::CopyFiles(bool cut)
 	if (!(iNumSelected > 0))
 		return; // No files selected
 
-	m_bCutMarkedFiles = true;
 	ClearCutMark();
 
 	// Build the list of files
@@ -1122,7 +1123,6 @@ void CGroup::PasteFiles()
 
 	// Build the pFrom string.
 	files = (char*)GetClipboardData(CF_HDROP)+20;
-	//WideCharToMultiByte(CP_ACP, 0, files, -1, szFiles, sizeof(szFiles), NULL, NULL);
 	while (!bBreak)
 	{
 		szFiles[i/2] = files[i];
@@ -1240,6 +1240,9 @@ void CGroup::SortByDate()
 	ListView_SortItems(m_hwndListView, SortByDateCompareFunc, m_pFolder);
 }
 
+/**************************************************************************************************
+	This function changes the text color
+**************************************************************************************************/
 void CGroup::SetTextColor(COLORREF crColor)
 {
 	ListView_SetTextColor(m_hwndListView, crColor);
@@ -1248,6 +1251,9 @@ void CGroup::SetTextColor(COLORREF crColor)
 	UpdateWindow(m_hwndListView);
 }
 
+/**************************************************************************************************
+	This function changes the text background color
+**************************************************************************************************/
 void CGroup::SetTextBkColor(COLORREF crColor)
 {
 	ListView_SetTextBkColor(m_hwndListView, crColor);
@@ -1256,6 +1262,9 @@ void CGroup::SetTextBkColor(COLORREF crColor)
 	UpdateWindow(m_hwndListView);
 }
 
+/**************************************************************************************************
+	This function changes the background color
+**************************************************************************************************/
 void CGroup::SetBackgroundColor(COLORREF crColor)
 {
 	ListView_SetBkColor(m_hwndListView, crColor);
@@ -1264,6 +1273,9 @@ void CGroup::SetBackgroundColor(COLORREF crColor)
 	UpdateWindow(m_hwndListView);
 }
 
+/**************************************************************************************************
+	This function changes the background.
+**************************************************************************************************/
 void CGroup::SetBackground(const char *szBackground, int nOffsetPercentX, int nOffsetPercentY, bool bTiled)
 {
 	LVBKIMAGE lvbki;
