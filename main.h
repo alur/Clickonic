@@ -3,8 +3,6 @@ extern "C" {
     __declspec( dllexport ) void quitModule(HINSTANCE hDllInstance);
 }
 
-#define CONFIG_TOKENS_NUM	2
-
 const char g_rcsRevision[]	= "1.1.4.1";
 const char g_szAppName[]	= "Clickonic";
 const char g_szMsgHandler[]	= "LSClickonicManager";
