@@ -17,6 +17,10 @@ int initModuleEx(HWND hwndParent, HINSTANCE hDllInstance, LPCSTR szPath)
 	g_nErrorTranslucency = GetRCInt("ClickonicErrorTranslucency", 2);
 	StringCchCopy(g_szPath, sizeof(g_szPath), szPath);
 
+	// Get information about the operating system.
+	g_osVersion.dwOSVersionInfoSize = sizeof(g_osVersion);
+	GetVersionEx(&g_osVersion);
+
 	if (!CreateMessageHandler())
 		return 1;
 
@@ -34,8 +38,11 @@ int initModuleEx(HWND hwndParent, HINSTANCE hDllInstance, LPCSTR szPath)
 	RegisterBangs();
 
 	LoadGroups();
-
-	SetTimer(g_hwndMessageHandler, 1337, 500, NULL); // UGLY VISTA HACK!
+	
+	if (g_osVersion.dwMajorVersion >= 6)
+	{
+		SetTimer(g_hwndMessageHandler, 1337, 500, NULL); // UGLY VISTA HACK!
+	}
 
 	return 0;
 }

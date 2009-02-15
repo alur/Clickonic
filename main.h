@@ -19,6 +19,7 @@ MonitorInfo g_Monitors[5]; // Supports up to 4 monitors
 HWND g_hwndMessageHandler;
 int g_iMon = 2;
 int g_nErrorTranslucency;
+OSVERSIONINFO g_osVersion;
 
 // Functions
 void UpdateMonitorInfo();
