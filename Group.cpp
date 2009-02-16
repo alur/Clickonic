@@ -516,7 +516,7 @@ void CGroup::ReadIconSettings()
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{450D8FBA-AD25-11D0-98A8-0800361B1103}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideMyDocuments", false))
 		ToggleIcon(m_szMyDocumentsPath, false);
-	else
+	else if (!m_bDontUseRegistryIcons)
 		ToggleIcon(m_szMyDocumentsPath, true);
 
 	// My Network Places (XP and Vista)
