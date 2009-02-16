@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "utils.h"
+#include "time.h"
 
 void utils::ErrorMessage(unsigned __int8 nLevel, LPCSTR pszFormat, ...)
 {
@@ -30,6 +31,14 @@ void utils::ErrorMessage(unsigned __int8 nLevel, LPCSTR pszFormat, ...)
 			break;
 		}
 	}
+}
+
+void utils::GetFormatedTime (LPCSTR pszFormat, LPSTR pszReturn, size_t cchReturn)
+{
+	time_t CurrentTime = time(NULL);
+	tm TimeInfo;
+	localtime_s(&TimeInfo, &CurrentTime);
+	strftime(pszReturn, cchReturn, pszFormat, &TimeInfo);
 }
 
 int utils::MapXCoordinateToMonitor(int nNewMonitor, int nX, int nOldMonitor)

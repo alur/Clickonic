@@ -1,5 +1,4 @@
-#ifndef __BANGS_HEADER__
-#define __BANGS_HEADER__
+#pragma once
 
 void RegisterBangs();
 void UnregisterBangs();
@@ -66,5 +65,3 @@ void bangDestroyGroup (HWND caller, LPCSTR szArgs);
 void bangShowControlPanel (HWND caller, LPCSTR szArgs);
 void bangHideControlPanel (HWND caller, LPCSTR szArgs);
 void bangSetMonitor (HWND caller, LPCSTR szArgs);
-
-#endif // __BANGS_HEADER__

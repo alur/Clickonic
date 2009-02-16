@@ -10,16 +10,17 @@
 
 namespace utils
 {
-	int FixCoordinate(char *szCoordinate, bool isY);
-	COLORREF String2Color(const char *szColor);
-	bool String2Bool(const char *szBool);
+	int FixCoordinate (char *szCoordinate, bool isY);
+	COLORREF String2Color (const char *szColor);
+	bool String2Bool (const char *szBool);
 	bool File_Exists (char* szFilePath);
 	bool Is_Directory (const char* szPath);
-	void ErrorMessage(unsigned __int8 nLevel, LPCSTR pszFormat, ...);
-	void SetEvar(LPCSTR pszGroup, LPCSTR pszEvar, LPCSTR pszFormat, ...);
-	HRESULT CreateLink(LPCSTR lpszPathObj, LPCSTR lpszPathLink, LPCSTR lpszDesc);
-	int MapXCoordinateToMonitor(int nNewMonitor, int nX, int nOldMonitor);
-	int MapYCoordinateToMonitor(int nNewMonitor, int nY, int nOldMonitor);
+	void GetFormatedTime (LPCSTR pszFormat, LPSTR pszReturn, size_t cchReturn); 
+	void ErrorMessage (unsigned __int8 nLevel, LPCSTR pszFormat, ...);
+	void SetEvar (LPCSTR pszGroup, LPCSTR pszEvar, LPCSTR pszFormat, ...);
+	HRESULT CreateLink (LPCSTR lpszPathObj, LPCSTR lpszPathLink, LPCSTR lpszDesc);
+	int MapXCoordinateToMonitor (int nNewMonitor, int nX, int nOldMonitor);
+	int MapYCoordinateToMonitor (int nNewMonitor, int nY, int nOldMonitor);
 };
 
 #endif

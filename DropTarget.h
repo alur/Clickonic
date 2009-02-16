@@ -1,9 +1,5 @@
 // DropTarget.h: interface for the CDropTarget class.
-//
 //////////////////////////////////////////////////////////////////////
-
-#ifndef __DROPTARGET_HEADER__
-#define __DROPTARGET_HEADER__
 
 #pragma once
 
@@ -56,5 +52,3 @@ public:
 	static void RegisterFormats();
 	static UINT cf_types[CLIPFORMATS_USED];
 };
-
-#endif

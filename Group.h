@@ -185,6 +185,7 @@ public:
 	WNDPROC m_wpOrigListViewProc;
 	WNDPROC m_wpOrigGroupProc;
 	LPITEMIDLIST	m_pidlFolder; // PIDL address of the folder to browse
+	char	m_szTextPasteFormat[MAX_PATH];
 	bool	m_bPersistantFolderLocation;
 	bool	m_bHidden;
 	bool	m_bInitialized;

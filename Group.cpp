@@ -111,6 +111,8 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	else
 		m_uViewMode = FVM_ICON;
 
+	LiteStep::GetPrefixedRCString(m_szTextPasteFormat, m_szName, "TextPasteFormat", "%A, %B %d.txt");
+
 	// Desktop icon settings
 	m_bDontUseRegistryIcons = LiteStep::GetPrefixedRCBool(m_szName, "DontUseRegistryIcons", FALSE);
 
@@ -1167,16 +1169,22 @@ void CGroup::PasteText()
 		return;
 
 	FILE* pFile;
-	char* szText = (char*)GetClipboardData(CF_TEXT);
-	char szFileLoc[MAX_PATH];
+	char *szText = (char*)GetClipboardData(CF_TEXT);
+	char szFileLoc[MAX_PATH], szFileName[MAX_PATH];
 
-	SYSTEMTIME st;
-	GetSystemTime(&st);
-	StringCchPrintf(szFileLoc, MAX_PATH, "%s\\clipboard-%d-%d-%d-%d-%d-%d-%d.txt", m_szFolderLocation,
-		st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+	utils::GetFormatedTime(m_szTextPasteFormat, szFileName, MAX_PATH);
+	StringCchPrintf(szFileLoc, MAX_PATH, "%s\\%s", m_szFolderLocation, szFileName);
+
 	fopen_s (&pFile, szFileLoc, "a");
-	fputs (szText, pFile);
-	fclose (pFile);
+	if (pFile)
+	{
+		fputs (szText, pFile);
+		fclose (pFile);
+	}
+	else
+	{
+		utils::ErrorMessage(E_WARNING, "Unable to create file \"%s\". Probably due to an invalid file name", szFileName);
+	}
 
 	CloseClipboard();
 }
