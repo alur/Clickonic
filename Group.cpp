@@ -502,14 +502,14 @@ void CGroup::ReadIconSettings()
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{871C5380-42A0-1069-A2EA-08002B30309D}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideInternetExplorer", false))
 		ToggleIcon("::{871C5380-42A0-1069-A2EA-08002B30309D}", false);
-	else
+	else if (!m_bDontUseRegistryIcons)
 		ToggleIcon("::{871C5380-42A0-1069-A2EA-08002B30309D}", true);
 
 	// My Computer (XP only?)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideMyComputer", false))
 		ToggleIcon("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", false);
-	else
+	else if (!m_bDontUseRegistryIcons)
 		ToggleIcon("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", true);
 
 	// My Documents (XP only?)
@@ -523,21 +523,21 @@ void CGroup::ReadIconSettings()
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{208D2C60-3AEA-1069-A2D7-08002B30309D}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideMyNetworkPlaces", false))
 		ToggleIcon("::{208D2C60-3AEA-1069-A2D7-08002B30309D}", false);
-	else
+	else if (!m_bDontUseRegistryIcons)
 		ToggleIcon("::{208D2C60-3AEA-1069-A2D7-08002B30309D}", true);
 
 	// Recycle Bin (XP only?)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{645FF040-5081-101B-9F08-00AA002F954E}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideRecycleBin", false))
 		ToggleIcon("::{645FF040-5081-101B-9F08-00AA002F954E}", false);
-	else
+	else if (!m_bDontUseRegistryIcons)
 		ToggleIcon("::{645FF040-5081-101B-9F08-00AA002F954E}", true);
 
 	// Control Panel (Vista Only)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{59031a47-3f72-44a7-89c5-5595fe6b30ee}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideControlPanel", false))
 		ToggleIcon("::{26EE0668-A00A-44D7-9371-BEB064C98683}", false);
-	else
+	else if (!m_bDontUseRegistryIcons)
 		ToggleIcon("::{26EE0668-A00A-44D7-9371-BEB064C98683}", true);
 }
 
