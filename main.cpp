@@ -278,7 +278,7 @@ LRESULT WINAPI MessageHandlerProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			lParam = NULL;
 			return 0;
 		}
-	/*case WM_SETTINGCHANGE:
+	case WM_SETTINGCHANGE:
 		{
 			if (wParam == 0 && !_stricmp("Windows", (char*)lParam)) {
 				for (GroupMap::iterator iter = g_Groups.begin(); iter != g_Groups.end(); ++iter)
@@ -287,7 +287,7 @@ LRESULT WINAPI MessageHandlerProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				}
 			}
 			break;
-		}*/
+		}
 	case WM_DISPLAYCHANGE:
 		{
 			UpdateMonitorInfo();
@@ -405,14 +405,6 @@ LRESULT WINAPI ListViewProc(HWND hListView, UINT msg, WPARAM wParam, LPARAM lPar
 
 	switch(msg)
 	{
-	case LVM_UPDATE:
-		{
-			return TRUE;
-		}
-	case LVM_ARRANGE:
-		{
-			return 1;
-		}
 	case LVM_SETICONSPACING:
 		{
 			// Prevent explorers "Align to Grid" setting from messing up the spacing.

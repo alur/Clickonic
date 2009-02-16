@@ -152,7 +152,7 @@ public:
 	void ChangeDir(const char *szNewDir);
 	bool CheckModkeys(WORD wKeys);
 	//void FixMyDocs();
-	//void HandleSettingChange();
+	void HandleSettingChange();
 	void relayMouseMessage(UINT message, WPARAM wParam, LPARAM lParam);
 	IDropTarget* GetLastItemTarget(bool *pbExecute);
 	void Drop(DWORD grfKeyState, POINTL *pt, DWORD *pdwEffect, CIDA *pida, POINT *pOffsets);

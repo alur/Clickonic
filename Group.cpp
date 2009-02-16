@@ -502,31 +502,43 @@ void CGroup::ReadIconSettings()
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{871C5380-42A0-1069-A2EA-08002B30309D}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideInternetExplorer", false))
 		ToggleIcon("::{871C5380-42A0-1069-A2EA-08002B30309D}", false);
+	else
+		ToggleIcon("::{871C5380-42A0-1069-A2EA-08002B30309D}", true);
 
 	// My Computer (XP only?)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideMyComputer", false))
 		ToggleIcon("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", false);
+	else
+		ToggleIcon("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}", true);
 
 	// My Documents (XP only?)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{450D8FBA-AD25-11D0-98A8-0800361B1103}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideMyDocuments", false))
 		ToggleIcon(m_szMyDocumentsPath, false);
+	else
+		ToggleIcon(m_szMyDocumentsPath, true);
 
 	// My Network Places (XP and Vista)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{208D2C60-3AEA-1069-A2D7-08002B30309D}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideMyNetworkPlaces", false))
 		ToggleIcon("::{208D2C60-3AEA-1069-A2D7-08002B30309D}", false);
+	else
+		ToggleIcon("::{208D2C60-3AEA-1069-A2D7-08002B30309D}", true);
 
 	// Recycle Bin (XP only?)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{645FF040-5081-101B-9F08-00AA002F954E}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideRecycleBin", false))
 		ToggleIcon("::{645FF040-5081-101B-9F08-00AA002F954E}", false);
+	else
+		ToggleIcon("::{645FF040-5081-101B-9F08-00AA002F954E}", true);
 
 	// Control Panel (Vista Only)
 	SHGetValue(HKEY_CURRENT_USER, m_szRegDeskIconsPath, "{59031a47-3f72-44a7-89c5-5595fe6b30ee}", &dwType, &dwBuffer, &dwSize);
 	if ((!m_bDontUseRegistryIcons && dwBuffer == 1) || LiteStep::GetPrefixedRCBool(m_szName, "HideControlPanel", false))
 		ToggleIcon("::{26EE0668-A00A-44D7-9371-BEB064C98683}", false);
+	else
+		ToggleIcon("::{26EE0668-A00A-44D7-9371-BEB064C98683}", true);
 }
 
 /**************************************************************************************************
@@ -1826,14 +1838,12 @@ void CGroup::relayMouseMessage(UINT message, WPARAM wParam, LPARAM lParam)
 /**************************************************************************************************
 	This function fires when a "Windows" User Policy changes (such as desktop icon settings)
 **************************************************************************************************/
-/*void CGroup::HandleSettingChange()
+void CGroup::HandleSettingChange()
 {
-	// We should make this function restore hidden icons as well...
 	if (m_bDontUseRegistryIcons)
 		return;
 	ReadIconSettings();
-	ScanIcons();
-}*/
+}
 
 /**************************************************************************************************
 	This function takes a listview item id and returns it's PIDL
