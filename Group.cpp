@@ -605,6 +605,8 @@ void CGroup::Reposition (int x, int y, int width, int height, bool relative)
 		m_nHeight = height;
 	}
 
+	// There should be a better way of doing this...
+	/*
 	SaveState();
 	if (m_pView2)
 	{
@@ -615,7 +617,12 @@ void CGroup::Reposition (int x, int y, int width, int height, bool relative)
 		m_pView->DestroyViewWindow();
 		m_pView->Release();
 	}
-	InitFolderView();
+	InitFolderView();*/
+
+	// This method has potential to be even slower than the previous one...
+	SaveState();
+	MoveWindow(m_hwndView, m_nX, m_nY, m_nWidth, m_nHeight, true);
+	RestoreState();
 }
 
 /**************************************************************************************************
