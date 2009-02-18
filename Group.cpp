@@ -784,7 +784,8 @@ void CGroup::ChangeDir(const char *szNewDir)
 /**************************************************************************************************
 	This function changes the video mode
 **************************************************************************************************/
-void CGroup::SetViewMode(const char *szNewMode) {
+void CGroup::SetViewMode(const char *szNewMode)
+{
 	UINT uNewMode;
 
 	if (_stricmp(szNewMode, "tiles") == 0)
@@ -809,7 +810,9 @@ void CGroup::SetViewMode(const char *szNewMode) {
 	SaveState();
 	if (m_pView2)
 		m_pView2->Release();
-	if (m_pView) {
+
+	if (m_pView)
+	{
 		m_pView->DestroyViewWindow();
 		m_pView->Release();
 	}
@@ -819,12 +822,15 @@ void CGroup::SetViewMode(const char *szNewMode) {
 /**************************************************************************************************
 	This function changes the hottracking setting
 **************************************************************************************************/
-void CGroup::HotTracking( bool bEnabled ) {
-	if (bEnabled) {
+void CGroup::HotTracking( bool bEnabled )
+{
+	if (bEnabled)
+	{
 		ListView_SetExtendedListViewStyleEx(m_hwndListView, LVS_EX_TRACKSELECT, LVS_EX_TRACKSELECT);
 		m_bHotTracking = true;
 	}
-	else {
+	else
+	{
 		ListView_SetExtendedListViewStyleEx(m_hwndListView, LVS_EX_TRACKSELECT, 0);
 		m_bHotTracking = false;
 	}
@@ -834,12 +840,15 @@ void CGroup::HotTracking( bool bEnabled ) {
 /**************************************************************************************************
 	This function changes the infotip setting
 **************************************************************************************************/
-void CGroup::InfoTip( bool bEnabled ) {
-	if (bEnabled) {
+void CGroup::InfoTip( bool bEnabled )
+{
+	if (bEnabled)
+	{
 		ListView_SetExtendedListViewStyleEx(m_hwndListView, LVS_EX_INFOTIP, LVS_EX_INFOTIP);
 		m_bNoInfoTips = false;
 	}
-	else {
+	else
+	{
 		ListView_SetExtendedListViewStyleEx(m_hwndListView, LVS_EX_INFOTIP, 0);
 		m_bNoInfoTips = true;
 	}	
@@ -848,18 +857,20 @@ void CGroup::InfoTip( bool bEnabled ) {
 /**************************************************************************************************
 	This function changes the aligntop setting
 **************************************************************************************************/
-void CGroup::AlignTop( bool bEnabled ) {
-	if (bEnabled) {
-		if (!m_bAlignTop) {
+void CGroup::AlignTop( bool bEnabled )
+{
+	if (bEnabled)
+	{
+		if (!m_bAlignTop)
+		{
 			m_longListViewStyle ^= LVS_ALIGNLEFT;
 			m_bAlignTop = true;
 		}
 	}
-	else {
-		if (m_bAlignTop) {
-			m_longListViewStyle |= LVS_ALIGNLEFT;
-			m_bAlignTop = false;
-		}
+	else if (m_bAlignTop)
+	{
+		m_longListViewStyle |= LVS_ALIGNLEFT;
+		m_bAlignTop = false;
 	}
 	SetWindowLongPtr(m_hwndListView, GWL_STYLE, m_longListViewStyle);
 }
@@ -868,13 +879,16 @@ void CGroup::AlignTop( bool bEnabled ) {
 /**************************************************************************************************
 	This function changes the snap to grid setting
 **************************************************************************************************/
-void CGroup::SnapToGrid( bool bEnabled ) {
-	if (bEnabled) {
+void CGroup::SnapToGrid( bool bEnabled )
+{
+	if (bEnabled)
+	{
 		m_bSnapToGrid = true;
 		ListView_SetExtendedListViewStyleEx(m_hwndListView, LVS_EX_SNAPTOGRID, LVS_EX_SNAPTOGRID);
 		ListView_Arrange(m_hwndListView, LVA_SNAPTOGRID);
 	}
-	else {
+	else
+	{
 		m_bSnapToGrid = false;
 		ListView_SetExtendedListViewStyleEx(m_hwndListView, LVS_EX_SNAPTOGRID, 0);
 	}
@@ -883,61 +897,94 @@ void CGroup::SnapToGrid( bool bEnabled ) {
 /**************************************************************************************************
 	This function resets stored icon positions
 **************************************************************************************************/
-void CGroup::Reset(const char *szFolder, bool bDontSort) {
+void CGroup::Reset(const char *szFolder, bool bDontSort)
+{
 	char szKeyName[MAX_PATH], szNum[10], szFile[MAX_PATH];
 	HKEY hKey;
 	
-	if (_stricmp(szFolder, ".all") == 0) { 
+	if (_stricmp(szFolder, ".all") == 0)
+	{ 
 		if (m_bUseIconPositionFile)
+		{
 			remove(m_szIconPositionFile); // Just delete the file
-		else {
+		}
+		else
+		{
 			StringCchPrintf(szKeyName, MAX_PATH, "%s%s", REGKEY_MODULE, m_szName);
 			SHDeleteKey(HKEY_CURRENT_USER, szKeyName);
 		}
+
 		if (!bDontSort)
+		{
 			ListView_SortItems(m_hwndListView, SortByNameCompareFunc, m_pFolder);
+		}
 	}
-	else if (_stricmp(szFolder, "") == 0) {
-		if (m_bUseIconPositionFile) {
+	else if (_stricmp(szFolder, "") == 0)
+	{
+		if (m_bUseIconPositionFile)
+		{
 			StringCchCopy(m_szFolderLocation, sizeof(m_szFolderLocation), szFile);
 			if (szFile[0] == m_CustomDrive)
 				szFile[0] = '?';
 			WritePrivateProfileSection(szFile, "", m_szIconPositionFile);
 		}
-		else {
+		else
+		{
 			StringCchPrintf(szKeyName, MAX_PATH, "%s%s\\%s", REGKEY_MODULE, m_szName, m_szFolderLocation);
 			if (ERROR_SUCCESS != RegOpenKeyEx( HKEY_CURRENT_USER, szKeyName, 0, KEY_ALL_ACCESS, &hKey))
+			{
 				return;
-			for (int k = 0; ; k++) {
+			}
+
+			for (int k = 0; ; k++)
+			{
 				StringCchPrintf(szNum, 10, "%d", k);
 				if (RegDeleteValue(hKey, szNum) != ERROR_SUCCESS)
+				{
 					break;
+				}
 			}
+
 			RegCloseKey(hKey);
 		}
+
 		if (!bDontSort)
+		{
 			ListView_SortItems(m_hwndListView, SortByNameCompareFunc, m_pFolder);
+		}
 	}
-	else {
-		if (m_bUseIconPositionFile) {
+	else
+	{
+		if (m_bUseIconPositionFile)
+		{
 			memcpy(szFile, szFolder, sizeof(szFolder));
 			if (szFile[0] == m_CustomDrive)
 				szFile[0] = '?';
 			WritePrivateProfileSection(szFile, "", m_szIconPositionFile);
 		}
-		else {
+		else
+		{
 			StringCchPrintf(szKeyName, MAX_PATH, "%s%s\\%s", REGKEY_MODULE, m_szName, szFolder);
 			if (ERROR_SUCCESS != RegOpenKeyEx( HKEY_CURRENT_USER, szKeyName, 0, KEY_ALL_ACCESS, &hKey))
+			{
 				return;
-			for (int k = 0; ; k++) {
+			}
+
+			for (int k = 0; ; k++)
+			{
 				StringCchPrintf(szNum, 10, "%d", k);
 				if (RegDeleteValue(hKey, szNum) != ERROR_SUCCESS)
+				{
 					break;
+				}
 			}
 			RegCloseKey(hKey);
 		}
+
 		if (_stricmp(szFolder, m_szFolderLocation) == 0 && !bDontSort)
+		{
 			ListView_SortItems(m_hwndListView, SortByNameCompareFunc, m_pFolder);
+		}
 	}
 }
 
