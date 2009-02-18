@@ -278,8 +278,8 @@ LRESULT WINAPI MessageHandlerProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			lParam = NULL;
 			return 0;
 		}
-	case WM_SETTINGCHANGE:
-		{
+	/*case WM_SETTINGCHANGE:
+		{ // May cause crashes
 			if (wParam == 0 && !_stricmp("Windows", (char*)lParam)) {
 				for (GroupMap::iterator iter = g_Groups.begin(); iter != g_Groups.end(); ++iter)
 				{
@@ -287,7 +287,7 @@ LRESULT WINAPI MessageHandlerProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				}
 			}
 			break;
-		}
+		}*/
 	case WM_DISPLAYCHANGE:
 		{
 			UpdateMonitorInfo();
