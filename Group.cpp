@@ -2181,7 +2181,8 @@ void CGroup::HandleMouseEvent(UINT uEvent, UINT msg, WPARAM wParam, LPARAM lPara
 /**************************************************************************************************
 	This function loads commands for all events
 **************************************************************************************************/
-void CGroup::LoadEvents() {
+void CGroup::LoadEvents()
+{
 	// Backwards compability
 	bool bUseDelete	= LiteStep::GetPrefixedRCBool(m_szName, "UseDelete", TRUE);
 	bool bUseRename	= LiteStep::GetPrefixedRCBool(m_szName, "UseRename", TRUE);

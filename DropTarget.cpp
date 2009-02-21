@@ -203,7 +203,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 					if (bCreateLinks)
 					{
 						pszPos = strrchr(szFile, '\\');
-						StringCchPrintf(szList, sizeof(szList), "%s%s", m_pGroup->m_szFolderLocation, pszPos);
+						StringCchPrintf(szList, sizeof(szList), "%s%s.lnk", m_pGroup->m_szFolderLocation, pszPos);
 						utils::CreateLink(szFile, szList, "");
 					}
 					else

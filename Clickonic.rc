@@ -65,8 +65,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,4,1
- PRODUCTVERSION 1,1,4,1
+ FILEVERSION 1,1,5,0
+ PRODUCTVERSION 1,1,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -84,13 +84,13 @@ BEGIN
             VALUE "Authors", "Seg@, Andymon, Alurcard2"
             VALUE "CompanyName", "Inform Group"
             VALUE "FileDescription", "Clickonic LiteStep module"
-            VALUE "FileVersion", "1.1.4.1"
-            VALUE "InternalName", "Clickonic-1.1.4.1.dll"
-            VALUE "LegalCopyright", "Copyright © 2004-2008"
+            VALUE "FileVersion", "1.1.5"
+            VALUE "InternalName", "Clickonic-1.1.5.dll"
+            VALUE "LegalCopyright", "Copyright © 2004-2009"
             VALUE "Motto", "Vi veri veniversum vivus vici!"
-            VALUE "OriginalFilename", "Clickonic-1.1.4.1.dll"
+            VALUE "OriginalFilename", "Clickonic-1.1.5.dll"
             VALUE "ProductName", "Clickonic LiteStep module"
-            VALUE "ProductVersion", "1.1.4.1"
+            VALUE "ProductVersion", "1.1.5"
         END
     END
     BLOCK "VarFileInfo"

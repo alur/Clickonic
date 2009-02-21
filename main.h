@@ -3,7 +3,7 @@ extern "C" {
     __declspec( dllexport ) void quitModule(HINSTANCE hDllInstance);
 }
 
-const char g_rcsRevision[]	= "1.1.4.1";
+const char g_rcsRevision[]	= "1.1.5";
 const char g_szAppName[]	= "Clickonic";
 const char g_szMsgHandler[]	= "LSClickonicManager";
 const UINT g_lsMessages[] = {LM_GETREVID, LM_REFRESH, 0};
