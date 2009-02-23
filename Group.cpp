@@ -113,6 +113,8 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 
 	LiteStep::GetPrefixedRCString(m_szTextPasteFormat, m_szName, "TextPasteFormat", "%A, %B %d.txt");
 
+	m_bShortcutMode = LiteStep::GetPrefixedRCBool(m_szName, "ShortcutMode", FALSE);
+
 	// Desktop icon settings
 	m_bDontUseRegistryIcons = LiteStep::GetPrefixedRCBool(m_szName, "DontUseRegistryIcons", FALSE);
 

@@ -110,6 +110,10 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 	POINT *pOffsets = NULL;
 	bool bExecute;
 
+	DWORD dwShortcut = DROPEFFECT_LINK;
+	if (m_pGroup->m_bShortcutMode)
+		memcpy(pdwEffect, &dwShortcut, sizeof(DWORD));
+
 	if (m_pDropHelper)
 	{
 		POINT pt = { ptl.x, ptl.y };

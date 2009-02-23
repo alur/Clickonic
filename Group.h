@@ -232,4 +232,5 @@ public:
 	WORD	m_wSystemMenuMod;
 	IconMap m_HiddenIcons;
 	bool	m_bExplicitCalls;
+	bool	m_bShortcutMode;
 };
