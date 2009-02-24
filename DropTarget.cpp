@@ -198,7 +198,15 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 				HDROP hFiles = (HDROP)stg3.hGlobal;
 				UINT nNumFiles = DragQueryFile(hFiles, 0xFFFFFFFF, szFile, MAX_PATH);
 				memcpy(&dwEffect, pdwEffect, sizeof(DWORD));
+				
 				bool bCreateLinks = ((dwEffect & DROPEFFECT_LINK) == DROPEFFECT_LINK);
+				bool bPrefixShortcutTo = false;
+				if (bCreateLinks)
+				{
+					DWORD dwBuffer, dwSize = sizeof(DWORD), dwType = REG_BINARY;
+					SHGetValue(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer", "link", &dwType, &dwBuffer, &dwSize);
+					bPrefixShortcutTo = (dwBuffer != 0);
+				}
 
 				LPSTR pszPos = szList;
 				for (UINT i = 0; i < nNumFiles; i++)
@@ -207,7 +215,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 					if (bCreateLinks)
 					{
 						pszPos = strrchr(szFile, '\\');
-						StringCchPrintf(szList, sizeof(szList), "%s%s.lnk", m_pGroup->m_szFolderLocation, pszPos);
+						StringCchPrintf(szList, sizeof(szList), "%s%s%s.lnk", bPrefixShortcutTo ? "Shortcut to " : "", m_pGroup->m_szFolderLocation, pszPos);
 						utils::CreateLink(szFile, szList, "");
 					}
 					else
