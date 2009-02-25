@@ -1140,14 +1140,14 @@ void CGroup::CopyFiles(bool cut)
 	DROPFILES dobj = { sizeof(DROPFILES), { 0, 0 }, 0, 0 };
 	UINT iDataSize = (UINT)(sizeof(dobj) + pszPos - szFullCommand);
 	HGLOBAL hClipData = GlobalAlloc( GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, iDataSize );
-	char* szData = (char*)GlobalLock(hClipData);
+	LPSTR szData = (LPSTR)GlobalLock(hClipData);
 	memcpy(szData, &dobj, 20);
 	memcpy(szData + sizeof(dobj), &szFullCommand, iDataSize-sizeof(dobj));
 	GlobalUnlock(hClipData);
 
 	// Put the dropeffect in global memory
 	HGLOBAL hEffect = GlobalAlloc(GMEM_ZEROINIT|GMEM_MOVEABLE|GMEM_DDESHARE, sizeof(DWORD) );
-	DWORD* pdw1 = (DWORD*)GlobalLock(hEffect);
+	PDWORD pdw1 = (PDWORD)GlobalLock(hEffect);
 	*pdw1 = cut ? DROPEFFECT_MOVE : DROPEFFECT_COPY;
 	GlobalUnlock(hEffect);
 	
@@ -1374,7 +1374,7 @@ void CGroup::SaveState()
 {
 	HKEY hKey;
 	DWORD dwDisposition;
-	BYTE *pBuf;
+	PBYTE pBuf;
 	POINT pt;
 	LPITEMIDLIST pidl;
 	int nCount, nSize, npidlSize;
