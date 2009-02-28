@@ -20,6 +20,7 @@ CGroup::CGroup(const char *szName)
 	m_nForwardFolderCount = 0;
 	m_wpOrigListViewProc = NULL;
 	m_NextIconPosition.x = -1;
+	m_bInFolderChange = false;
 
 	StringCchCopy(m_szName, MAX_PATH, szName); // Store the group name
 	
