@@ -23,20 +23,20 @@ public:
 	HRESULT STDMETHODCALLTYPE DragEnter(
 		IDataObject *pDataObj,
 		DWORD grfKeyState,
-		POINTL ptl,
+		POINTL ScPt,
 		DWORD *pdwEffect);
 
 	HRESULT STDMETHODCALLTYPE DragOver( 
 		DWORD grfKeyState,
-		POINTL ptl,
+		POINTL ScPt,
 		DWORD *pdwEffect);
 
-	HRESULT STDMETHODCALLTYPE DragLeave( void);
+	HRESULT STDMETHODCALLTYPE DragLeave(void);
 
 	HRESULT STDMETHODCALLTYPE Drop( 
 		IDataObject *pDataObj,
 		DWORD grfKeyState,
-		POINTL ptl,
+		POINTL ScPt,
 		DWORD *pdwEffect);
 
 	// locally used stuff

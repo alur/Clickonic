@@ -145,7 +145,7 @@ public:
 	void InfoTip (bool bEnabled);
 	void SnapToGrid (bool bEnabled);
 	void AlignTop (bool bEnabled);
-	void Reposition (int x, int y, int width, int height, bool relative);
+	void Reposition (int DcX, int DcY, int width, int height, bool relative);
 	bool GetNameFromId(int iItem, char* szFileName, UINT cchLength);
 	LPITEMIDLIST GetPIDLFromId(int iItem);
 	WORD GetModkeyWord(char* szOption, char* szDefault);
@@ -155,7 +155,7 @@ public:
 	void HandleSettingChange();
 	void relayMouseMessage(UINT message, WPARAM wParam, LPARAM lParam);
 	IDropTarget* GetLastItemTarget(bool *pbExecute);
-	void Drop(DWORD grfKeyState, POINTL *pt, DWORD *pdwEffect, CIDA *pida, POINT *pOffsets);
+	void Drop(DWORD grfKeyState, POINTL *ScPt, DWORD *pdwEffect, CIDA *pida, POINT *pOffsets);
 	void SetDropHover(POINTL *pt, DWORD *pdwEffect);
 	void ClearDropHover();
 	void HandleEvent(UINT uEvent);
@@ -212,8 +212,10 @@ public:
 	int		m_nHotTrackingTime;
 	bool	m_bInFolderChange;
 	bool	m_bStealFocus;
-	int		m_nX, m_nY;
+	
+	int		m_DcX, m_DcY;
 	int		m_nWidth, m_nHeight;
+	
 	int		m_nMonitor;
 	int		m_nLastItem;
 	int		m_nSpacingX, m_nSpacingY;

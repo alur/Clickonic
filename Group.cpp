@@ -4,6 +4,7 @@
 #include "pidl.h"
 #include "lsapiex.h"
 #include "DropTarget.h"
+using namespace utils;
 
 /**************************************************************************************************
 	This is the constructor, it's called when the group is created.
@@ -139,8 +140,13 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 
 	// Positions
 	m_nMonitor	= LiteStep::GetPrefixedRCInt(m_szName, "Monitor", 0);
-	m_nX		= LiteStep::GetPrefixedRCInt(m_szName, "X", 0) + g_Monitors[m_nMonitor].Left;
-	m_nY		= LiteStep::GetPrefixedRCInt(m_szName, "Y", 0) + g_Monitors[m_nMonitor].Top;
+	
+	POINTL McPos = { LiteStep::GetPrefixedRCInt(m_szName, "X", 0),
+	                 LiteStep::GetPrefixedRCInt(m_szName, "Y", 0) };
+	POINTL DcPos = DcFromSc(ScFromMc(McPos, m_nMonitor));
+	m_DcX = DcPos.x;
+	m_DcY = DcPos.y;
+	
 	m_nWidth	= LiteStep::GetPrefixedRCInt(m_szName, "Width", g_Monitors[m_nMonitor].ResX);
 	m_nHeight	= LiteStep::GetPrefixedRCInt(m_szName, "Height", g_Monitors[m_nMonitor].ResY);
 	m_nSpacingX	= LiteStep::GetPrefixedRCInt(m_szName, "SpacingX",  -1);
@@ -591,19 +597,19 @@ int CALLBACK SortByDateCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
 /**************************************************************************************************
 	This function moves and resizes the group
 **************************************************************************************************/
-void CGroup::Reposition (int x, int y, int width, int height, bool relative)
+void CGroup::Reposition (int DcX, int DcY, int width, int height, bool relative)
 {
 	if (relative)
 	{
-		m_nX += x;
-		m_nY += y;
+		m_DcX += DcX;
+		m_DcY += DcY;
 		m_nWidth += width;
 		m_nHeight += height;
 	}
 	else
 	{
-		m_nX = x;
-		m_nY = y;
+		m_DcX = DcX;
+		m_DcY = DcY;
 		m_nWidth = width;
 		m_nHeight = height;
 	}
@@ -624,7 +630,7 @@ void CGroup::Reposition (int x, int y, int width, int height, bool relative)
 
 	// This method has potential to be even slower than the previous one...
 	SaveState();
-	MoveWindow(m_hwndView, m_nX, m_nY, m_nWidth, m_nHeight, true);
+	MoveWindow(m_hwndView, m_DcX, m_DcY, m_nWidth, m_nHeight, true);
 	RestoreState();
 }
 
@@ -1640,7 +1646,7 @@ IDropTarget* CGroup::GetLastItemTarget(bool *pbExecute)
 }
 
 
-void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ptl, DWORD *pdwEffect, CIDA *pida, POINT *pOffsets)
+void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ScPt, DWORD *pdwEffect, CIDA *pida, POINT *pOffsets)
 {
 	LPITEMIDLIST pidl;	// single file object
 	UINT i = 0;
@@ -1702,12 +1708,14 @@ void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ptl, DWORD *pdwEffect, CIDA *p
 			LPITEMIDLIST pidlItem = GetPIDLFromId(j);
 			if (pidlItem != NULL && m_pFolder->CompareIDs(0, HIDA_GetPIDLItem(pida, i), pidlItem) == 0)
 			{
-				RECT rect;
-				GetWindowRect(m_hwndListView, &rect);
+				RECT ScRect;
+				GetWindowRect(m_hwndListView, &ScRect);
+				
+				POINTL GcPos = {ScPt->x - ScRect.left, ScPt->y - ScRect.top};
 				ListView_SetItemPosition( m_hwndListView, j,
-					ptl->x + pOffsets[1 + i].x - rect.left,
-					ptl->y + pOffsets[1 + i].y - rect.top);
-				//POINT pt; pt.x = ptl->x;pt.y = ptl->y;
+					GcPos.x + pOffsets[1 + i].x,
+					GcPos.y + pOffsets[1 + i].y);
+				//POINT pt; pt.x = ScPt->x;pt.y = ScPt->y;
 				//m_pView2->SelectAndPositionItem(HIDA_GetPIDLItem(pida, i), SVSI_SELECT | SVSI_TRANSLATEPT, &pt);
 				break;
 			}
@@ -1810,10 +1818,10 @@ bool CGroup::InitFolderView()
 	if (m_bAutoArrange)
 		fs.fFlags |= FWF_AUTOARRANGE;
 	
-	RECT rect = { m_nX, m_nY, m_nX + m_nWidth, m_nY + m_nHeight };
+	RECT DcRect = { m_DcX, m_DcY, m_DcX + m_nWidth, m_DcY + m_nHeight };
 
 	// Create the viewing window for IShellView
-	m_pView->CreateViewWindow(NULL, &fs, (IShellBrowser*)this, &rect, &m_hwndView);
+	m_pView->CreateViewWindow(NULL, &fs, (IShellBrowser*)this, &DcRect, &m_hwndView);
 	m_pView->UIActivate(SVUIA_ACTIVATE_NOFOCUS);
 	if (!m_hwndView)
 	{
@@ -1871,8 +1879,10 @@ bool CGroup::InitFolderView()
 	RestoreState();
 
 	// Export Evars
-	utils::SetEvar(m_szName, "CurrentX", "%d", m_nX);
-	utils::SetEvar(m_szName, "CurrentY", "%d", m_nY);
+	POINTL DcPos = {m_DcX, m_DcY};
+	POINTL ScPos = ScFromDc(DcPos);
+	utils::SetEvar(m_szName, "CurrentX", "%d", ScPos.x);
+	utils::SetEvar(m_szName, "CurrentY", "%d", ScPos.y);
 	utils::SetEvar(m_szName, "CurrentWidth", "%d", m_nWidth);
 	utils::SetEvar(m_szName, "CurrentHeight", "%d", m_nHeight);
 	utils::SetEvar(m_szName, "ItemCount", "%d", ListView_GetItemCount(m_hwndListView));

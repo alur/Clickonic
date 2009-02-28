@@ -7,6 +7,7 @@
 #include "Group.h"
 #include "utils.h"
 #include "pidl.h"
+using namespace utils;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -56,15 +57,15 @@ ULONG STDMETHODCALLTYPE CDropTarget::Release()
 }
 
 
-HRESULT STDMETHODCALLTYPE CDropTarget::DragEnter(IDataObject *pDataObj, DWORD /* grfKeyState */, POINTL ptl, DWORD *pdwEffect) {
+HRESULT STDMETHODCALLTYPE CDropTarget::DragEnter(IDataObject *pDataObj, DWORD /* grfKeyState */, POINTL ScPt, DWORD *pdwEffect) {
 	if (m_pDropHelper) {
-		POINT pt = {ptl.x, ptl.y};
+		POINT pt = {ScPt.x, ScPt.y};
 		m_pDropHelper->DragEnter(m_pGroup->m_hwndView, pDataObj, &pt, *pdwEffect);
 	}
 
 	FORMATETC etc = {0};
 
-	m_pGroup->SetDropHover(&ptl, pdwEffect);
+	m_pGroup->SetDropHover(&ScPt, pdwEffect);
 	if (*pdwEffect == DROPEFFECT_NONE)
 		return S_OK; // bad drop point =(
 
@@ -82,12 +83,12 @@ HRESULT STDMETHODCALLTYPE CDropTarget::DragEnter(IDataObject *pDataObj, DWORD /*
 }
 
 
-HRESULT STDMETHODCALLTYPE CDropTarget::DragOver( DWORD /*grfKeyState*/, POINTL ptl, DWORD *pdwEffect) {
+HRESULT STDMETHODCALLTYPE CDropTarget::DragOver( DWORD /*grfKeyState*/, POINTL ScPt, DWORD *pdwEffect) {
 	if (m_pDropHelper) {
-		POINT pt = { ptl.x, ptl.y };
+		POINT pt = { ScPt.x, ScPt.y };
 		m_pDropHelper->DragOver(&pt, *pdwEffect);
 	}
-	m_pGroup->SetDropHover(&ptl, pdwEffect);
+	m_pGroup->SetDropHover(&ScPt, pdwEffect);
 	return S_OK;
 }
 
@@ -102,7 +103,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::DragLeave() {
 #define HIDA_GetPIDLParent(pida) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[0])
 #define HIDA_GetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])
 
-HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
+HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKeyState, POINTL ScPt, DWORD *pdwEffect)
 {
 	FORMATETC etc = {0};
 	STGMEDIUM stg1 = {0}, stg2 = {0}, stg3 = {0};
@@ -116,7 +117,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 
 	if (m_pDropHelper)
 	{
-		POINT pt = { ptl.x, ptl.y };
+		POINT pt = { ScPt.x, ScPt.y };
 		m_pDropHelper->Drop(pDataObj, &pt, *pdwEffect);
 	}
 
@@ -131,9 +132,9 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 
 	if (pObject)
 	{
-		pObject->DragEnter(pDataObj, grfKeyState, ptl, pdwEffect);
-		pObject->DragOver(grfKeyState, ptl, pdwEffect);
-		pObject->Drop(pDataObj, grfKeyState, ptl, pdwEffect);
+		pObject->DragEnter(pDataObj, grfKeyState, ScPt, pdwEffect);
+		pObject->DragOver(grfKeyState, ScPt, pdwEffect);
+		pObject->Drop(pDataObj, grfKeyState, ScPt, pdwEffect);
 		pObject->Release();
 		return S_OK;
 	}
@@ -166,7 +167,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 
 	if (bReorderOnly || bExecute) // Local drag/drop
 	{
-		m_pGroup->Drop(grfKeyState, &ptl, pdwEffect, pida, pOffsets);
+		m_pGroup->Drop(grfKeyState, &ScPt, pdwEffect, pida, pOffsets);
 	}
 	else // External drag/drop
 	{
@@ -174,16 +175,15 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 		//LPITEMIDLIST pidl = PIDL::ParseDisplayName(m_pGroup->m_szFolderLocation);
 		//LPITEMIDLIST pidl = (LPITEMIDLIST)CoTaskMemAlloc(sizeof(USHORT));
 		//ZeroMemory(pidl, sizeof(USHORT));
-		POINTL ptLocal;
-		ptLocal.x = ptl.x - m_pGroup->m_nX;
-		ptLocal.y = ptl.y - m_pGroup->m_nY;
+		POINTL GcPt = GcFromSc(ScPt, m_pGroup);
+		
 		m_pGroup->m_pFolder->GetUIObjectOf(NULL, 1,(LPCITEMIDLIST*)&m_pGroup->m_pidlFolder, IID_IDropTarget, 0, (void**)&pObject);
 		if (pObject) // Only works for the desktop
 		{
-			m_pGroup->m_NextIconPosition = ptLocal; // Temporary "fix" for icon positions
-			pObject->DragEnter(pDataObj, grfKeyState, ptl, pdwEffect);
-			pObject->DragOver(grfKeyState, ptl, pdwEffect);
-			pObject->Drop(pDataObj, grfKeyState, ptl, pdwEffect);
+			m_pGroup->m_NextIconPosition = GcPt;
+			pObject->DragEnter(pDataObj, grfKeyState, ScPt, pdwEffect);
+			pObject->DragOver(grfKeyState, ScPt, pdwEffect);
+			pObject->Drop(pDataObj, grfKeyState, ScPt, pdwEffect);
 			pObject->Release();
 		}
 		else // Whatever... We'll just handle it ourselfs.
@@ -242,7 +242,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::Drop( IDataObject *pDataObj, DWORD grfKey
 					}
 					if (!FileOp.fAnyOperationsAborted) // Sort the icons
 					{
-						m_pGroup->m_NextIconPosition = ptLocal; // Temporary "fix" for icon positions
+						m_pGroup->m_NextIconPosition = GcPt; // Temporary "fix" for icon positions
 						//m_pGroup->Drop(grfKeyState, &ptl, pdwEffect, pida, pOffsets);
 					}
 				}

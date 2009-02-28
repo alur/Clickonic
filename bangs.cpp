@@ -529,7 +529,7 @@ void bangMove (HWND /* caller */, LPCSTR szArgs)
 	CGroup *pGroup = GetGroupByName(token1);
 	if (!pGroup)
 		return BangFailed("Move", token1);
-	pGroup->Reposition(utils::FixCoordinate(token2, false), utils::FixCoordinate(token3, true), 0, 0, false);
+	pGroup->Reposition(utils::DcParseCoordinate(token2, false), utils::DcParseCoordinate(token3, true), 0, 0, false);
 }
 void bangMoveBy (HWND /* caller */, LPCSTR szArgs)
 {
@@ -751,9 +751,15 @@ void bangSetMonitor (HWND /* caller */, LPCSTR szArgs)
 	if (!pGroup)
 		return BangFailed("SetMonitor", szArgs);
 
-	int nMonitor = atoi(szArgs);
+	int nNewMonitor = atoi(szArgs);
+	int nOldMonitor = pGroup->m_nMonitor;
 
-	pGroup->m_nX = utils::MapXCoordinateToMonitor(nMonitor, pGroup->m_nX, pGroup->m_nMonitor);
-	pGroup->m_nY = utils::MapYCoordinateToMonitor(nMonitor, pGroup->m_nY, pGroup->m_nMonitor);
-	pGroup->m_nMonitor = nMonitor;
+	// New monitor's origin, in the old monitor's coordinate system
+	POINTL McNewMonitorOrigin = {
+		g_Monitors[nNewMonitor].Left - g_Monitors[nOldMonitor].Left,
+		g_Monitors[nNewMonitor].Top - g_Monitors[nOldMonitor].Top
+		};
+	pGroup->m_DcX += McNewMonitorOrigin.x;
+	pGroup->m_DcY += McNewMonitorOrigin.y;
+	pGroup->m_nMonitor = nNewMonitor;
 }

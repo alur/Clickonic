@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "utils.h"
 #include "time.h"
+#include "group.h"
 
 void utils::ErrorMessage(unsigned __int8 nLevel, LPCSTR pszFormat, ...)
 {
@@ -41,16 +42,6 @@ void utils::GetFormatedTime (LPCSTR pszFormat, LPSTR pszReturn, size_t cchReturn
 	strftime(pszReturn, cchReturn, pszFormat, &TimeInfo);
 }
 
-int utils::MapXCoordinateToMonitor(int nNewMonitor, int nX, int nOldMonitor)
-{
-	return (g_Monitors[nNewMonitor].Left + nX - g_Monitors[nOldMonitor].Left);
-}
-
-int utils::MapYCoordinateToMonitor(int nNewMonitor, int nY, int nOldMonitor)
-{
-	return (g_Monitors[nNewMonitor].Top + nY - g_Monitors[nOldMonitor].Top);
-}
-
 void utils::SetEvar(LPCSTR pszGroup, LPCSTR pszEvar, LPCSTR pszFormat, ...)
 {
 	char szValue[MAX_LINE_LENGTH] = { 0 };
@@ -66,13 +57,21 @@ void utils::SetEvar(LPCSTR pszGroup, LPCSTR pszEvar, LPCSTR pszFormat, ...)
 	LSSetVariable(szEvar, szValue);
 }
 
-int utils::FixCoordinate(char *szCoordinate, bool isY)
+int utils::DcParseCoordinate(char *szCoordinate, bool isY)
 {
 	if (szCoordinate[1] != '@')
-		return atoi(szCoordinate);
-	int iMon = szCoordinate[0] - 48;
-	int iPos = atoi(szCoordinate + 2);
-	return isY ? g_Monitors[iMon].Top + iPos : g_Monitors[iMon].Left + iPos;
+	{
+		int ScPos = atoi(szCoordinate);
+		int DcPos = ScPos - GetSystemMetrics(SM_XVIRTUALSCREEN);
+		return DcPos;
+	}
+	else
+	{
+		int iMon = szCoordinate[0] - '0';
+		int McPos = atoi(szCoordinate + 2);
+		int DcPos = McPos + (isY?g_Monitors[iMon].Top:g_Monitors[iMon].Left);
+		return DcPos;
+	}
 }
 
 COLORREF utils::String2Color(const char *szColor)
@@ -125,3 +124,55 @@ HRESULT utils::CreateLink(LPCSTR lpszPathObj, LPCSTR lpszPathLink, LPCSTR lpszDe
 	}
 	return hres; 
 } 
+
+
+POINTL utils::ScFromDc(POINTL point)
+{
+	POINTL ret = {
+		point.x + GetSystemMetrics(SM_XVIRTUALSCREEN),
+		point.y + GetSystemMetrics(SM_YVIRTUALSCREEN)
+		};
+	return ret;
+}
+POINTL utils::DcFromSc(POINTL point)
+{
+	POINTL ret = {
+		point.x - GetSystemMetrics(SM_XVIRTUALSCREEN),
+		point.y - GetSystemMetrics(SM_YVIRTUALSCREEN)
+		};
+	return ret;
+}
+
+POINTL utils::ScFromMc(POINTL point, int monitor)
+{
+	POINTL ret = {
+		point.x + g_Monitors[monitor].Left,
+		point.y + g_Monitors[monitor].Top
+		};
+	return ret;
+}
+POINTL utils::McFromSc(POINTL point, int monitor)
+{
+	POINTL ret = {
+		point.x - g_Monitors[monitor].Left,
+		point.y - g_Monitors[monitor].Top
+		};
+	return ret;
+}
+
+POINTL utils::ScFromGc(POINTL point, const CGroup *group)
+{
+	POINTL ret = {
+		point.x + (group->m_DcX + GetSystemMetrics(SM_XVIRTUALSCREEN)),
+		point.y + (group->m_DcY + GetSystemMetrics(SM_YVIRTUALSCREEN))
+		};
+	return ret;
+}
+POINTL utils::GcFromSc(POINTL point, const CGroup *group)
+{
+	POINTL ret = {
+		point.x - (group->m_DcX + GetSystemMetrics(SM_XVIRTUALSCREEN)),
+		point.y - (group->m_DcY + GetSystemMetrics(SM_YVIRTUALSCREEN))
+		};
+	return ret;
+}

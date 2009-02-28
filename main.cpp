@@ -209,8 +209,8 @@ bool CreateMessageHandler()
 //
 void UpdateMonitorInfo()
 {
-	g_Monitors[0].Top = 0;
-	g_Monitors[0].Left = 0;
+	g_Monitors[0].Left = LSGetSystemMetrics(SM_XVIRTUALSCREEN);
+	g_Monitors[0].Top = LSGetSystemMetrics(SM_YVIRTUALSCREEN);
 	g_Monitors[0].ResX = LSGetSystemMetrics(SM_CXVIRTUALSCREEN);
 	g_Monitors[0].ResY = LSGetSystemMetrics(SM_CYVIRTUALSCREEN);
 
