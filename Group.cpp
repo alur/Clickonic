@@ -595,15 +595,15 @@ void CGroup::Reposition (int DcX, int DcY, int width, int height, bool relative)
 **************************************************************************************************/
 bool CGroup::CheckModkeys(WORD wKeys)
 {
-	if (((wKeys & MODKEY_SHIFT) == MODKEY_SHIFT) && !(GetKeyState( VK_SHIFT ) < 0))
+	if (((wKeys & MOD_SHIFT) == MOD_SHIFT) && !(GetKeyState( VK_SHIFT ) < 0))
 	{
 		return false;
 	}
-	if (((wKeys & MODKEY_ALT) == MODKEY_ALT) && !(GetKeyState( VK_MENU ) < 0))
+	if (((wKeys & MOD_ALT) == MOD_ALT) && !(GetKeyState( VK_MENU ) < 0))
 	{
 		return false;
 	}
-	if (((wKeys & MODKEY_CTRL) == MODKEY_CTRL) && !(GetKeyState( VK_CONTROL ) < 0))
+	if (((wKeys & MOD_CONTROL) == MOD_CONTROL) && !(GetKeyState( VK_CONTROL ) < 0))
 	{
 		return false;
 	}
@@ -1591,11 +1591,11 @@ WORD CGroup::GetModkeyWord(char* szOption, char* szDefault)
 	char szBuf[MAX_LINE_LENGTH];
 	LiteStep::GetPrefixedRCLine(szBuf, m_szName, szOption, szDefault);
 	if (strstr(szBuf, ".shift") != NULL)
-		wReturn |= MODKEY_SHIFT;
+		wReturn |= MOD_SHIFT;
 	if (strstr(szBuf, ".alt") != NULL)
-		wReturn |= MODKEY_ALT;
+		wReturn |= MOD_ALT;
 	if (strstr(szBuf, ".ctrl") != NULL)
-		wReturn |= MODKEY_CTRL;
+		wReturn |= MOD_CONTROL;
 	return wReturn;
 }
 

@@ -6,10 +6,6 @@
 
 #include "IShellBrowserImpl.h"
 
-#define MODKEY_SHIFT	0x0001
-#define MODKEY_ALT		0x0002
-#define MODKEY_CTRL		0x0004
-
 #define EVENT_ONCREATED 0
 #define EVENT_ONF1DOWN 1
 #define EVENT_ONF2DOWN 2
