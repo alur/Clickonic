@@ -983,6 +983,7 @@ void CGroup::CopyFiles(bool cut)
 		return; // No files selected
 
 	ClearCutMark();
+	m_bCutMarkedFiles = false;
 
 	// Build the list of files
 	for (i = 0; i < iNumSelected; i++)
@@ -996,7 +997,7 @@ void CGroup::CopyFiles(bool cut)
 					ListView_SetItemState(m_hwndListView, iItem, LVIS_CUT, LVIS_CUT);
 
 				iFileCounter++;
-				StringCchCopyA(pszPos, sizeof(szFullCommand)+szFullCommand-pszPos, szFileName);
+				StringCchCopyA(pszPos, sizeof(szFullCommand) + szFullCommand-pszPos, szFileName);
 				pszPos += strlen(szFileName)+1;
 			}
 		}
@@ -1006,16 +1007,18 @@ void CGroup::CopyFiles(bool cut)
 		return; // In case they tried to copy my computer or something like that
 
 	// Put the list of files in global memory
-	DROPFILES dobj = { sizeof(DROPFILES), { 0, 0 }, 0, 0 };
-	UINT iDataSize = (UINT)(sizeof(dobj) + pszPos - szFullCommand);
+	DROPFILES dobj = { sizeof(DROPFILES), { 0, 0 }, 0, 1 };
+	UINT iDataSize = (UINT)(sizeof(dobj) + (pszPos - szFullCommand)*2 + 5);
 	HGLOBAL hClipData = GlobalAlloc( GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, iDataSize );
 	LPSTR szData = (LPSTR)GlobalLock(hClipData);
 	memcpy(szData, &dobj, 20);
-	memcpy(szData + sizeof(dobj), &szFullCommand, iDataSize-sizeof(dobj));
+	LPSTR sWStr = szData+20;
+	for ( i = 0; i < (UINT)(pszPos-szFullCommand); i++ )
+		sWStr[i*2] = szFullCommand[i];
 	GlobalUnlock(hClipData);
 
 	// Put the dropeffect in global memory
-	HGLOBAL hEffect = GlobalAlloc(GMEM_ZEROINIT|GMEM_MOVEABLE|GMEM_DDESHARE, sizeof(DWORD) );
+	HGLOBAL hEffect = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, sizeof(DWORD) );
 	PDWORD pdw1 = (PDWORD)GlobalLock(hEffect);
 	*pdw1 = cut ? DROPEFFECT_MOVE : DROPEFFECT_COPY;
 	GlobalUnlock(hEffect);
