@@ -248,6 +248,8 @@ void CGroup::SaveToFile()
 	for (int i = 0; i < nCount; i++)
 	{
 		ListView_GetItemText(m_hwndListView, i, 0, szFileName, MAX_PATH);
+		if (szFileName[0] == '[')
+			szFileName[0] = '>';
 		if (!IconShouldBeHidden(szFileName))
 		{
 			StringCchCopy(pszPos, szFileData+sizeof(szFileData)-pszPos, szFileName);
@@ -369,6 +371,8 @@ void CGroup::RestoreFromFile()
 		pSub = strtok_s(pString, "?", &next);
 		StringCchCopy(szFileName, sizeof(szFileName), pSub);
 		szFileName[strlen(szFileName)-1] = 0;
+		if (szFileName[0] == '>')
+			szFileName[0] = '[';
 		
 		// This will get the x coordinate
 		pos += (strlen(pString)+1);
