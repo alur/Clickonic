@@ -174,6 +174,7 @@ bool CreateMessageHandler()
 	wc.hInstance = g_hInstance;
 	wc.lpszClassName = g_szMsgHandler;
 	wc.hIconSm = 0;
+	wc.style = CS_NOCLOSE;
 
 	if (!RegisterClassEx(&wc))
 	{
