@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="ruDocs-en.xsl"?>
-<lsmd spec="0.3p" version="1.1.4.1">
+<lsmd spec="0.3p" version="1.1.5">
 	<author>Seg@</author>
 	<copyright year="2004-2008">Seg@, Andymon, Alurcard2.  Distributed under the GNU GPL2 license.</copyright>
-	<module version="1.1.4.1" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
+	<module version="1.1.5" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
 		<author name="Sergey Gagarin" email="inform-sega_AT_freemail.ru" web="http://www.litestep.bip.ru" icq="162261148">Seg@</author>
 		<author name="Andymon" email="andymon_AT_ls-universe.info" web="http://www.ls-universe.info">Andymon</author>
 		<author name="Erik Welander" email="alurcard2_AT_gmail.com">Alurcard2</author>
@@ -18,15 +18,15 @@
 			<section id="install" name="Installation">
 				<description>
 					<p>
-						Put Clickonic-1.1.4.1.dll in any directory you like, for example <code>C:\LiteStep\</code>,
+						Put Clickonic-1.1.5.dll in any directory you like, for example <code>C:\LiteStep\</code>,
 						then add this line to step.rc
 					</p>
-					<example>LoadModule "C:\LiteStep\Clickonic-1.1.4.1.dll"</example>
+					<example>LoadModule "C:\LiteStep\Clickonic-1.1.5.dll"</example>
 					<p>
 						In the case you're using OTS2 compatible distro such as Omar's LiteStep Installer,
 						AngelKnight's EZ2Install or Joshhh's Dist.ru, you should use the *NetLoadModule pseudo-operator:
 					</p>
-					<example>*NetLoadModule Clickonic-1.1.4.1</example>
+					<example>*NetLoadModule Clickonic-1.1.5</example>
 				</description>
 			</section>
 			<section id="usage" name="Usage">
@@ -64,7 +64,7 @@ DeskIconsFolder ".desktop"</example>
 				<description>
 					<example>
 ;===============================================
-;  Desktop icons (Clickonic.dll v1.1.4.1)
+;  Desktop icons (Clickonic.dll v1.1.5)
 ;-----------------------------------------------
 *Clickonic DeskIcons
 DeskIconsFolder .desktop
@@ -1147,6 +1147,12 @@ DeskIconsNoConnectedFiles</example>
 						<p>This will make Clickonic explicitly call explorer.exe when opening a folder.</p>
 					</description>
 				</single>
+				<single name="(group)PersistantFolderLocation">
+					<bool data="PersistantFolderLocation1"/>
+					<description>
+						<p>Will store the current folder location and use that as the desktop folder.</p>
+					</description>
+				</single>
 			</group>
 		</config>
 		<!-- @@@@@@@@@@@@@@@@@@  bangs  @@@@@@@@@@@@@@@@ -->
@@ -1590,6 +1596,15 @@ DeskIconsNoConnectedFiles</example>
 			</group>
 		</control>
 		<history>
+			<revision version="1.1.5" by="Alurcard2" date="2009-xx-xx">
+				<fixed>.ini corruption when file names started with a [</fixed>
+				<fixed>Uninitialized m_bInFolderChange which broke keybindings,</fixed>
+				<added><xref>(group)ShortcutMode</xref></added>
+				<added><xref>(group)TextPasteFormat</xref></added>
+				<fixed>Issue with the highlighting of cut files.</fixed>
+				<added>Support for saving the folder location <xref>(group)PersistantFolderLocation</xref></added>
+				<fixed>Issue with hackish vista code effecting pre-vista systems.</fixed>
+			</revision>
 			<revision version="1.1.4.1" by="Alurcard2" date="2009-02-09">
 				<fixed>Issue introduced in 1.1.4 which could cause clickonic to load significantly slower.</fixed>
 			</revision>
