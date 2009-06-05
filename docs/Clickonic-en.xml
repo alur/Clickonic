@@ -1590,10 +1590,10 @@ DeskIconsNoConnectedFiles</example>
 			</group>
 		</control>
 		<history>
-			<revision version="1.1.4.1" by="Alurcard2" date="2009-09-02">
+			<revision version="1.1.4.1" by="Alurcard2" date="2009-02-09">
 				<fixed>Issue introduced in 1.1.4 which could cause clickonic to load significantly slower.</fixed>
 			</revision>
-			<revision version="1.1.4" by="Alurcard2" date="2009-28-01">
+			<revision version="1.1.4" by="Alurcard2" date="2009-01-28">
 				<added>Support for Windows Vista and Windows 7</added>
 				<fixed>Crash on recycle with LiteStep 0.25.0</fixed>
 				<added>
@@ -1613,12 +1613,12 @@ DeskIconsNoConnectedFiles</example>
 				</added>
 				<added><xref>(group)ExplicitCalls</xref></added>
 			</revision>
-			<revision version="1.1.3" by="Alurcard2" date="2008-25-10">
+			<revision version="1.1.3" by="Alurcard2" date="2008-10-25">
 				<fixed>Error message poping up when it shouldnt.</fixed>
 				<fixed>Clickonic wouldn't go all the way to the root drive using ".up".</fixed>
 				<added><xref>!ClickonicClearData</xref> to clean up old stored icon positions.</added>
 			</revision>
-			<revision version="1.1.2" by="Alurcard2" date="2008-30-08">
+			<revision version="1.1.2" by="Alurcard2" date="2008-08-30">
 				<fixed>Event actions containing spaces needed quotes around them.</fixed>
 				<added>
 					<xref>!ClickonicRenameFile</xref>, 
@@ -1630,7 +1630,7 @@ DeskIconsNoConnectedFiles</example>
 					<xref>!ClickonicMoveFocus</xref>
 				</added>
 			</revision>
-			<revision version="1.1.1" by="Alurcard2" date="2008-20-08">
+			<revision version="1.1.1" by="Alurcard2" date="2008-08-20">
 				<fixed>Clickonic is now "transparent" for double clicks, middle button clicks, and xbutton clicks</fixed>
 				<fixed>Icons would "snap to grid" on startup even if SnapToGrid was disabled while using an iconposition file</fixed>
 				<fixed>Icons wouldn't snap to grid when !ClickonicSnapToGrid was called</fixed>
@@ -1646,7 +1646,7 @@ DeskIconsNoConnectedFiles</example>
 				<changed>Pasting with text in the clipboard will cause the clipboard to save the text into a .txt file on the clipboard, set <xref>(group)DontPasteText</xref> to avoid this.</changed>
 				<added>Added support for ".selected" in <xref>!ClickonicChangeDir</xref>.</added>
 			</revision>
-			<revision version="1.1" by="Alurcard2" date="2008-30-07">
+			<revision version="1.1" by="Alurcard2" date="2008-07-30">
 				<changed>Internet Explorer, Recycle Bin, My Computer, My Documents, and My Network Places will all be hidden/shown on the desktop depending on windows desktop settings.</changed>
 				<changed>Made deletion of above icons change windows desktop settings.</changed>
 				<changed>Clickonic no longer depends on a module such as xDesk, jDesk, or desktop2 being loaded.</changed>
@@ -1693,7 +1693,7 @@ DeskIconsNoConnectedFiles</example>
 				<added><xref>!ClickonicMove</xref>, <xref>!ClickonicMoveBy</xref>, <xref>!ClickonicResize</xref>, <xref>!ClickonicResizeBy</xref></added>
 				<added><xref>!ClickonicReposition</xref>, <xref>!ClickonicRepositionBy</xref></added>
 			</revision>
-			<revision version="1.0.7" by="Alurcard2" date="2008-10-06">
+			<revision version="1.0.7" by="Alurcard2" date="2008-06-10">
 				<fixed>Removed some debugging code.</fixed>
 				<fixed>Pasting a cut file will move it rather than copy it.</fixed>
 				<added>Information on fixing problems with .ZIP files.</added>
@@ -1708,17 +1708,17 @@ DeskIconsNoConnectedFiles</example>
 					<xref>(group)DontUseCtrlC</xref>
 				</added>
 			</revision>
-			<revision version="1.0.6" by="Alurcard2" date="2008-04-06">
+			<revision version="1.0.6" by="Alurcard2" date="2008-06-04">
 				<fixed>Bug with deleting multiple files.</fixed>
 				<added>ctrl+c copies selected files to the windows clipboard.</added>
 				<added>Pressing ctrl+v while having a file selected pastes files from the clipboard.</added>
 				<added><xref>!ClickonicPasteFiles</xref> pastes files from the clipboard.</added>
 				<added>Added information about removing IE, My Documents, etc from the desktop.</added>
 			</revision>
-			<revision version="1.0.5.1" by="Alurcard2" date="2007-04-12">
+			<revision version="1.0.5.1" by="Alurcard2" date="2007-12-04">
 				<fixed>Deleting links or having file extensions disabled causing wrong file to be deleted</fixed>
 			</revision>
-			<revision version="1.0.5" by="Alurcard2" date="2007-30-11">
+			<revision version="1.0.5" by="Alurcard2" date="2007-11-30">
 				<added>The Delete button deletes selected files.</added>
 				<added>Press F2 to rename a focused file.</added>
 				<added>
@@ -1752,10 +1752,10 @@ DeskIconsNoConnectedFiles</example>
 					<xref>!ClickonicUseDelete</xref>
 				</added>
 			</revision>
-			<revision version="1.0.4" by="Seg@" date="2006-13-07">
+			<revision version="1.0.4" by="Seg@" date="2006-07-13">
 				<fixed>Left mouse button click wasn't 'transparent' for desktop. Thanks to immortal who point this bug</fixed>
 			</revision>
-			<revision version="1.0.3" by="Seg@" date="2006-16-04">
+			<revision version="1.0.3" by="Seg@" date="2006-04-16">
 				<added>
 					Background stuff:
 					<xref>(group)Background</xref>,
@@ -1772,7 +1772,7 @@ DeskIconsNoConnectedFiles</example>
 					<xref>!ClickonicSetTextColor</xref>, <xref>!ClickonicSetTextBkColor</xref>
 				</added>
 			</revision>
-			<revision version="1.0.2" by="Andymon, Seg@" date="2006-08-04">
+			<revision version="1.0.2" by="Andymon, Seg@" date="2006-04-08">
 				<fixed>No more crash after logoff/reboot</fixed>
 				<added><xref>(group)FontBackgroundColor</xref></added>
 				<fixed>Error message for bangs contained the bang name instead of the icons group name</fixed>
@@ -1790,7 +1790,7 @@ DeskIconsNoConnectedFiles</example>
 					Fixed the suboptimal MouseClick behaviour ;) The normal LiteStep Desktop Clicks were totally unavailable! Now it's a really great module ;)
 				</fixed>
 			</revision>
-			<revision version="1.0" by="Seg@" date="2005-12-05">
+			<revision version="1.0" by="Seg@" date="2005-06-12">
 				<note>
 					That's a first public release. Actually the most part of the module has been coded in 3 days of December 2004,
 					but I havn't enough time to finish the development till the yesterday =(
