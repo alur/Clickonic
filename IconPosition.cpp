@@ -248,6 +248,7 @@ void CGroup::SaveToFile()
 	for (int i = 0; i < nCount; i++)
 	{
 		ListView_GetItemText(m_hwndListView, i, 0, szFileName, MAX_PATH);
+		GetNameFromId(i, szFileName, MAX_PATH);
 		if (szFileName[0] == '[')
 			szFileName[0] = '>';
 		if (!IconShouldBeHidden(szFileName))
@@ -388,7 +389,7 @@ void CGroup::RestoreFromFile()
 
 		for (int i = 0; i < nCount; i++)
 		{
-			ListView_GetItemText(m_hwndListView, i, 0, szTempName, MAX_PATH);
+			GetNameFromId(i, szTempName, MAX_PATH);
 			if (_stricmp(szTempName, szFileName) == 0)
 			{
 				ListView_SetItemPosition(m_hwndListView, i, pt.x, pt.y);
