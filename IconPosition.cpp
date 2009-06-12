@@ -247,7 +247,6 @@ void CGroup::SaveToFile()
 
 	for (int i = 0; i < nCount; i++)
 	{
-		ListView_GetItemText(m_hwndListView, i, 0, szFileName, MAX_PATH);
 		GetNameFromId(i, szFileName, MAX_PATH);
 		if (szFileName[0] == '[')
 			szFileName[0] = '>';
