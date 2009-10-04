@@ -279,16 +279,25 @@ LRESULT WINAPI MessageHandlerProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			lParam = NULL;
 			return 0;
 		}
-	/*case WM_SETTINGCHANGE:
-		{ // May cause crashes
+	case WM_SETTINGCHANGE:
+		{	
+			/*/ May cause crashes
 			if (wParam == 0 && !_stricmp("Windows", (char*)lParam)) {
 				for (GroupMap::iterator iter = g_Groups.begin(); iter != g_Groups.end(); ++iter)
 				{
 					iter->second->HandleSettingChange();
 				}
+			}*/
+			if (wParam == SPI_SETDESKWALLPAPER)
+			{
+				for (GroupMap::iterator iter = g_Groups.begin(); iter != g_Groups.end(); ++iter)
+				{
+					RedrawWindow(iter->second->m_hwndListView, NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_UPDATENOW); 
+				}
+				return 0;
 			}
 			break;
-		}*/
+		}
 	case WM_DISPLAYCHANGE:
 		{
 			UpdateMonitorInfo();
