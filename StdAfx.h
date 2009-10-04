@@ -3,7 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define MAX_RCCOMMAND 64
 
-#include <AggressiveOptimize.h>
+//#include <AggressiveOptimize.h>
 #include <map>
 #include <string>
 #include "lsapi.h"

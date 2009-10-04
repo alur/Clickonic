@@ -12,7 +12,7 @@ void utils::ErrorMessage(unsigned __int8 nLevel, LPCSTR pszFormat, ...)
 	StringCchVPrintfA(szError, MAX_LINE_LENGTH, pszFormat, argList);
 	va_end(argList);
 
-	LSLog(nLevel, "Clickonic", szError); // We always log errors
+	//LSLog(nLevel, "Clickonic", szError); // We always log errors
 
 	if (g_nErrorTranslucency >= nLevel)
 	{

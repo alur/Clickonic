@@ -1317,9 +1317,10 @@ void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ScPt, DWORD *pdwEffect, CIDA *
 				GetWindowRect(m_hwndListView, &ScRect);
 				
 				POINTL GcPos = {ScPt->x - ScRect.left, ScPt->y - ScRect.top};
-				ListView_SetItemPosition( m_hwndListView, j,
-					GcPos.x + pOffsets[1 + i].x,
-					GcPos.y + pOffsets[1 + i].y);
+				if (pOffsets != NULL)
+					ListView_SetItemPosition( m_hwndListView, j, GcPos.x + pOffsets[1 + i].x, GcPos.y + pOffsets[1 + i].y);
+				else // Windows 7
+					ListView_SetItemPosition( m_hwndListView, j, GcPos.x, GcPos.y );
 				//POINT pt; pt.x = ScPt->x;pt.y = ScPt->y;
 				//m_pView2->SelectAndPositionItem(HIDA_GetPIDLItem(pida, i), SVSI_SELECT | SVSI_TRANSLATEPT, &pt);
 				break;
