@@ -53,7 +53,7 @@ void utils::SetEvar(LPCSTR pszGroup, LPCSTR pszEvar, LPCSTR pszFormat, ...)
 	va_end(argList);
 
 	StringCchPrintfA(szEvar, sizeof(szEvar), "%s%s", pszGroup, pszEvar);
-
+	PathQuoteSpaces(szValue);
 	LSSetVariable(szEvar, szValue);
 }
 
