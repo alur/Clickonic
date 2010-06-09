@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Clickonic", "Clickonic.vcproj", "{6D0B7566-A155-4995-846E-F97BE01CC994}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Clickonic", "Clickonic.vcxproj", "{6D0B7566-A155-4995-846E-F97BE01CC994}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
