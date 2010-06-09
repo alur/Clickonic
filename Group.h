@@ -206,6 +206,7 @@ public:
 	bool	m_bSnapToGrid;
 	bool	m_bHotTracking;
 	int		m_nHotTrackingTime;
+	bool	m_bSingleClick;
 	bool	m_bInFolderChange;
 	bool	m_bStealFocus;
 	

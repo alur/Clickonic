@@ -25,6 +25,7 @@ BangItem g_Bangs[BANGS_NUM] =
 	{	"SetBackgroundColor",			bangSetBackgroundColor},
 	{	"HotTracking",					bangHotTracking	},
 	{	"HotTrackingTime",				bangHotTrackingTime	},
+	{	"SingleClick",					bangSingleClick	},
 	{	"ConfirmFileDelete",			bangConfirmFileDelete },
 	{	"DontUseRecycleBin",			bangDontUseReycleBin },
 	{	"NoConnectedFiles",				bangNoConnectedFiles },
@@ -255,6 +256,20 @@ void bangHotTracking (HWND /* caller */, LPCSTR szArgs)
 		pGroup->HotTracking(!pGroup->m_bHotTracking);
 	else
 		pGroup->HotTracking(utils::String2Bool(token2));
+}
+
+void bangSingleClick (HWND /* caller */, LPCSTR szArgs)
+{
+	char token1[MAX_LINE_LENGTH], token2[MAX_LINE_LENGTH], szExtra[MAX_LINE_LENGTH];
+	char* tokens[2] = {token1, token2};
+	LCTokenize(szArgs, tokens, 2, szExtra);
+	CGroup *pGroup = GetGroupByName(token1);
+	if (!pGroup)
+		return BangFailed("SingleClick", token1);
+	if (!_stricmp(token2, "toggle"))
+		pGroup->m_bSingleClick = !pGroup->m_bSingleClick;
+	else
+		pGroup->m_bSingleClick = utils::String2Bool(token2);
 }
 
 void bangInfoTip (HWND /* caller */, LPCSTR szArgs)

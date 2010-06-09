@@ -179,6 +179,8 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	m_bHotTracking		= LiteStep::GetPrefixedRCBool(m_szName, "HotTracking", FALSE);
 	m_nHotTrackingTime	= LiteStep::GetPrefixedRCInt(m_szName, "HotTrackingTime", -1);
 
+	m_bSingleClick = LiteStep::GetPrefixedRCBool(m_szName, "SingleClick", FALSE);
+
 	m_bInlineBrowsing = LiteStep::GetPrefixedRCBool(m_szName, "InlineBrowsing", FALSE);
 	m_bNoVirtualSwitch = LiteStep::GetPrefixedRCBool(m_szName, "NoVirtualSwitch", FALSE);
 
@@ -1721,7 +1723,15 @@ void CGroup::HandleMouseEvent(UINT uEvent, UINT msg, WPARAM wParam, LPARAM lPara
 		if ( ListView_HitTest(m_hwndListView, &lvhi) != -1 )
 		{
 			// We could add a whole set of events for this scenario as well, but I don't really see a need.
-			CallWindowProc(m_wpOrigListViewProc, m_hwndListView, msg, wParam, lParam);
+			if (msg == WM_LBUTTONDOWN && m_bSingleClick)
+			{
+				// Simply send a double click : >
+				CallWindowProc(m_wpOrigListViewProc, m_hwndListView, WM_LBUTTONDBLCLK, wParam, lParam);
+			}
+			else
+			{
+				CallWindowProc(m_wpOrigListViewProc, m_hwndListView, msg, wParam, lParam);
+			}
 			return; // An icon was clicked.
 		}
 	}

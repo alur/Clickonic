@@ -17,6 +17,7 @@ void bangSetBackground (HWND caller, LPCSTR szArgs);
 void bangSetBackgroundColor	(HWND caller, LPCSTR szArgs);
 void bangHotTracking (HWND caller, LPCSTR szArgs);
 void bangHotTrackingTime (HWND caller, LPCSTR szArgs);
+void bangSingleClick (HWND caller, LPCSTR szArgs);
 void bangConfirmFileDelete (HWND caller, LPCSTR szArgs);
 void bangDontUseReycleBin (HWND caller, LPCSTR szArgs);
 void bangNoConnectedFiles (HWND caller, LPCSTR szArgs);
