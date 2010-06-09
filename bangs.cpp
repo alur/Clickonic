@@ -8,7 +8,7 @@ typedef struct BangItem {
 	BANGCOMMANDPROC pCommand;
 } BangItem;
 
-#define BANGS_NUM		63
+#define BANGS_NUM		64
 BangItem g_Bangs[BANGS_NUM] =
 {
 	{	"Show",							bangShow	},
