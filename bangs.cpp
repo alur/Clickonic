@@ -8,7 +8,7 @@ typedef struct BangItem {
 	BANGCOMMANDPROC pCommand;
 } BangItem;
 
-#define BANGS_NUM		62
+#define BANGS_NUM		63
 BangItem g_Bangs[BANGS_NUM] =
 {
 	{	"Show",							bangShow	},
@@ -71,8 +71,8 @@ BangItem g_Bangs[BANGS_NUM] =
 	{	"CreateGroup",					bangCreateGroup },
 	{	"DestroyGroup",					bangDestroyGroup },
 	{	"HideControlPanel",				bangHideControlPanel },
-	{	"ShowControlPanel",				bangShowControlPanel }
-
+	{	"ShowControlPanel",				bangShowControlPanel },
+	{	"RefreshIcons",					bangRefreshIcons }
 };
 
 
@@ -104,6 +104,14 @@ void UnregisterBangs()
 void BangFailed(const char *szBangName, const char *szGroup)
 {
 	utils::ErrorMessage(E_WARNING, "Icon group with name \"%s\" not found, !%s%s bang failed", szGroup, g_szAppName, szBangName);
+}
+
+void bangRefreshIcons (HWND , LPCSTR szArgs)
+{
+	CGroup *pGroup = GetGroupByName(szArgs);
+	if (!pGroup)
+		return BangFailed("RefreshIcons", szArgs);
+	ListView_RedrawItems(pGroup->m_hwndListView, 0, ListView_GetItemCount(pGroup->m_hwndListView));
 }
 
 void bangShow (HWND /* caller */, LPCSTR szArgs)

@@ -379,6 +379,11 @@ LRESULT WINAPI GroupProc(HWND hListView, UINT msg, WPARAM wParam, LPARAM lParam)
 					utils::SetEvar(group->m_szName, "ItemCount", "%d", ListView_GetItemCount(group->m_hwndListView)-1);
 					break;
 				} // LVN_DELETEITEM
+			case LVM_UPDATE:
+				{
+					ListView_RedrawItems(group->m_hwndListView, wParam, wParam);
+					break;
+				}
 			} // ((LPNMHDR)lParam)->code
 			break;
 		} // WM_NOTIFY
