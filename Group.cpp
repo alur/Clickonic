@@ -1722,11 +1722,10 @@ void CGroup::HandleMouseEvent(UINT uEvent, UINT msg, WPARAM wParam, LPARAM lPara
 
 		if ( ListView_HitTest(m_hwndListView, &lvhi) != -1 )
 		{
-			// We could add a whole set of events for this scenario as well, but I don't really see a need.
 			if (msg == WM_LBUTTONDOWN && m_bSingleClick)
 			{
-				// Simply send a double click : >
-				CallWindowProc(m_wpOrigListViewProc, m_hwndListView, WM_LBUTTONDBLCLK, wParam, lParam);
+				CallWindowProc(m_wpOrigListViewProc, m_hwndListView, WM_LBUTTONDOWN, wParam, lParam);
+				SendMessage(m_hwndListView, WM_LBUTTONDBLCLK, wParam, lParam);
 			}
 			else
 			{
