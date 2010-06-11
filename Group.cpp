@@ -1722,15 +1722,9 @@ void CGroup::HandleMouseEvent(UINT uEvent, UINT msg, WPARAM wParam, LPARAM lPara
 
 		if ( ListView_HitTest(m_hwndListView, &lvhi) != -1 )
 		{
+			CallWindowProc(m_wpOrigListViewProc, m_hwndListView, WM_LBUTTONDOWN, wParam, lParam);
 			if (msg == WM_LBUTTONDOWN && m_bSingleClick)
-			{
-				CallWindowProc(m_wpOrigListViewProc, m_hwndListView, WM_LBUTTONDOWN, wParam, lParam);
 				SendMessage(m_hwndListView, WM_LBUTTONDBLCLK, wParam, lParam);
-			}
-			else
-			{
-				CallWindowProc(m_wpOrigListViewProc, m_hwndListView, msg, wParam, lParam);
-			}
 			return; // An icon was clicked.
 		}
 	}
