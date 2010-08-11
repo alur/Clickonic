@@ -66,4 +66,4 @@ void bangDestroyGroup (HWND caller, LPCSTR szArgs);
 void bangShowControlPanel (HWND caller, LPCSTR szArgs);
 void bangHideControlPanel (HWND caller, LPCSTR szArgs);
 void bangSetMonitor (HWND caller, LPCSTR szArgs);
-void bangRefreshIcons (HWND caller, LPCSTR szArgs);
+void bangSetIconSize (HWND caller, LPCSTR szArgs);

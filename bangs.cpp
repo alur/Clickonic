@@ -73,7 +73,7 @@ BangItem g_Bangs[BANGS_NUM] =
 	{	"DestroyGroup",					bangDestroyGroup },
 	{	"HideControlPanel",				bangHideControlPanel },
 	{	"ShowControlPanel",				bangShowControlPanel },
-	{	"RefreshIcons",					bangRefreshIcons }
+	{	"SetIconSize",					bangSetIconSize }
 };
 
 
@@ -105,14 +105,6 @@ void UnregisterBangs()
 void BangFailed(const char *szBangName, const char *szGroup)
 {
 	utils::ErrorMessage(E_WARNING, "Icon group with name \"%s\" not found, !%s%s bang failed", szGroup, g_szAppName, szBangName);
-}
-
-void bangRefreshIcons (HWND , LPCSTR szArgs)
-{
-	CGroup *pGroup = GetGroupByName(szArgs);
-	if (!pGroup)
-		return BangFailed("RefreshIcons", szArgs);
-	ListView_RedrawItems(pGroup->m_hwndListView, 0, ListView_GetItemCount(pGroup->m_hwndListView));
 }
 
 void bangShow (HWND /* caller */, LPCSTR szArgs)
@@ -785,4 +777,17 @@ void bangSetMonitor (HWND /* caller */, LPCSTR szArgs)
 	pGroup->m_DcX += McNewMonitorOrigin.x;
 	pGroup->m_DcY += McNewMonitorOrigin.y;
 	pGroup->m_nMonitor = nNewMonitor;
+}
+
+void bangSetIconSize (HWND, LPCSTR szArgs)
+{
+	char token1[MAX_LINE_LENGTH], szExtra[MAX_LINE_LENGTH];
+	char* tokens[1] = {token1};
+	LCTokenize(szArgs, tokens, 1, szExtra);
+
+	CGroup *pGroup = GetGroupByName(token1);
+	if (!pGroup)
+		return BangFailed("SetIconSize", szArgs);
+
+	pGroup->SetIconSize(atoi(szExtra));
 }

@@ -6,6 +6,8 @@
 #include "DropTarget.h"
 using namespace utils;
 
+extern OSVERSIONINFO g_osVersion;
+
 /**************************************************************************************************
 	This is the constructor, it's called when the group is created.
 **************************************************************************************************/
@@ -112,6 +114,8 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 		m_uViewMode = FVM_SMALLICON;
 	else
 		m_uViewMode = FVM_ICON;
+
+	m_iIconSize = LiteStep::GetPrefixedRCInt(m_szName, "IconSize", -1);
 
 	LiteStep::GetPrefixedRCString(m_szTextPasteFormat, m_szName, "TextPasteFormat", "%A, %B %d.txt");
 
@@ -784,6 +788,55 @@ void CGroup::SetViewMode(const char *szNewMode)
 		m_pView->Release();
 	}
 	InitFolderView();
+}
+
+/**************************************************************************************************
+	Sets the icon size under Windows 7 and Vista
+**************************************************************************************************/
+void CGroup::SetIconSize(int size, bool bRefresh)
+{
+	if (g_osVersion.dwMajorVersion >= 6)
+	{
+		IFolderView2 *pFolderView = NULL;
+		if (SUCCEEDED(m_pView->QueryInterface(IID_IFolderView2, (void**)&pFolderView)))
+		{
+			int s;
+			FOLDERVIEWMODE fv;
+			if (SUCCEEDED(pFolderView->GetViewModeAndIconSize(&fv, &s)))
+			{
+				m_iIconSize = size;
+				
+				if (bRefresh) // m_pView->refresh() causes the icons to sort, and I can't seem to stop it :/
+				{
+					SaveState();
+					if (m_pDropTarget)
+					{
+						m_pDropTarget->Revoke(m_hwndView);
+						delete m_pDropTarget;
+					}
+					if (m_pView2)
+					{
+						m_pView2->Release();
+					}
+					if (m_pView)
+					{
+						m_pView->DestroyViewWindow();
+						m_pView->Release();
+					}
+					InitFolderView();
+				}
+				else
+				{
+					pFolderView->SetViewModeAndIconSize(fv, size);
+				}
+			}
+			pFolderView->Release();
+		}
+	}
+	else
+	{
+		utils::ErrorMessage(E_WARNING, "Icon sizes can't be set on versions of Windows prior to Windows vista");
+	}
 }
 
 /**************************************************************************************************
@@ -1480,7 +1533,10 @@ bool CGroup::InitFolderView()
 	SetWindowLongPtr(m_hwndListView, GWLP_USERDATA, (LONG)this);
 	m_wpOrigListViewProc = (WNDPROC) SetWindowLongPtr(m_hwndListView, GWLP_WNDPROC, (LONG) ListViewProc);
 
-	ShowWindow(m_hwndView, m_bHidden ? SW_HIDE : SW_SHOW);
+	if (m_iIconSize != -1)
+	{
+		SetIconSize(m_iIconSize);
+	}
 
 	ReadIconSettings();
 	ScanIcons();

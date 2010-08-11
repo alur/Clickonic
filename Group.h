@@ -162,6 +162,7 @@ public:
 	int GetIdFromName(LPCTSTR pszFileName);
 	void CheckVirtualIcon(LPCTSTR pszFileName, bool bDeleted);
 	void GetStoredFolderLocation(LPSTR szBuf);
+	void SetIconSize(int size, bool bRefresh = false);
 
 	char	m_szName[MAX_PATH]; // Name of the group
 	char	m_szInitError[MAX_LINE_LENGTH];
@@ -232,4 +233,5 @@ public:
 	IconMap m_HiddenIcons;
 	bool	m_bExplicitCalls;
 	bool	m_bShortcutMode;
+	int		m_iIconSize;
 };

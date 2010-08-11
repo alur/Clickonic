@@ -389,11 +389,6 @@ LRESULT WINAPI GroupProc(HWND hListView, UINT msg, WPARAM wParam, LPARAM lParam)
 					utils::SetEvar(group->m_szName, "ItemCount", "%d", ListView_GetItemCount(group->m_hwndListView)-1);
 					break;
 				} // LVN_DELETEITEM
-			case LVM_UPDATE:
-				{
-					ListView_RedrawItems(group->m_hwndListView, wParam, wParam);
-					break;
-				}
 			} // ((LPNMHDR)lParam)->code
 			break;
 		} // WM_NOTIFY
@@ -712,29 +707,30 @@ LRESULT WINAPI ListViewProc(HWND hListView, UINT msg, WPARAM wParam, LPARAM lPar
 			if ( nFileid != -1 )
 			{
 				char szFileName[MAX_PATH];
-				if (!group->GetNameFromId(nFileid, szFileName, sizeof(szFileName)))
-					break;
-				/*if (_stricmp(szFileName, "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}") == 0)
+				if (group->GetNameFromId(nFileid, szFileName, sizeof(szFileName)))
 				{
-					group->ChangeDir(".mycomputer");
-					return 0;
-				}*/
-				if (utils::Is_Directory(szFileName))
-				{
-					if (group->m_bInlineBrowsing)
+					/*if (_stricmp(szFileName, "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}") == 0)
 					{
-						if (!group->m_bNoVirtualSwitch && (_stricmp(szFileName, group->m_szDesktopPath) == 0))
-							group->ChangeDir(".desktop");
-						else
-							group->ChangeDir(szFileName);
+						group->ChangeDir(".mycomputer");
 						return 0;
-					} // group->m_bInlineBrowsing
-					else if (group->m_bExplicitCalls)
+					}*/
+					if (utils::Is_Directory(szFileName))
 					{
-						LSExecuteEx(NULL, "open", "explorer.exe", szFileName, NULL, SW_SHOWNORMAL);
-						return 0;
-					}
-				} // utils::Is_Directory(szFileName)
+						if (group->m_bInlineBrowsing)
+						{
+							if (!group->m_bNoVirtualSwitch && (_stricmp(szFileName, group->m_szDesktopPath) == 0))
+								group->ChangeDir(".desktop");
+							else
+								group->ChangeDir(szFileName);
+							return 0;
+						} // group->m_bInlineBrowsing
+						else if (group->m_bExplicitCalls)
+						{
+							LSExecuteEx(NULL, "open", "explorer.exe", szFileName, NULL, SW_SHOWNORMAL);
+							return 0;
+						}
+					} // utils::Is_Directory(szFileName)
+				}
 			} // nFileid != -1
 			group->HandleMouseEvent(EVENT_ONLEFTDBLCLICK, msg, wParam, lParam);
 			return 0;
