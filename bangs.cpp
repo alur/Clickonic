@@ -762,11 +762,14 @@ void bangDestroyGroup (HWND /* caller */, LPCSTR szArgs)
 
 void bangSetMonitor (HWND /* caller */, LPCSTR szArgs)
 {
-	CGroup *pGroup = GetGroupByName(szArgs);
+	char token1[MAX_LINE_LENGTH], szExtra[MAX_LINE_LENGTH];
+	char* tokens[1] = {token1};
+	LCTokenize(szArgs, tokens, 1, szExtra);
+	CGroup *pGroup = GetGroupByName(token1);
 	if (!pGroup)
-		return BangFailed("SetMonitor", szArgs);
+		return BangFailed("SetMonitor", token1);
 
-	int nNewMonitor = atoi(szArgs);
+	int nNewMonitor = atoi(szExtra);
 	int nOldMonitor = pGroup->m_nMonitor;
 
 	// New monitor's origin, in the old monitor's coordinate system
@@ -787,7 +790,7 @@ void bangSetIconSize (HWND, LPCSTR szArgs)
 
 	CGroup *pGroup = GetGroupByName(token1);
 	if (!pGroup)
-		return BangFailed("SetIconSize", szArgs);
+		return BangFailed("SetIconSize", token1);
 
 	pGroup->SetIconSize(atoi(szExtra));
 }
