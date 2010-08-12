@@ -43,7 +43,6 @@ int initModuleEx(HWND hwndParent, HINSTANCE hDllInstance, LPCSTR szPath)
 	{
 		SetTimer(g_hwndMessageHandler, 1337, 500, NULL); // UGLY VISTA HACK!
 	}
-	SetTimer(g_hwndMessageHandler, 1000, 300000, NULL); // Save icon positions every 5 minutes
 
 	return 0;
 }
@@ -313,15 +312,6 @@ LRESULT WINAPI MessageHandlerProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		{
 			switch (wParam)
 			{
-			case 1000: // Save the icon positions (just in case there's a crash / forced shutdown)
-				{
-					for (GroupMap::iterator iter = g_Groups.begin(); iter != g_Groups.end(); ++iter)
-					{
-						iter->second->SaveState();
-					}
-
-					break;
-				}
 			case 1337: // Ugly vista hack :/ Restores icon positions after clickonic finishes loading.
 				{
 					for (GroupMap::iterator iter = g_Groups.begin(); iter != g_Groups.end(); ++iter)
