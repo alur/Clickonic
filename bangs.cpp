@@ -8,8 +8,7 @@ typedef struct BangItem {
 	BANGCOMMANDPROC pCommand;
 } BangItem;
 
-#define BANGS_NUM		64
-BangItem g_Bangs[BANGS_NUM] =
+BangItem g_Bangs[] =
 {
 	{	"Show",							bangShow	},
 	{	"Hide",							bangHide	},
@@ -73,14 +72,15 @@ BangItem g_Bangs[BANGS_NUM] =
 	{	"DestroyGroup",					bangDestroyGroup },
 	{	"HideControlPanel",				bangHideControlPanel },
 	{	"ShowControlPanel",				bangShowControlPanel },
-	{	"SetIconSize",					bangSetIconSize }
+	{	"SetIconSize",					bangSetIconSize },
+	{	NULL, NULL	}
 };
 
 
 void RegisterBangs()
 {
 	char szBangName[MAX_BANGCOMMAND];
-	for (int i = 0; i < BANGS_NUM; i++)
+	for (int i = 0; g_Bangs[i].pCommand != NULL; i++)
 	{
 		StringCchPrintf(szBangName, MAX_BANGCOMMAND, "!%s%s", g_szAppName, g_Bangs[i].szName);
 		AddBangCommand(szBangName, g_Bangs[i].pCommand);
@@ -90,7 +90,7 @@ void RegisterBangs()
 void UnregisterBangs()
 {
 	char szBangName[MAX_BANGCOMMAND];
-	for (int i = 0; i < BANGS_NUM; i++)
+	for (int i = 0; g_Bangs[i].pCommand != NULL; i++)
 	{
 		StringCchPrintf(szBangName, MAX_BANGCOMMAND, "!%s%s", g_szAppName, g_Bangs[i].szName);
 		RemoveBangCommand(szBangName);
