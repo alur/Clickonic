@@ -792,5 +792,5 @@ void bangSetIconSize (HWND, LPCSTR szArgs)
 	if (!pGroup)
 		return BangFailed("SetIconSize", token1);
 
-	pGroup->SetIconSize(atoi(szExtra));
+	pGroup->SetIconSize(atoi(szExtra), true);
 }
