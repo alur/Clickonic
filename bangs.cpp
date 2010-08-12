@@ -73,6 +73,7 @@ BangItem g_Bangs[] =
 	{	"HideControlPanel",				bangHideControlPanel },
 	{	"ShowControlPanel",				bangShowControlPanel },
 	{	"SetIconSize",					bangSetIconSize },
+	{	"SaveIconPositions",			bangSaveIconPositions },
 	{	NULL, NULL	}
 };
 
@@ -793,4 +794,13 @@ void bangSetIconSize (HWND, LPCSTR szArgs)
 		return BangFailed("SetIconSize", token1);
 
 	pGroup->SetIconSize(atoi(szExtra), true);
+}
+
+void bangSaveIconPositions (HWND, LPCSTR szArgs)
+{
+	CGroup *pGroup = GetGroupByName(szArgs);
+	if (!pGroup)
+		return BangFailed("SaveIconPositions", szArgs);
+
+	pGroup->SaveState();
 }

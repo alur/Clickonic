@@ -67,3 +67,4 @@ void bangShowControlPanel (HWND caller, LPCSTR szArgs);
 void bangHideControlPanel (HWND caller, LPCSTR szArgs);
 void bangSetMonitor (HWND caller, LPCSTR szArgs);
 void bangSetIconSize (HWND caller, LPCSTR szArgs);
+void bangSaveIconPositions (HWND caller, LPCSTR szArgs);
