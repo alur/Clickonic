@@ -106,6 +106,7 @@ public:
 	void CheckVirtualIcon(LPCTSTR pszFileName, bool bDeleted);
 	void GetStoredFolderLocation(LPSTR szBuf);
 	void SetIconSize(int size, bool bRefresh = false);
+	void ApplyListviewExStyle();
 
 	// Implemented in IconPosition.cpp
 	void Reset(const char *szFolder, bool bDontSort);

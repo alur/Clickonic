@@ -1923,3 +1923,20 @@ void CGroup::LoadEvents()
 	LiteStep::GetPrefixedRCLine(m_szEventCommand[EVENT_ONDOWNKEYUP], m_szName, "OnDownKeyUp", EVENT_ACTION_NONE);
 	LiteStep::GetPrefixedRCLine(m_szEventCommand[EVENT_ONENTERUP], m_szName, "OnEnterUp", EVENT_ACTION_NONE);
 }
+
+/**************************************************************************************************
+	This function applies the correct extended style to the listview
+**************************************************************************************************/
+void CGroup::ApplyListviewExStyle()
+{
+	DWORD dListStyleFlags = LVS_EX_TRANSPARENTBKGND | LVS_EX_LABELTIP | LVS_EX_TRANSPARENTSHADOWTEXT /*| LVS_EX_DOUBLEBUFFER */;
+	if (!m_bNoInfoTips)
+		dListStyleFlags |= LVS_EX_INFOTIP;
+	if (m_bHotTracking)
+		dListStyleFlags |= LVS_EX_TRACKSELECT;
+	if (m_bSnapToGrid)
+		dListStyleFlags |= LVS_EX_SNAPTOGRID;
+	ListView_SetExtendedListViewStyle(m_hwndListView, dListStyleFlags);
+	if (m_bSnapToGrid)
+		ListView_Arrange(m_hwndListView, LVA_SNAPTOGRID);
+}

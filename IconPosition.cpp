@@ -332,17 +332,7 @@ void CGroup::RestoreState()
 	}
 
 	RegCloseKey(hKey);
-	DWORD dListStyleFlags = LVS_EX_TRANSPARENTBKGND | LVS_EX_LABELTIP;
-	if (!m_bNoInfoTips)
-		dListStyleFlags |= LVS_EX_INFOTIP;
-	if (m_bHotTracking)
-		dListStyleFlags |= LVS_EX_TRACKSELECT;
-	if (m_bSnapToGrid)
-		dListStyleFlags |= LVS_EX_SNAPTOGRID;
-	ListView_SetExtendedListViewStyle(m_hwndListView, dListStyleFlags);
-
-	if (m_bSnapToGrid)
-		ListView_Arrange(m_hwndListView, LVA_SNAPTOGRID);
+	ApplyListviewExStyle();
 }
 
 /**************************************************************************************************
@@ -398,15 +388,5 @@ void CGroup::RestoreFromFile()
 		pos += (strlen(pString)+1);
 		pString = szStoredPos + pos;
 	}
-	DWORD dListStyleFlags = LVS_EX_TRANSPARENTBKGND | LVS_EX_LABELTIP;
-	if (!m_bNoInfoTips)
-		dListStyleFlags |= LVS_EX_INFOTIP;
-	if (m_bHotTracking)
-		dListStyleFlags |= LVS_EX_TRACKSELECT;
-	if (m_bSnapToGrid)
-		dListStyleFlags |= LVS_EX_SNAPTOGRID;
-	ListView_SetExtendedListViewStyle(m_hwndListView, dListStyleFlags);
-	if (m_bSnapToGrid)
-		ListView_Arrange(m_hwndListView, LVA_SNAPTOGRID);
+	ApplyListviewExStyle();
 }
-
