@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="ruDocs-en.xsl"?>
 <lsmd spec="0.3p" version="1.1.5">
 	<author>Seg@</author>
-	<copyright year="2004-2008">Seg@, Andymon, Alurcard2.  Distributed under the GNU GPL2 license.</copyright>
+	<copyright year="2004-2010">Seg@, Andymon, Alurcard2.  Distributed under the GNU GPL2 license.</copyright>
 	<module version="1.1.5" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
 		<author name="Sergey Gagarin" email="inform-sega_AT_freemail.ru" web="http://www.litestep.bip.ru" icq="162261148">Seg@</author>
 		<author name="Andymon" email="andymon_AT_ls-universe.info" web="http://www.ls-universe.info">Andymon</author>
@@ -1596,14 +1596,19 @@ DeskIconsNoConnectedFiles</example>
 			</group>
 		</control>
 		<history>
-			<revision version="1.1.5" by="Alurcard2" date="2009-xx-xx">
+			<revision version="1.1.5" by="Alurcard2" date="2010-xx-xx">
 				<fixed>.ini corruption when file names started with a [</fixed>
-				<fixed>Uninitialized m_bInFolderChange which broke keybindings,</fixed>
+				<fixed>Uninitialized variable which broke keybindings</fixed>
+				<fixed><xref>(group)CurrentFolder</xref> didn't have quotes around it when it contains spaces</fixed>
+				<fixed><xref>!ClickonicSetMonitor</xref> wasn't working properly</fixed>
 				<added><xref>(group)ShortcutMode</xref></added>
 				<added><xref>(group)TextPasteFormat</xref></added>
 				<fixed>Issue with the highlighting of cut files.</fixed>
 				<added>Support for saving the folder location <xref>(group)PersistantFolderLocation</xref></added>
 				<fixed>Issue with hackish vista code effecting pre-vista systems.</fixed>
+				<added><xref>(group)SingleClick</xref> and <xref>!ClickonicSingleClick</xref></added>
+				<added><xref>(group)IconSize</xref> and <xref>!ClickonicSetIconSize</xref></added>
+				<fixed>Shouldn't need visual c runtimes anymore (this problem was reintroduced at some point)</fixed>
 			</revision>
 			<revision version="1.1.4.1" by="Alurcard2" date="2009-02-09">
 				<fixed>Issue introduced in 1.1.4 which could cause clickonic to load significantly slower.</fixed>
@@ -1814,6 +1819,9 @@ DeskIconsNoConnectedFiles</example>
 		</history>
 	</module>
 	<history>
+		<revision version="1.1.5">
+			<note>Added 1.1.5 changes</note>
+		</revision>
 		<revision version="1.1.4.1">
 			<note>Added 1.1.4.1 changes</note>
 		</revision>
