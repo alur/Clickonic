@@ -396,6 +396,19 @@ LRESULT WINAPI GroupProc(HWND hListView, UINT msg, WPARAM wParam, LPARAM lParam)
 				SendMessage(group->m_hwndNextClipViewer, WM_CHANGECBCHAIN, wParam, lParam);
 			return 0;
 		} // WM_CHANGECBCHAIN
+	case WM_TIMER:
+		{
+			switch (wParam)
+			{
+			case 1337: // Another ugly vista hack :/ Restores icon positions after a refresh
+				{
+					group->RestoreState();
+					KillTimer(group->m_hwndView, 1337);
+					break;
+				}
+			}
+			break;
+		}
 	} // msg
 	// Forward the message to the origional messagehandler if we don't handle it.
 	return CallWindowProc(group->m_wpOrigGroupProc, hListView, msg, wParam, lParam);
