@@ -6,8 +6,6 @@
 #include "DropTarget.h"
 using namespace utils;
 
-extern OSVERSIONINFO g_osVersion;
-
 /**************************************************************************************************
 	This is the constructor, it's called when the group is created.
 **************************************************************************************************/
@@ -795,47 +793,32 @@ void CGroup::SetViewMode(const char *szNewMode)
 **************************************************************************************************/
 void CGroup::SetIconSize(int size, bool bRefresh)
 {
-	if (g_osVersion.dwMajorVersion >= 6)
+	IFolderView2 *pFolderView = NULL;
+	if (SUCCEEDED(m_pView->QueryInterface(IID_IFolderView2, (void**)&pFolderView)))
 	{
-		IFolderView2 *pFolderView = NULL;
-		if (SUCCEEDED(m_pView->QueryInterface(IID_IFolderView2, (void**)&pFolderView)))
+		int s;
+		FOLDERVIEWMODE fv;
+		if (SUCCEEDED(pFolderView->GetViewModeAndIconSize(&fv, &s)))
 		{
-			int s;
-			FOLDERVIEWMODE fv;
-			if (SUCCEEDED(pFolderView->GetViewModeAndIconSize(&fv, &s)))
-			{
-				m_iIconSize = size;
+			m_iIconSize = size;
 				
-				if (bRefresh) // m_pView->refresh() causes the icons to sort, and I can't seem to stop it :/
-				{
-					SaveState();
-					if (m_pDropTarget)
-					{
-						m_pDropTarget->Revoke(m_hwndView);
-						delete m_pDropTarget;
-					}
-					if (m_pView2)
-					{
-						m_pView2->Release();
-					}
-					if (m_pView)
-					{
-						m_pView->DestroyViewWindow();
-						m_pView->Release();
-					}
-					InitFolderView();
-				}
-				else
-				{
-					pFolderView->SetViewModeAndIconSize(fv, size);
-				}
+			if (bRefresh)
+			{
+				pFolderView->SetViewModeAndIconSize(fv, size);
+				SaveState();
+				m_pView2->Refresh();
+				SetTimer(m_hwndView, 1337, 200, NULL); // UGLY VISTA HACK!
 			}
-			pFolderView->Release();
+			else
+			{
+				pFolderView->SetViewModeAndIconSize(fv, size);
+			}
 		}
+		pFolderView->Release();
 	}
 	else
 	{
-		utils::ErrorMessage(E_WARNING, "Icon sizes can't be set on versions of Windows prior to Windows vista");
+		utils::ErrorMessage(E_WARNING, "Icon sizes can't be set on versions of Windows prior to Windows Vista");
 	}
 }
 
@@ -1467,7 +1450,7 @@ bool CGroup::InitFolderView()
 	// Set up settings for IShellViews window
 	FOLDERSETTINGS fs;
 	fs.ViewMode = m_uViewMode; // FVM_ICON, FVM_SMALLICON, FVM_LIST, FVM_DETAILS, FVM_THUMBNAIL, FVM_TILE, FVM_THUMBSTRIP
-	fs.fFlags = FWF_NOCLIENTEDGE | FWF_SNAPTOGRID | FWF_SHOWSELALWAYS /*| FWF_TRANSPARENT | FWF_DESKTOP | FWF_BESTFITWINDOW*/;
+	fs.fFlags = FWF_NOCLIENTEDGE | FWF_SNAPTOGRID | FWF_SHOWSELALWAYS /*| FWF_TRANSPARENT /*| FWF_DESKTOP | FWF_BESTFITWINDOW*/;
 	if (!m_szBackground || !(m_szBackground[0]))
 		fs.fFlags |= FWF_TRANSPARENT /*| FWF_NOWEBVIEW*/ | FWF_DESKTOP;
 	else
@@ -1490,6 +1473,7 @@ bool CGroup::InitFolderView()
 		return false;
 	}
 	SetWindowPos(m_hwndView, HWND_BOTTOM, 0,0,0,0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+	ShowWindow(m_hwndView, SW_HIDE);
 
 	m_pView->QueryInterface(IID_IShellView2, (void**)&m_pView2);
 	if (m_pView2 == NULL)
@@ -1500,6 +1484,7 @@ bool CGroup::InitFolderView()
 	m_hwndListView = ::GetWindow(m_hwndView, GW_CHILD);
 
 	m_longListViewStyle = GetWindowLong(m_hwndListView, GWL_STYLE);
+	m_longListViewStyle |= LVS_SHAREIMAGELISTS;
 
 	if (m_bAlignTop)
 		m_longListViewStyle ^= LVS_ALIGNLEFT;
