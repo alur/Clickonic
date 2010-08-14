@@ -1160,7 +1160,7 @@ DeskIconsNoConnectedFiles</example>
 				<single name="(group)ShortcutMode">
 					<bool data="ShortcutMode1"/>
 					<description>
-						<p>When enabled, all drag&drop operations will result in a shortcut being created rather than moving/copying of the file.</p>
+						<p>When enabled, all drag&amp;drop operations will result in a shortcut being created rather than moving/copying of the file.</p>
 					</description>
 				</single>
 				<single name="(group)TextPasteFormat">
