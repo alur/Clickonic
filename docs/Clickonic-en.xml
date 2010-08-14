@@ -1178,7 +1178,7 @@ DeskIconsNoConnectedFiles</example>
 				<single name="(group)IconSize">
 					<integer data="IconSize1"/>
 					<description>
-						<p>Sets the size (in pixels) of the desktop icons. Currently only work under Windows Vista and up.</p>
+						<p>Sets the size (in pixels) of the desktop icons. Currently only work under Windows Vista and up. Min: 16, Max: 256</p>
 					</description>
 				</single>
 			</group>
