@@ -281,6 +281,7 @@ DeskIconsNoConnectedFiles</example>
 			<integer id="ClickonicErrorTranslucency1" default="2" />
 			<integer id="Monitor1" default="0" />
 			<bool id="ExplicitCalls1" default="false" />
+			<bool id="PersistantFolderLocation1" default="false" />
 			<bool id="ShortcutMode1" default="false" />
 			<string id="TextPasteFormat1" default="%A, %B %d.txt" />
 			<bool id="SingleClick1" default="false" />
@@ -1146,7 +1147,7 @@ DeskIconsNoConnectedFiles</example>
 					</description>
 				</single>
 				<single name="(group)ExplicitCalls">
-					<integer data="ExplicitCalls1"/>
+					<bool data="ExplicitCalls1"/>
 					<description>
 						<p>This will make Clickonic explicitly call explorer.exe when opening a folder.</p>
 					</description>
