@@ -69,7 +69,7 @@ int utils::DcParseCoordinate(char *szCoordinate, bool isY)
 	{
 		int iMon = szCoordinate[0] - '0';
 		int McPos = atoi(szCoordinate + 2);
-		int DcPos = McPos + (isY?g_Monitors[iMon].Top:g_Monitors[iMon].Left);
+		int DcPos = McPos + (isY?g_Monitors.at(iMon).Top:g_Monitors.at(iMon).Left);
 		return DcPos;
 	}
 }
@@ -146,16 +146,16 @@ POINTL utils::DcFromSc(POINTL point)
 POINTL utils::ScFromMc(POINTL point, int monitor)
 {
 	POINTL ret = {
-		point.x + g_Monitors[monitor].Left,
-		point.y + g_Monitors[monitor].Top
+		point.x + g_Monitors.at(monitor).Left,
+		point.y + g_Monitors.at(monitor).Top
 		};
 	return ret;
 }
 POINTL utils::McFromSc(POINTL point, int monitor)
 {
 	POINTL ret = {
-		point.x - g_Monitors[monitor].Left,
-		point.y - g_Monitors[monitor].Top
+		point.x - g_Monitors.at(monitor).Left,
+		point.y - g_Monitors.at(monitor).Top
 		};
 	return ret;
 }

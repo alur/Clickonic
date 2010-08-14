@@ -13,7 +13,7 @@ HWND g_hParent;
 HINSTANCE g_hInstance;
 char g_szPath[MAX_PATH];
 GroupMap g_Groups;
-MonitorInfo g_Monitors[5]; // Supports up to 4 monitors
+std::vector<MonitorInfo> g_Monitors;
 HWND g_hwndMessageHandler;
 int g_iMon = 2;
 int g_nErrorTranslucency;

@@ -775,8 +775,8 @@ void bangSetMonitor (HWND /* caller */, LPCSTR szArgs)
 
 	// New monitor's origin, in the old monitor's coordinate system
 	POINTL McNewMonitorOrigin = {
-		g_Monitors[nNewMonitor].Left - g_Monitors[nOldMonitor].Left,
-		g_Monitors[nNewMonitor].Top - g_Monitors[nOldMonitor].Top
+		g_Monitors.at(nNewMonitor).Left - g_Monitors.at(nOldMonitor).Left,
+		g_Monitors.at(nNewMonitor).Top - g_Monitors.at(nOldMonitor).Top
 		};
 	pGroup->m_DcX += McNewMonitorOrigin.x;
 	pGroup->m_DcY += McNewMonitorOrigin.y;

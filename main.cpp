@@ -210,12 +210,15 @@ bool CreateMessageHandler()
 //
 void UpdateMonitorInfo()
 {
-	g_Monitors[0].Left = GetSystemMetrics(SM_XVIRTUALSCREEN);
-	g_Monitors[0].Top = GetSystemMetrics(SM_YVIRTUALSCREEN);
-	g_Monitors[0].ResX = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-	g_Monitors[0].ResY = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+	g_Monitors.clear();
+	
+	MonitorInfo mInfo;
+	mInfo.Left = GetSystemMetrics(SM_XVIRTUALSCREEN);
+	mInfo.Top = GetSystemMetrics(SM_YVIRTUALSCREEN);
+	mInfo.ResX = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+	mInfo.ResY = GetSystemMetrics(SM_CYVIRTUALSCREEN);
 
-	g_iMon = 2;
+	g_Monitors.push_back(mInfo);
 
 	EnumDisplayMonitors(NULL, NULL, SetMonitorVars, 0);
 }
@@ -228,24 +231,24 @@ void UpdateMonitorInfo()
 //
 BOOL CALLBACK SetMonitorVars(HMONITOR hMonitor, HDC  /* hdcMonitor */, LPRECT /* lprcMonitor */, LPARAM /* dwData */)
 {
-	int iMonNum;
+	MonitorInfo mInfo;
 	MONITORINFO mi;
 	mi.cbSize = sizeof(MONITORINFO);
 	GetMonitorInfo(hMonitor, &mi);
 
+	mInfo.Top = mi.rcMonitor.top;
+	mInfo.Left = mi.rcMonitor.left;
+	mInfo.ResY = mi.rcMonitor.bottom - mi.rcMonitor.top;
+	mInfo.ResX = mi.rcMonitor.right - mi.rcMonitor.left;
+
 	if ((mi.dwFlags & MONITORINFOF_PRIMARY) == MONITORINFOF_PRIMARY)
 	{
-		iMonNum = 1;
+		g_Monitors.insert(g_Monitors.begin()+1, mInfo);
 	}
 	else
 	{
-		iMonNum = g_iMon++;
+		g_Monitors.push_back(mInfo);
 	}
-
-	g_Monitors[iMonNum].Top = mi.rcMonitor.top;
-	g_Monitors[iMonNum].Left = mi.rcMonitor.left;
-	g_Monitors[iMonNum].ResY = mi.rcMonitor.bottom - mi.rcMonitor.top;
-	g_Monitors[iMonNum].ResX = mi.rcMonitor.right - mi.rcMonitor.left;
 
 	return TRUE;
 }

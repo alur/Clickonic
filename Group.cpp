@@ -149,8 +149,8 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	m_DcX = DcPos.x;
 	m_DcY = DcPos.y;
 	
-	m_nWidth	= LiteStep::GetPrefixedRCInt(m_szName, "Width", g_Monitors[m_nMonitor].ResX);
-	m_nHeight	= LiteStep::GetPrefixedRCInt(m_szName, "Height", g_Monitors[m_nMonitor].ResY);
+	m_nWidth	= LiteStep::GetPrefixedRCInt(m_szName, "Width", g_Monitors.at(m_nMonitor).ResX);
+	m_nHeight	= LiteStep::GetPrefixedRCInt(m_szName, "Height", g_Monitors.at(m_nMonitor).ResY);
 	m_nSpacingX	= LiteStep::GetPrefixedRCInt(m_szName, "SpacingX",  -1);
 	m_nSpacingY	= LiteStep::GetPrefixedRCInt(m_szName, "SpacingY", -1);
 	

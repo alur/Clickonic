@@ -12,6 +12,7 @@
 #include <shellapi.h>
 #include <oleidl.h>
 #include "strsafe.h"
+#include <vector>
 
 class CGroup;
 
@@ -42,7 +43,7 @@ typedef std::map<string, bool> IconMap;
 
 extern const char g_szAppName[];
 extern HINSTANCE g_hInstance;
-extern MonitorInfo g_Monitors[5];
+extern std::vector<MonitorInfo> g_Monitors;
 extern int g_nErrorTranslucency;
 
 CGroup* GetGroupByName(const char *szName);
