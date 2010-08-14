@@ -142,7 +142,12 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 
 	// Positions
 	m_nMonitor	= LiteStep::GetPrefixedRCInt(m_szName, "Monitor", 0);
-	
+	if (m_nMonitor >= g_Monitors.size())
+	{
+		utils::ErrorMessage(E_WARNING, "There is no monitor #%i", m_nMonitor);
+		m_nMonitor = 0;
+	}
+
 	POINTL McPos = { LiteStep::GetPrefixedRCInt(m_szName, "X", 0),
 	                 LiteStep::GetPrefixedRCInt(m_szName, "Y", 0) };
 	POINTL DcPos = DcFromSc(ScFromMc(McPos, m_nMonitor));
