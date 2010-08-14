@@ -436,6 +436,11 @@ LRESULT WINAPI ListViewProc(HWND hListView, UINT msg, WPARAM wParam, LPARAM lPar
 			// Prevent explorers "Align to Grid" setting from messing up the spacing.
 			return CallWindowProc(group->m_wpOrigListViewProc, hListView, msg, wParam, (LPARAM)MAKELONG(group->m_nSpacingX, group->m_nSpacingY));
 		}
+	case WM_ERASEBKGND:
+		{
+			PaintDesktop((HDC)wParam);
+			return TRUE;
+		}
 	/*case LVM_SETEXTENDEDLISTVIEWSTYLE:
 		{
 			// Take some time to fix group variables, just in case this is called by an external app.
