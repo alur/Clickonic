@@ -1638,7 +1638,7 @@ DeskIconsNoConnectedFiles</example>
 			</group>
 		</control>
 		<history>
-			<revision version="1.1.5" by="Alurcard2" date="2010-xx-xx">
+			<revision version="1.1.5" by="Alurcard2" date="2010-08-13">
 				<fixed>.ini corruption when file names started with a [</fixed>
 				<fixed>Uninitialized variable which broke keybindings</fixed>
 				<fixed><xref>(group)CurrentFolder</xref> didn't have quotes around it when it contains spaces</fixed>
