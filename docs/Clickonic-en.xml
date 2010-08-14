@@ -281,6 +281,10 @@ DeskIconsNoConnectedFiles</example>
 			<integer id="ClickonicErrorTranslucency1" default="2" />
 			<integer id="Monitor1" default="0" />
 			<bool id="ExplicitCalls1" default="false" />
+			<bool id="ShortcutMode1" default="false" />
+			<string id="TextPasteFormat1" default="%A, %B %d.txt" />
+			<bool id="SingleClick1" default="false" />
+			<integer id="IconSize1" default="-1" />
 		</data>
 		<!-- @@@@@@@@@@@@@@@@@@  config @@@@@@@@@@@@@@@@ -->
 		<config>
@@ -1153,6 +1157,30 @@ DeskIconsNoConnectedFiles</example>
 						<p>Will store the current folder location and use that as the desktop folder.</p>
 					</description>
 				</single>
+				<single name="(group)ShortcutMode">
+					<bool data="ShortcutMode1"/>
+					<description>
+						<p>When enabled, all drag&drop operations will result in a shortcut being created rather than moving/copying of the file.</p>
+					</description>
+				</single>
+				<single name="(group)TextPasteFormat">
+					<string data="TextPasteFormat1"/>
+					<description>
+						<p>Naming sceheme for the created file when you paste text into the group. It follows <a href="http://www.cplusplus.com/reference/clibrary/ctime/strftime/">this</a> format.</p>
+					</description>
+				</single>
+				<single name="(group)SingleClick">
+					<bool data="SingleClick1"/>
+					<description>
+						<p>When enabled, all files will be executed with a single click.</p>
+					</description>
+				</single>
+				<single name="(group)IconSize">
+					<integer data="IconSize1"/>
+					<description>
+						<p>Sets the size (in pixels) of the desktop icons. Currently only work under Windows Vista and up.</p>
+					</description>
+				</single>
 			</group>
 		</config>
 		<!-- @@@@@@@@@@@@@@@@@@  bangs  @@@@@@@@@@@@@@@@ -->
@@ -1593,6 +1621,20 @@ DeskIconsNoConnectedFiles</example>
 						<p>Moves Clickonic to a different monitor.</p>
 					</description>
 				</bang>
+				<bang name="ClickonicSingleClick">
+					<group/>
+					<tbool/>
+					<description>
+						<p>Enables/Disables/Toggles <xref>(group)SingleClick</xref>.</p>
+					</description>
+				</bang>
+				<bang name="ClickonicSetIconSize">
+					<group/>
+					<integer/>
+					<description>
+						<p>Sets the icon size, in pixels. Currently only avilable for Windows Vista and up.</p>
+					</description>
+				</bang>
 			</group>
 		</control>
 		<history>
@@ -1609,6 +1651,7 @@ DeskIconsNoConnectedFiles</example>
 				<added><xref>(group)SingleClick</xref> and <xref>!ClickonicSingleClick</xref></added>
 				<added><xref>(group)IconSize</xref> and <xref>!ClickonicSetIconSize</xref></added>
 				<fixed>Shouldn't need visual c runtimes anymore (this problem was reintroduced at some point)</fixed>
+				<changed>Removed the limit on the number of monitors.</changed>
 			</revision>
 			<revision version="1.1.4.1" by="Alurcard2" date="2009-02-09">
 				<fixed>Issue introduced in 1.1.4 which could cause clickonic to load significantly slower.</fixed>
