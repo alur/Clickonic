@@ -3,7 +3,7 @@
 <lsmd spec="0.3p" version="1.1.5">
 	<author>Seg@</author>
 	<copyright year="2004-2010">Seg@, Andymon, Alurcard2.  Distributed under the GNU GPL2 license.</copyright>
-	<module version="1.1.5" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
+	<module version="1.1.6" basename="Clickonic" category="desktop" load-free="true" load-wharf="false">
 		<author name="Sergey Gagarin" email="inform-sega_AT_freemail.ru" web="http://www.litestep.bip.ru" icq="162261148">Seg@</author>
 		<author name="Andymon" email="andymon_AT_ls-universe.info" web="http://www.ls-universe.info">Andymon</author>
 		<author name="Erik Welander" email="alurcard2_AT_gmail.com">Alurcard2</author>
@@ -18,15 +18,15 @@
 			<section id="install" name="Installation">
 				<description>
 					<p>
-						Put Clickonic-1.1.5.dll in any directory you like, for example <code>C:\LiteStep\</code>,
+						Put Clickonic-1.1.6.dll in any directory you like, for example <code>C:\LiteStep\</code>,
 						then add this line to step.rc
 					</p>
-					<example>LoadModule "C:\LiteStep\Clickonic-1.1.5.dll"</example>
+					<example>LoadModule "C:\LiteStep\Clickonic-1.1.6.dll"</example>
 					<p>
 						In the case you're using OTS2 compatible distro such as Omar's LiteStep Installer,
 						AngelKnight's EZ2Install or Joshhh's Dist.ru, you should use the *NetLoadModule pseudo-operator:
 					</p>
-					<example>*NetLoadModule Clickonic-1.1.5</example>
+					<example>*NetLoadModule Clickonic-1.1.6</example>
 				</description>
 			</section>
 			<section id="usage" name="Usage">
@@ -64,7 +64,7 @@ DeskIconsFolder ".desktop"</example>
 				<description>
 					<example>
 ;===============================================
-;  Desktop icons (Clickonic.dll v1.1.5)
+;  Desktop icons (Clickonic.dll v1.1.6)
 ;-----------------------------------------------
 *Clickonic DeskIcons
 DeskIconsFolder .desktop
@@ -1639,6 +1639,9 @@ DeskIconsNoConnectedFiles</example>
 			</group>
 		</control>
 		<history>
+			<revision version="1.1.6" by="Alurcard2" date="2013-08-12">
+				<fixed>Buffer overflows and memory leaks</fixed>
+			</revision>
 			<revision version="1.1.5" by="Alurcard2" date="2010-08-13">
 				<fixed>.ini corruption when file names started with a [</fixed>
 				<fixed>Uninitialized variable which broke keybindings</fixed>
