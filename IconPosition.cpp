@@ -178,7 +178,6 @@ void CGroup::SaveState()
 	DWORD dwDisposition;
 	PBYTE pBuf;
 	POINT pt;
-	LPITEMIDLIST pidl;
 	int nCount, nSize, npidlSize;
 	char szKeyName[MAX_PATH], szNum[10], szFileName[MAX_PATH];
 
@@ -202,7 +201,7 @@ void CGroup::SaveState()
 		ListView_GetItemText(m_hwndListView, i, 0, szFileName, MAX_PATH);
 		if (!IconShouldBeHidden(szFileName))
 		{
-			pidl = GetPIDLFromId(i);
+			LPITEMIDLIST pidl = GetPIDLFromId(i);
 			ListView_GetItemPosition(m_hwndListView, i, &pt);
 			npidlSize = PIDL::GetSize(pidl);
 			nSize = 2 * sizeof(ULONG) + npidlSize;
@@ -213,6 +212,7 @@ void CGroup::SaveState()
 			StringCchPrintf(szNum, 10, "%d", i);
 			RegSetValueEx(hKey, szNum, 0, REG_BINARY, pBuf, nSize);
 			HeapFree(GetProcessHeap(), 0, pBuf);
+            CoTaskMemFree(pidl);
 		}
 	}
 
@@ -327,6 +327,7 @@ void CGroup::RestoreState()
 				ListView_SetItemPosition(m_hwndListView, i, pt.x, pt.y);
 				break;
 			}
+            CoTaskMemFree(pidlSearch);
 		}
 		HeapFree(GetProcessHeap(), 0, pBuf);
 	}

@@ -101,7 +101,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	StringCchCopy(m_szRegDeskIconsPath, MAX_PATH, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel");
 
 	// ViewMode
-	LiteStep::GetPrefixedRCString(szBuf, m_szName, "ViewMode", "icons");
+	LiteStep::GetPrefixedRCString(szBuf, MAX_LINE_LENGTH, m_szName, "ViewMode", "icons");
 	if (strcmp(szBuf, "tiles") == 0)
 		m_uViewMode = FVM_TILE;
 	else if (strcmp(szBuf, "thumbnails") == 0)
@@ -115,7 +115,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 
 	m_iIconSize = LiteStep::GetPrefixedRCInt(m_szName, "IconSize", -1);
 
-	LiteStep::GetPrefixedRCString(m_szTextPasteFormat, m_szName, "TextPasteFormat", "%A, %B %d.txt");
+	LiteStep::GetPrefixedRCString(m_szTextPasteFormat, MAX_PATH, m_szName, "TextPasteFormat", "%A, %B %d.txt");
 
 	m_bShortcutMode = LiteStep::GetPrefixedRCBool(m_szName, "ShortcutMode", FALSE);
 
@@ -124,10 +124,10 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 
 	// Icon position saving
 	m_bUseIconPositionFile = true;
-	LiteStep::GetPrefixedRCLine(m_szIconPositionFile, m_szName, "IconPositionFile", ".registry");
+	LiteStep::GetPrefixedRCLine(m_szIconPositionFile, MAX_PATH, m_szName, "IconPositionFile", ".registry");
 	if (_stricmp(m_szIconPositionFile, ".registry") == 0)
 		m_bUseIconPositionFile = false;
-	LiteStep::GetPrefixedRCString(szBuf, m_szName, "CustomDrive", "-");
+	LiteStep::GetPrefixedRCString(szBuf, MAX_LINE_LENGTH, m_szName, "CustomDrive", "-");
 	if (_stricmp(szBuf, ".current") == 0)
 	{
 		char lpCurrentDirectory[MAX_PATH];
@@ -192,7 +192,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	m_bNoVirtualSwitch = LiteStep::GetPrefixedRCBool(m_szName, "NoVirtualSwitch", FALSE);
 
 	// Background settings
-	LiteStep::GetPrefixedRCString(szBuf, m_szName, "Background", "");
+	LiteStep::GetPrefixedRCString(szBuf, MAX_LINE_LENGTH, m_szName, "Background", "");
 	StringCchCopy(m_szBackground, MAX_PATH, szBuf);
 	if (m_szBackground && m_szBackground[0])
 	{
@@ -209,7 +209,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	// Grab the PIDL for the folder
 	if (!bIsRefresh)
 	{
-		LiteStep::GetPrefixedRCLine(szBuf, m_szName, "Folder", ".desktop");
+		LiteStep::GetPrefixedRCLine(szBuf, MAX_LINE_LENGTH, m_szName, "Folder", ".desktop");
 
 		if (m_bPersistantFolderLocation)
 		{
@@ -246,7 +246,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	m_crTextColor = LiteStep::GetPrefixedRCColor(m_szName, "FontColor", RGB(255, 255, 255));
 	m_crTextBackgroundColor = LiteStep::GetPrefixedRCColor(m_szName, "FontBackgroundColor", CLR_NONE);
 	int nFontQuality;
-	LiteStep::GetPrefixedRCString(szBuf, m_szName, "FontQuality", "default");
+	LiteStep::GetPrefixedRCString(szBuf, MAX_LINE_LENGTH, m_szName, "FontQuality", "default");
 	if (_stricmp(szBuf, "antialiased") == 0)
 		nFontQuality = ANTIALIASED_QUALITY;
 	else if (_stricmp(szBuf, "cleartype") == 0)
@@ -260,7 +260,7 @@ bool CGroup::ReadSettings(bool bIsRefresh)
 	else 
 		nFontQuality = DEFAULT_QUALITY;
 
-	LiteStep::GetPrefixedRCLine(szBuf, m_szName, "Font", "Arial");
+	LiteStep::GetPrefixedRCLine(szBuf, MAX_LINE_LENGTH, m_szName, "Font", "Arial");
 
 	m_hFont = CreateFont(
 		LiteStep::GetPrefixedRCInt(m_szName, "FontSize", 14), 0, 0, 0,
@@ -1296,13 +1296,12 @@ IDropTarget* CGroup::GetLastItemTarget(bool *pbExecute)
 
 void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ScPt, DWORD *pdwEffect, CIDA *pida, POINT *pOffsets)
 {
-	LPITEMIDLIST pidl;	// single file object
 	UINT i = 0;
 
 	// file dropped on the icon
 	if (m_nLastItem != -1)
 	{
-		pidl = GetPIDLFromId(m_nLastItem);
+		LPITEMIDLIST pidl = GetPIDLFromId(m_nLastItem);
 		bool bMoveOnly = false;
 
 		if (pidl != NULL)
@@ -1338,6 +1337,8 @@ void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ScPt, DWORD *pdwEffect, CIDA *
 					}
 				}
 			}
+
+            CoTaskMemFree(pidl);
 		}
 
 		ListView_SetItemState(m_hwndView, -1, 0, LVIS_DROPHILITED);
@@ -1368,6 +1369,10 @@ void CGroup::Drop(DWORD  /*grfKeyState*/, POINTL *ScPt, DWORD *pdwEffect, CIDA *
 				//m_pView2->SelectAndPositionItem(HIDA_GetPIDLItem(pida, i), SVSI_SELECT | SVSI_TRANSLATEPT, &pt);
 				break;
 			}
+            if (pidlItem)
+            {
+                CoTaskMemFree(pidlItem);
+            }
 		}
 		++i;
 	}
@@ -1418,6 +1423,7 @@ void CGroup::SetDropHover(POINTL *pt, DWORD *pdwEffect)
 			m_pFolder->GetAttributesOf(1, (LPCITEMIDLIST*)(&(pidl)), &flags);
 			if ((flags & SFGAO_DROPTARGET) != SFGAO_DROPTARGET)
 				*pdwEffect = DROPEFFECT_NONE;
+            CoTaskMemFree(pidl);
 		}
 	}
 }
@@ -1499,8 +1505,8 @@ bool CGroup::InitFolderView()
 
 	SetWindowLongPtr(m_hwndListView, GWL_STYLE, m_longListViewStyle);
 
-	SetWindowLongPtr(m_hwndView, GWLP_USERDATA, (LONG)this);
-	m_wpOrigGroupProc = (WNDPROC) SetWindowLongPtr(m_hwndView, GWLP_WNDPROC, (LONG) GroupProc);
+	SetWindowLongPtr(m_hwndView, GWLP_USERDATA, (LONG_PTR)this);
+	m_wpOrigGroupProc = (WNDPROC) SetWindowLongPtr(m_hwndView, GWLP_WNDPROC, (LONG_PTR) GroupProc);
 
 	m_pDropTarget = new CDropTarget();
 	m_pDropTarget->Register(this);
@@ -1520,8 +1526,8 @@ bool CGroup::InitFolderView()
 		SetBackground(m_szBackground, m_nOffsetPercentX, m_nOffsetPercentY, m_bTiled);
 
 	// Hijack the window procedure for the listview.
-	SetWindowLongPtr(m_hwndListView, GWLP_USERDATA, (LONG)this);
-	m_wpOrigListViewProc = (WNDPROC) SetWindowLongPtr(m_hwndListView, GWLP_WNDPROC, (LONG) ListViewProc);
+	SetWindowLongPtr(m_hwndListView, GWLP_USERDATA, (LONG_PTR)this);
+	m_wpOrigListViewProc = (WNDPROC) SetWindowLongPtr(m_hwndListView, GWLP_WNDPROC, (LONG_PTR) ListViewProc);
 
 	if (m_iIconSize != -1)
 	{
@@ -1571,26 +1577,17 @@ void CGroup::HandleSettingChange()
 **************************************************************************************************/
 LPITEMIDLIST CGroup::GetPIDLFromId(int iItem)
 {
-	LVITEM lvitem = {0};
-	lvitem.mask = LVIF_PARAM;
-	lvitem.iItem = iItem;
-	ListView_GetItem(m_hwndListView, &lvitem);
+    LPITEMIDLIST idList = nullptr;
 
-	if (lvitem.lParam == NULL)
+	// Vista or later, there is no lParam anymore :/
+	IFolderView *pFolderView = nullptr;
+	if (SUCCEEDED(m_pView->QueryInterface(IID_IFolderView, (void**)&pFolderView)))
 	{
-		// Vista or later, there is no lParam anymore :/
-		IFolderView *pFolderView = NULL;
-		if (SUCCEEDED(m_pView->QueryInterface(IID_IFolderView, (void**)&pFolderView)))
-		{
-			if (SUCCEEDED(pFolderView->Item(iItem, (LPITEMIDLIST*)&lvitem.lParam)))
-			{
-				CoTaskMemFree(&lvitem.lParam);
-			}
-			pFolderView->Release();
-		}
+        pFolderView->Item(iItem, (LPITEMIDLIST*) &idList);
+		pFolderView->Release();
 	}
 
-	return (LPITEMIDLIST)lvitem.lParam;
+    return idList;
 }
 
 /**************************************************************************************************
@@ -1641,7 +1638,7 @@ WORD CGroup::GetModkeyWord(char* szOption, char* szDefault)
 {
 	WORD wReturn = 0;
 	char szBuf[MAX_LINE_LENGTH];
-	LiteStep::GetPrefixedRCLine(szBuf, m_szName, szOption, szDefault);
+	LiteStep::GetPrefixedRCLine(szBuf, MAX_LINE_LENGTH, m_szName, szOption, szDefault);
 	if (strstr(szBuf, ".shift") != NULL)
 		wReturn |= MOD_SHIFT;
 	if (strstr(szBuf, ".alt") != NULL)

@@ -24,9 +24,10 @@ int initModuleEx(HWND hwndParent, HINSTANCE hDllInstance, LPCSTR szPath)
 	if (!CreateMessageHandler())
 		return 1;
 
-	if (FAILED(OleInitialize(NULL)))
+    HRESULT hr;
+	if (FAILED(hr = OleInitialize(NULL)))
 	{
-		utils::ErrorMessage(E_ERROR, "Failed to initalize COM");
+		utils::ErrorMessage(E_ERROR, "Failed to initialize COM");
 		return 1;
 	}
 

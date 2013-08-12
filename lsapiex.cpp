@@ -5,11 +5,11 @@
 //
 // Read prefixed string option ([szPrefix][szOption]) from .RC
 // 
-void LiteStep::GetPrefixedRCString(char *szDest, const char *szPrefix, const char *szOption, const char *szDefault)
+void LiteStep::GetPrefixedRCString(char *szDest, size_t cchDest, const char *szPrefix, const char *szOption, const char *szDefault)
 {
-	char szOptionName[MAX_LINE_LENGTH];
-	StringCchPrintf(szOptionName, MAX_LINE_LENGTH, "%s%s", szPrefix, szOption);
-	GetRCString(szOptionName, szDest, szDefault, MAX_LINE_LENGTH);
+	char szOptionName[MAX_RCCOMMAND];
+	StringCchPrintf(szOptionName, MAX_RCCOMMAND, "%s%s", szPrefix, szOption);
+	GetRCString(szOptionName, szDest, szDefault, (UINT)cchDest);
 }
 
 
@@ -17,11 +17,11 @@ void LiteStep::GetPrefixedRCString(char *szDest, const char *szPrefix, const cha
 //
 // Read prefixed line option ([szPrefix][szOption]) from .RC
 // 
-void LiteStep::GetPrefixedRCLine(char *szDest, const char *szPrefix, const char *szOption, const char *szDefault)
+void LiteStep::GetPrefixedRCLine(char *szDest, size_t cchDest, const char *szPrefix, const char *szOption, const char *szDefault)
 {
-	char szOptionName[MAX_LINE_LENGTH];
-	StringCchPrintf(szOptionName, MAX_LINE_LENGTH, "%s%s", szPrefix, szOption);
-	GetRCLine(szOptionName, szDest, MAX_LINE_LENGTH, szDefault);
+	char szOptionName[MAX_RCCOMMAND];
+	StringCchPrintf(szOptionName, _countof(szOptionName), "%s%s", szPrefix, szOption);
+	GetRCLine(szOptionName, szDest, (UINT)cchDest, szDefault);
 	PathUnquoteSpaces(szDest);
 }
 
